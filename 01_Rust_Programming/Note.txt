@@ -1,4 +1,4 @@
-https://doc.rust-lang.org/book/title-page.html
+Rust Book: https://doc.rust-lang.org/book/title-page.html
 
 ##################
 ## Installation ##
@@ -42,10 +42,16 @@ source "$HOME/.cargo/env"
 ## Rust REPL (Read-Eval-Print Loop) ##
 ######################################
 
+// =========== First (irust) ===========
 // 1) cargo install irust (install irust, it is a REPL tool for Rust)
 // 2) irust (initiate irust in the terminal)
 // 3) In: println!("Hello Rust!") (Give the input, i.e a function or a variable or anything)
 // 4) Out: ... (Rust returns the out put)
+
+// =========== Second (evcxr_repl) ===========
+// 1) cargo install --locked evcxr_repl
+// 2) evcxr
+// 3) >> .... (type command here, like Python)
 
 # NOTE: in vscode and vscodium, go to Preferences -> Keyboard Shortcut -> "Terminal: Run Selected Text in Active Terminal -> Ctrl + Shift + Enter (or whatever keyboard combination you want)
 #       later on, after initiating irust, you can selected a section in the .rs file, then Ctrl + Shift + Enter to run that section in irust REPL
@@ -53,3 +59,9 @@ source "$HOME/.cargo/env"
 ######################
 ## Jupyter for Rust ##
 ######################
+
+// 1) In Vscode or Vscodium, install Jupyter standard extension
+      (Or you can create a python environtment, install jupyter-lab or jupyternotebook with pip, then run it on your browser)
+// 2) cargo install --locked evcxr_jupyter
+// 3) evcxr_jupyter --install
+// 4) Create a .ipynb file and run Rust on it (can initiate a jupyter-lab/notebook browser and use like jupyternotebook experience)
