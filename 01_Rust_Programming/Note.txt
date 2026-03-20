@@ -19,8 +19,11 @@ source "$HOME/.cargo/env"
 ##############################
 
 // ============== First ==============
-// 1) rustc rust_file.rs (This will create a compiled file with the same name "rust_file" but without any extension)
+// 1) rustc rust_file.rs (This will create a compiled binary executable file in machine code with the same name "rust_file" but without any extension)
 // 2) ./path/to/rust_file (Run that compiled file)
+
+# NOTE: this compiled file is in machine code, meaning can run on every system without needing to install Rust
+#       all other ways below require Rust to be installed
 
 // ============== Second ==============
 // cargo +nightly -Zscript ./01_Rust_Programming/01_main_println.rs 
