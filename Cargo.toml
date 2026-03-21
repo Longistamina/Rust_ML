@@ -1,9 +1,5 @@
-[package]
-name = "Rust_ML"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-burn = { version = "0.20.1", features = ["wgpu"] }
-numrs2 = { version = "0.3.1", features = ["scirs", "lapack"] }
-scirs2 = { version = "0.3.4", features = ["full"] }
+[workspace]
+members = [
+    "part_01_rust_programming",
+]
+resolver = "2"

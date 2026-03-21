@@ -32,6 +32,10 @@ source "$HOME/.cargo/env"
 // cargo install rust-script (install the rust-script command line tool)
 // rust-script rust_file.rs
 
+// ============== Fourth (src/bin and --release) ==============
+// Move the .rs file to src/bin (if bin does not have, mkdir src/bin)
+// cargo run --release --bin filename (filename.rs)
+
 ##########################################
 ## Create and run a Rust project folder ##
 ##########################################
@@ -46,6 +50,43 @@ source "$HOME/.cargo/env"
 // 1) mkdir project_folder
 // 2) cd project_folder
 // 3) cargo init
+
+##########################
+## Project folder setup ##
+##########################
+
+Rust_ML/
+├── Cargo.toml                          ← workspace root
+├── part_01_rust_programming/
+│   ├── Cargo.toml
+│   └── src/bin/
+│       ├── 01_variables.rs
+│       ├── 02_functions.rs
+│       └── 03_ownership.rs
+├── part_02_vector_matrix/
+│   ├── Cargo.toml
+│   └── src/bin/
+│       ├── 01_create_vector.rs
+│       ├── 02_read_vector.rs
+│       └── 03_attributes.rs
+├── part_03_math_functions/
+│   ├── Cargo.toml
+│   └── src/bin/
+│       ├── 01_lu.rs
+│       └── 02_svd.rs
+
+cargo run -p part_02_vector_matrix --bin 01_create_vector
+
+#######################################
+## Check before run with compilation ##
+#######################################
+
+// ======= First =======
+// cargo check  # just checks for errors, no actual compilation — very fast
+
+// ======= Second =======
+// cargo install cargo-watch # cargo-watch for auto-recheck on save
+// cargo watch -x check
 
 ######################################
 ## Rust REPL (Read-Eval-Print Loop) ##
