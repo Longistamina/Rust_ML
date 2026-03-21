@@ -36,10 +36,16 @@ source "$HOME/.cargo/env"
 ## Create and run a Rust project folder ##
 ##########################################
 
+// =========== First ===========
 // 1) cargo project_folder (use cargo to create a project folder)
 // 2) cd project_folder (change working directory to that project folder)
 // 3) create .rs files in that project_folder
 // 4) cargo run (run the whole project_folder, meaning run litteraly every files)
+
+// =========== Second ===========
+// 1) mkdir project_folder
+// 2) cd project_folder
+// 3) cargo init
 
 ######################################
 ## Rust REPL (Read-Eval-Print Loop) ##
@@ -68,3 +74,19 @@ source "$HOME/.cargo/env"
 // 2) cargo install --locked evcxr_jupyter
 // 3) evcxr_jupyter --install
 // 4) Create a .ipynb file and run Rust on it (can initiate a jupyter-lab/notebook browser and use like jupyternotebook experience)
+
+##################
+## ML Libraries ##
+##################
+
+# Note: cd to a Rust project folder first
+
+# NumRS2 - NumPy for Rust
+cargo add numrs2 --features scirs,lapack
+
+# SciRS2 - SciPy for Rust
+cargo add scirs2 --features full
+
+
+
+
