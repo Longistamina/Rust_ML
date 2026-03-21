@@ -87,6 +87,7 @@ cargo add numrs2 --features scirs,lapack
 # SciRS2 - SciPy for Rust
 cargo add scirs2 --features full
 
-
+# Burn - PyTorch for Rust
+cargo add burn --features wgpu
 
 
