@@ -81,8 +81,11 @@ cargo run -p part_02_vector_matrix --bin 01_create_vector
 ## Check before run with compilation ##
 #######################################
 
+// "cargo check" is much faster than "cargo build" since it skips the production of the executable file
+
 // ======= First =======
 // cargo check  # just checks for errors, no actual compilation — very fast
+// cargo check -p part_01_rust_programming --bin 01_main_println
 
 // ======= Second =======
 // cargo install cargo-watch # cargo-watch for auto-recheck on save
