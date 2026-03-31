@@ -3968,6 +3968,9 @@ dependencies = [
 [[package]]
 name = "part_01_rust_programming"
 version = "0.1.0"
+dependencies = [
+ "rand 0.8.5",
+]
 
 [[package]]
 name = "password-hash"
