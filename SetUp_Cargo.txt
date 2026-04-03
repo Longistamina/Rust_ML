@@ -28,7 +28,16 @@ source "$HOME/.cargo/env"
 // ============== Second ==============
 // cargo +nightly -Zscript ./01_Rust_Programming/01_main_println.rs 
 
-// ============== Third (RECOMMENDED) ==============
+// ============== Third (Run/Debug fn main()) ==============
+// In side the .rs file, above the main() function, there is a Run/Debug button, use it (Run)
+// If got this error "The terminal process failed to launch: Path to shell executable "cargo" does not exist.", do as follows:
+// which cargo # find the path to cargo
+// copy the path (e.g. /home/longdpt/.cargo/bin/cargo)
+// In vscode or vscodium, File->Preferences->Settings->Search for "rust-analyzer.runnables.command"
+// Click the "Edit in settings.json"
+// Modify into this: "rust-analyzer.runnables.command": "/home/longdpt/.cargo/bin/cargo"
+
+// ============== Third (rust-script) ==============
 // cargo install rust-script (install the rust-script command line tool)
 // rust-script rust_file.rs
 
@@ -51,17 +60,17 @@ source "$HOME/.cargo/env"
 // 2) cd project_folder
 // 3) cargo init
 
-##########################
-## Project folder setup ##
-##########################
+###################################################
+## Project folder setup (Cargo Workspace - Just) ##
+###################################################
 
 Rust_ML/
 ├── Cargo.toml                          ← workspace root
 ├── part_01_rust_programming/
 │   ├── Cargo.toml
 │   └── src/bin/
-│       ├── 01_variables.rs
-│       ├── 02_functions.rs
+│       ├── 01_main_println.rs
+│       ├── 02_io_InputOutput.rs
 │       └── 03_ownership.rs
 ├── part_02_vector_matrix/
 │   ├── Cargo.toml
@@ -75,7 +84,49 @@ Rust_ML/
 │       ├── 01_lu.rs
 │       └── 02_svd.rs
 
-cargo run -p part_02_vector_matrix --bin 01_create_vector
+cargo new part_01_rust_programming
+
+cargo run -p part_01_vector_matrix --bin 03_rand_RandomNumber
+
+// ---------- Install just for easier use ----------
+// Install just and create justfile
+cargo install just
+touch justfile # create it where the Cargo.toml lives, no extension
+
+// Inside the justfile
+# justfile
+run part file:
+    cargo run -p {{part}} --bin {{file}}
+
+// Now run the command in terminal
+just run part_01_rust_programming 03_rand_RandomNumber
+
+// in vscode or vscodium -> install just (by shellock) for better justfile handling
+
+#####################################################
+## Project folder setup (Simple - For rust-script) ##
+#####################################################
+
+Rust_ML/
+├── part_01_rust_programming/
+│   ├── 01_variables.rs
+│   ├── 02_functions.rs
+│   └── 03_rand_RandomNumber.rs
+└── part_02_vector_matrix/
+    ├── 01_create_vector.rs
+    └── 02_read_vector.rs
+
+// In side the rust.rs file, set up dependencies like this
+#!/usr/bin/env rust-script
+//! ```cargo
+//! [dependencies]
+//! rand = "0.8.5"
+//! ```
+
+rust-script part_01_rust_programming/03_rand_RandomNumber.rs
+
+// It will download dependencies, compile, and cache the binary under the hood so subsequent runs are instant.
+// However, it will compile again for every new file with the same dependencies
 
 #######################################
 ## Check before run with compilation ##
