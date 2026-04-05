@@ -4,7 +4,7 @@ use std::io;
 use rand::Rng;
 
 fn main() {
-    println!("This is the guessing game!");
+    println!("This is the Guessing Game!");
     println!("Please guess a random number from 1 to 100!");
 
     let secret_number = rand::thread_rng().gen_range(1..=100);
