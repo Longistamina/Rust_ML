@@ -27,10 +27,11 @@ fn main() {
     // reference is also immutable by default, that's why we write "&mut information", not "&information"
 
     // .read_line() returns not only the user input, but also a Result value (an enumeration)
-    // "Result" has 2 states: "Ok" (successful operation) or "Err" (failed operation)
+    // "Result" has 2 states: "Ok(value)" (successful operation) or "Err(error)" (failed operation)
     // "Result" has the .expect("message") method to handle "Err" cases -> it will cause the program to crash and display the "message"
     // If the state is "Ok", then "Result" will return the user input it is holding so that you can use it
     // (If we not call .expet("message") out, Rust will display a warning during compiling)
+    // NOTE: more about Ok(value) and Err(error) in file 06_loop_break_continue_pass_ErrorHandling.rs
     
     // one-liner: io::stdin().read_line(&mut information).expect("Failed to read line");
 
