@@ -17,5 +17,5 @@ fn main() {
 
     // const Z: u32 = 20; // constant variable
     // let Z = Z + 1; // shadowing Z with a new variable that has the same name
-    // println!("The value of Z is: {Z}"); // this will rais error
+    // println!("The value of Z is: {Z}"); // this will raise error because constant cannot be shadowed
 }
