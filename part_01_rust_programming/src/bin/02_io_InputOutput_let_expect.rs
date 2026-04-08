@@ -35,7 +35,13 @@ fn main() {
     
     // one-liner: io::stdin().read_line(&mut information).expect("Failed to read line");
 
+    // Print out the information
     println!("Your given information: {information}"); // The {} is a placeholder, to print out the value of the "information" variable
+    println!("Your given information: {}", information);
+
+    // Print only the value of the variable
+    println!("{information}");
+    println!("{}", information)
 }
 
 /*

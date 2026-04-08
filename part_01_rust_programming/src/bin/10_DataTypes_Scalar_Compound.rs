@@ -5,16 +5,76 @@ fn main() {
     // Scalar type basically means a single value
     // Rust's 4 primary scalar types: integers, floating-point numbers, Booleans, and characters
 
-    /////////////
-    // Integer //
-    /////////////
+    /////////////////////
+    //    Integer    ///
+    ///////////////////
     // Integer are number without fractional component
 
     // Signed integer: i8, i16, ..., i128, isize (architecture-dependent)
-    // store value from -2^(n-1) to 2^(n-1)-1, meaning it can store negative integer numbers
+    // stores value from -2^(n-1) to 2^(n-1)-1, it can store both positive and negative integer numbers
+    // For example, i8 stores value from -2^7 to 2^7-1 -> from -128 to 127
+    
     let x: i8 = 3;
-    let y: i16 = -15;
-
     println!("x-i8 = {x}");
+
+    let y: i16 = -15;
     println!("y-i16 = {y}");
+
+    // Unsigned integer: u8, u16, ..., u128, usize (architecture-dependent)
+    // stores value from 0 to 2^n-1, it can store only positive numbers
+    // For example, u8 stores value from 0 to 2^8-1 -> from 0 to 255
+
+    let x: u8 = 15;
+    println!("x-u8 = {x}");
+
+    let y: u32 = 1_234; // equals to 1234
+    println!("y-u32 = {y}");
+
+    /*
+    let z: u16 = -23
+    => Raise ERROR!!!!
+     */
+
+    // NOTE: the default integer type is i32
+    // NOTE: if you try to store the value exceed the range of the type -> Overflow
+
+    ///////////////////////////
+    //    Floating-Point    ///
+    ///////////////////////////
+    // Floating-Point types are numbers with fractional component
+    // Rust has two primitive types for FP: f32 and f64 (default is f64)
+    // Both are signed type (can store both positive and negative number)
+    // FP is represented according to IEEE-754 standard
+
+    let x = 2.3; // f64
+    println!("x-f64: {x}");
+
+    let y: f32 = -1_530.26;
+    println!("y-f32: {y}");
+
+    ////////////////////
+    //    Boolean    //
+    ///////////////////
+    // Boolean type in Rust has two possible values: true and false
+    // Boolean type can be used for control flow (if condition), indexing, ....
+    
+    let t = true;
+    println!("True: {t}");
+
+    let f: bool = false; // with explicit type annotation
+    println!("False: {f}");
+
+    /////////////////
+    //    Char    //
+    ////////////////
+    // The char type represents a SINGLE character
+    // char literals are specified using single quotation marks ''
+    // (mean while String is something like a vector containing many char, so it's not scalar)
+    // (String literals are represented by double quotation marks "")
+
+    let c = 'c'; // Must use '', not ""
+    let z: char = 'ℤ'; // with explicit type annotation
+    let heart_eyed_cat = '😻';
+
+    println!("Char type examples: {c}, {z}, {heart_eyed_cat}");
 }
