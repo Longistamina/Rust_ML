@@ -23,6 +23,11 @@ fn main() {
                                                                            // .trim() to remove that "\n", then .parse() to automatically parse into numeric type
                                                                            // since we set "guess: u32 = ...", the .parse() will try to parse the string into u32
 
+    // IMPORTANT NOTE: when use .parse(), must specify the type (i.e. u32, i32),
+    // so that Rust knows which type we want to convert the string into.
+    // Because Rust is a statically typed language, meaning it has to know the variable's type at runtime,
+    // So if we do not do so -> Error -> Cannot compile
+
     // call out .cmp() method to compare "guess" with "secret_number", returns one of 3 enums: Less, Greater, Equal
     match guess.cmp(&secret_number) { // "match" expression to decide what to do based on the variant of the Ordering
         Ordering::Less => println!("Too small!"), // guess < secret_number
