@@ -15,9 +15,11 @@ fn main() {
     // For example, i8 stores value from -2^7 to 2^7-1 -> from -128 to 127
     
     let x: i8 = 3;
+    // let x = 3_i8;
     println!("x-i8 = {x}");
 
     let y: i16 = -15;
+    // let y = -15_i16;
     println!("y-i16 = {y}");
 
     // Unsigned integer: u8, u16, ..., u128, usize (architecture-dependent)
@@ -25,9 +27,11 @@ fn main() {
     // For example, u8 stores value from 0 to 2^8-1 -> from 0 to 255
 
     let x: u8 = 15;
+    // let x = 15_u8;
     println!("x-u8 = {x}");
 
     let y: u32 = 1_234; // equals to 1234
+    // let y = 1_234_u32;
     println!("y-u32 = {y}");
 
     /*
@@ -47,9 +51,11 @@ fn main() {
     // FP is represented according to IEEE-754 standard
 
     let x = 2.3; // f64
+    // let x = 2.3_f64;
     println!("x-f64: {x}");
 
     let y: f32 = -1_530.26;
+    // let y = -1_530.26_f32;
     println!("y-f32: {y}");
 
     ///////////////////
