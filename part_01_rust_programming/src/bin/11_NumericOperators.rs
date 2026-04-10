@@ -25,7 +25,7 @@ fn main() {
     let remainder = 43 % 5;
     println!("Remainder = -5.0 / 3.0 = {remainder}");
 
-    // exponent (use .pow(), .powi(), .exp())
+    // exponent (use .pow(), .powi(), .powf(), .exp())
     let integer_base: i32 = 2;
     let result = integer_base.pow(3);
     println!("Exponent_integer = 2^3 = {result}");
@@ -33,6 +33,10 @@ fn main() {
     let float_base: f64 = 3.9;
     let result = float_base.powi(5);
     println!("Exponent_float = 3.9^5 = {result}");
+
+    let float_base: f64 = 2.5;
+    let result = float_base.powf(-2.0);
+    println!("Exponent_float = 2.5^(-2.0) = {result}");    
 
     let result = 1.0_f64.exp(); // natural exponentioal
     println!("Exponent_natural = 1^e = {result}")
