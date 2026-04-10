@@ -92,6 +92,7 @@ fn main() {
     // Each position in the tuple has a type, they don’t have to be the same.
 
     let tup: (i32, f64, u8) = (-500, 6.4, 1);
+    println!("Tuple tup = {tup:?}");
 
     // Destructure a tuple to get its value
     let (x, y, z) = tup;
@@ -100,10 +101,10 @@ fn main() {
     println!("z_tup = {z}");
 
     // Use indexing to access its value
-    let first_element = tup.0;
-    let second_element = tup.1;
-    println!("first_element_tup = {first_element}");
-    println!("second_element_tup = {second_element}");
+    let first_element_tup = tup.0;
+    let second_element_tup = tup.1;
+    println!("first_element_tup = {first_element_tup}");
+    println!("second_element_tup = {second_element_tup}");
 
     /////////////////
     //    Array    //
@@ -117,7 +118,23 @@ fn main() {
 
     let months = ["January", "February", "March", "April", "May", "June", "July",
                               "August", "September", "October", "November", "December"];
-    println!("Array months = {months:?}") //  print out all the elements of the array on one single line
+    println!("Array months = {months:?}"); //  print out all the elements of the array on one single line
 
-    
+    // define an array with duplicate values
+    let a_duplicate = [5.2; 9];
+    println!("Array a_duplicate = {a_duplicate:?}");
+
+    // define an array with explicit type
+    let a_explicit: [f32; 4] = [-1.5, -2.9, 0.2, 6.0];
+    println!("Array a_explicit = {a_explicit:?}");
+
+    // Array element accessing
+    let first_element_array = a_explicit[0];
+    let second_element_array = a_explicit[1];
+    let last_element_array = a_explicit[a_explicit.len()-1];
+    println!("first_element_array = {first_element_array}");
+    println!("second_element_array = {second_element_array}");
+    println!("last_element_array = {last_element_array}");
+
+    // NOTE: tuple does not support indexing like array since its elements' datatypes are not the same
 }
