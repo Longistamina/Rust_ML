@@ -5,9 +5,9 @@ fn main() {
     // Scalar type basically means a single value
     // Rust's 4 primary scalar types: integers, floating-point numbers, Booleans, and characters
 
-    /////////////////////
+    ////////////////////
     //    Integer    ///
-    ///////////////////
+    ////////////////////
     // Integer are number without fractional component
 
     // Signed integer: i8, i16, ..., i128, isize (architecture-dependent)
@@ -38,9 +38,9 @@ fn main() {
     // NOTE: the default integer type is i32
     // NOTE: if you try to store the value exceed the range of the type -> Overflow
 
-    ///////////////////////////
-    //    Floating-Point    ///
-    ///////////////////////////
+    //////////////////////////
+    //    Floating-Point    //
+    //////////////////////////
     // Floating-Point types are numbers with fractional component
     // Rust has two primitive types for FP: f32 and f64 (default is f64)
     // Both are signed type (can store both positive and negative number)
@@ -52,7 +52,7 @@ fn main() {
     let y: f32 = -1_530.26;
     println!("y-f32: {y}");
 
-    ////////////////////
+    ///////////////////
     //    Boolean    //
     ///////////////////
     // Boolean type in Rust has two possible values: true and false
@@ -64,7 +64,7 @@ fn main() {
     let f: bool = false; // with explicit type annotation
     println!("False: {f}");
 
-    /////////////////
+    ////////////////
     //    Char    //
     ////////////////
     // The char type represents a SINGLE character
@@ -77,4 +77,47 @@ fn main() {
     let heart_eyed_cat = '😻';
 
     println!("Char type examples: {c}, {z}, {heart_eyed_cat}");
+
+    // ------------------------------------------------- //
+    // ---------------- Compound Types ----------------- //
+    // ------------------------------------------------- //
+    // Compound types can group multiple values into one type. 
+    // Rust has two primitive compound types: tuples and arrays.
+
+    /////////////////
+    //    Tuple    //
+    /////////////////
+    // Tuples have a fixed length: Once declared, they cannot grow or shrink in size.
+    // Use () and "," to define a tuple.
+    // Each position in the tuple has a type, they don’t have to be the same.
+
+    let tup: (i32, f64, u8) = (-500, 6.4, 1);
+
+    // Destructure a tuple to get its value
+    let (x, y, z) = tup;
+    println!("x_tup = {x}");
+    println!("y_tup = {y}");
+    println!("z_tup = {z}");
+
+    // Use indexing to access its value
+    let first_element = tup.0;
+    let second_element = tup.1;
+    println!("first_element_tup = {first_element}");
+    println!("second_element_tup = {second_element}");
+
+    /////////////////
+    //    Array    //
+    /////////////////
+    // Unlike a tuple, every element of an ARRAY must have the SAME TYPE.
+    // Array in rust has fixed length
+    // Use [] and "," to define an array
+
+    let a = [1, 2, 3, 4, 5];
+    println!("Array a = {a:#?}"); // print each element of the array on a separate line
+
+    let months = ["January", "February", "March", "April", "May", "June", "July",
+                              "August", "September", "October", "November", "December"];
+    println!("Array months = {months:?}") //  print out all the elements of the array on one single line
+
+    
 }
