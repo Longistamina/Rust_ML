@@ -16,6 +16,7 @@ fn main() {
 // ----------------------------------------- //
 
 fn demo_if() {
+    
     let number = 2;
 
     if number != 0 {
@@ -43,6 +44,7 @@ fn demo_if_else(rng: &mut ThreadRng) {
 // --------------------------------------------------- //
 
 fn demo_if_elseif_else(rng: &mut ThreadRng) {
+    
     let random_score = rng.random_range(0.0..=10.0); // generate floating-point numbers
 
     if (9.0 < random_score) & (random_score <= 10.0) {
@@ -66,6 +68,7 @@ fn demo_if_elseif_else(rng: &mut ThreadRng) {
 // -------------------------------------------------------------------- //
 
 fn demo_let_if(rng: &mut ThreadRng) {
+    
     let random_number = rng.random_range(1..=100);
 
     let condition = (random_number % 2).eq(&0); // true or false
