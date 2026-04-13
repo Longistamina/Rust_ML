@@ -41,3 +41,5 @@ fn main() {
     let result = 1.0_f64.exp(); // natural exponentioal
     println!("Exponent_natural = 1^e = {result}")
 }
+
+// All Operators and Symbols: https://doc.rust-lang.org/book/appendix-02-operators.html 

@@ -1,11 +1,13 @@
 use std::io::{self, Write}; 
 use std::cmp::Ordering;
-use rand::Rng;
+use rand::prelude::*;
 
 fn main() {
     println!("This the Guessing Game!");
 
-    let secret_number = rand::thread_rng().gen_range(1..=10);
+    let mut rng = rand::rng();
+    let secret_number = rng.random_range(1..=100);
+    
     let mut guess_string = String::new();
     let mut guess_numeric: u32;
     let mut guess_old: u32 = Default::default();

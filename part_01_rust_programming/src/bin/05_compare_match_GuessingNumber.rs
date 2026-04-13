@@ -1,13 +1,14 @@
 use std::cmp::Ordering; // import Ordering type for enum variants: Less, Greater, Equal
 use std::io;
 // use std::{cmp::Ordering, io};
-use rand::Rng;
+use rand::prelude::*;
 
 fn main() {
     println!("This is the Guessing Game!");
     println!("Please guess a random number from 1 to 100!");
 
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let mut rng = rand::rng();
+    let secret_number = rng.random_range(1..=100);
 
     let mut guess = String::new();
 

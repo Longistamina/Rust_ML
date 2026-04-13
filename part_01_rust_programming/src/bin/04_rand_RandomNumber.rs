@@ -4,16 +4,21 @@
 //! rand = "0.8.5"
 //! ```
 
-use rand::Rng; // must use rand = "0.8.5" in Cargo.toml for this to work
-               // Rng here is a trait, it defines methods that random number generators implement, and this trait must be in scope for us to use those methods
-
+use rand::prelude::*; // must use rand = "0.10.1" in Cargo.toml for this to work
+                      // "prelude" is a common module of many Rust library, storing frequently used modules
+                      // ::* means import everything from prelude
 fn main() {
     println!("Let's generate a random number!");
+
+    let mut rng = rand::rng(); // Create a random generator (must be "mut")
     
-    let random_number = rand::thread_rng().gen_range(1..=100); // must use rand = "0.8.5" in Cargo.toml for this to work
-                                   // rand::thread_rng() function gives a particular random number generator, on local thread, seeded by operating system
-                                   // gen_range() is a method bound to the generator created by thread_rng()
-                                   // 1..=100 means from 1 to 100 (the 100 is included), start..=end
+    let random_number = rng.random_range(1..=100);
+    // 1. rand::rng() provides a high-quality random number generator
+    //    that is local to the current thread and automatically seeded by the OS.
+    // 2. random_range() is a method from the RngExt trait 
+    //    used to generate a value within a specific bound.
+    // 3. 1..=100 is an inclusive range syntax, meaning it covers all numbers 
+    //    from 1 up to and including 100.
 
     println!("The generated random number is: {random_number}")
 }
