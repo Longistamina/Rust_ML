@@ -3,23 +3,32 @@
 use rand::prelude::*;
 
 fn main() {
+    let mut rng = rand::rng(); // 1. Make the variable mutable
 
-    // ----------------------------------------- //
-    // ------------------ if ------------------- //
-    // ----------------------------------------- //
+    demo_if();
+    demo_if_else(&mut rng); // 2. Pass a mutable reference (borrowing)
+    demo_if_elseif_else(&mut rng); // 3. Use it again
+    demo_let_if(&mut rng);
+}
 
+// ----------------------------------------- //
+// ------------------ if ------------------- //
+// ----------------------------------------- //
+
+fn demo_if() {
     let number = 2;
 
     if number != 0 {
         println!("This number is something other than 0.")
     }
+}
 
+// ----------------------------------------- //
+// --------------- if - else --------------- //
+// ----------------------------------------- //
 
-    // ----------------------------------------- //
-    // --------------- if - else --------------- //
-    // ----------------------------------------- //
+fn demo_if_else(rng: &mut ThreadRng) {
 
-    let mut rng = rand::rng();
     let random_number = rng.random_range(1..=10);
     
     if random_number > 5 {
@@ -27,13 +36,13 @@ fn main() {
     } else {
         println!("FALSE: random_number {random_number} is not greater than 5")
     }
+}
 
+// --------------------------------------------------- //
+// --------------- if - else if - else --------------- //
+// --------------------------------------------------- //
 
-    // --------------------------------------------------- //
-    // --------------- if - else if - else --------------- //
-    // --------------------------------------------------- //
-
-    let mut rng = rand::rng();
+fn demo_if_elseif_else(rng: &mut ThreadRng) {
     let random_score = rng.random_range(0.0..=10.0); // generate floating-point numbers
 
     if (9.0 < random_score) & (random_score <= 10.0) {
@@ -50,12 +59,13 @@ fn main() {
 
     // NOTE: Using many if-else can clutter your code
     //       In such case, consider using "match" expression
+}
 
+// -------------------------------------------------------------------- //
+// --------------- let var = if cond {expr} else {expr} --------------- //
+// -------------------------------------------------------------------- //
 
-    // --------------------------------------------- //
-    // --------------- "if" in "let" --------------- //
-    // --------------------------------------------- //
-
+fn demo_let_if(rng: &mut ThreadRng) {
     let random_number = rng.random_range(1..=100);
 
     let condition = (random_number % 2).eq(&0); // true or false
@@ -65,7 +75,6 @@ fn main() {
     // else, result = "ODD"
 
     println!("{random_number} is {result}!")
-
 }
 
 /*
@@ -85,11 +94,11 @@ This is because we want to use y as reference only (or "borrow" it).
 
 expr & expr -> Bitwise AND
 var &= expr -> Bitwise AND and assignment
-expr && expr -> Short-circuiting logical AND
+expr && expr -> Short-circuiting logical AND (If the first part is false, stop the checking)
 
 expr | expr -> 	Bitwise OR
 var |= expr -> Bitwise OR and assignment
-expr || expr -> Short-circuiting logical OR
+expr || expr -> Short-circuiting logical OR (If the first part is false, stop the checking)
 
 expr ^ expr -> Bitwise exclusive OR
 var ^= expr -> Bitwise exclusive OR and assignment
