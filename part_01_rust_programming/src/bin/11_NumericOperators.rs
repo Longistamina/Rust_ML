@@ -40,6 +40,16 @@ fn main() {
 
     let result = 1.0_f64.exp(); // natural exponentioal
     println!("Exponent_natural = 1^e = {result}")
+
+    /*
+    ########### Other Numeric Operators ###########
+
+    var += expr -> var = var + expr (Arithmetic addition and assignment)
+    var -= expr -> var = var - expr (Arithmetic subtraction and assignment)
+    var *= expr -> var = var * expr (Arithmetic multiplication and assignment)
+    var /= expr -> var = var / expr (Arithmetic division and assignment)
+    var %= expr -> var = var % expr (Arithmetic remainder and assignment)
+     */
 }
 
 // All Operators and Symbols: https://doc.rust-lang.org/book/appendix-02-operators.html 

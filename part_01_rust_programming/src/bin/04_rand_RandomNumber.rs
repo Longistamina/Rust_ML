@@ -20,5 +20,7 @@ fn main() {
     // 3. 1..=100 is an inclusive range syntax, meaning it covers all numbers 
     //    from 1 up to and including 100.
 
+    // rng.random_range(1.0..=100.0) to generate floating-point numbers
+
     println!("The generated random number is: {random_number}")
 }
