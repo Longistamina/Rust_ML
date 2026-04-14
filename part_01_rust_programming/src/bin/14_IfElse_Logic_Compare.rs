@@ -8,6 +8,7 @@ fn main() {
     demo_if();
     demo_if_else(&mut rng); // 2. Pass a mutable reference (borrowing)
     demo_if_elseif_else(&mut rng); // 3. Use it again
+    demo_if_nested(&mut rng);
     demo_let_if(&mut rng);
 }
 
@@ -61,6 +62,28 @@ fn demo_if_elseif_else(rng: &mut ThreadRng) {
 
     // NOTE: Using many if-else can clutter your code
     //       In such case, consider using "match" expression
+}
+
+// ----------------------------------------- //
+// -------------- Nested if ---------------- //
+// ----------------------------------------- //
+
+fn demo_if_nested(rng: &mut ThreadRng) {
+    let has_id = rng.random_bool(0.5); // 50% chance of being true
+    let is_admin = rng.random_bool(0.3); // 30% chance of being true
+
+    print!("Access Check: ");
+
+    if has_id {
+        // This code only runs if has_id is true
+        if is_admin {
+            println!("Welcome, Administrator. You have full access.");
+        } else {
+            println!("Welcome, User. You have limited access.");
+        }
+    } else {
+        println!("Access Denied. No ID found.");
+    }
 }
 
 // -------------------------------------------------------------------- //
