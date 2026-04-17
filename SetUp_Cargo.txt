@@ -37,11 +37,11 @@ source "$HOME/.cargo/env"
 // Click the "Edit in settings.json"
 // Modify into this: "rust-analyzer.runnables.command": "/home/longdpt/.cargo/bin/cargo"
 
-// ============== Third (rust-script) ==============
+// ============== Fourth (rust-script) ==============
 // cargo install rust-script (install the rust-script command line tool)
 // rust-script rust_file.rs
 
-// ============== Fourth (src/bin and --release) ==============
+// ============== Fifth (src/bin and --release) ==============
 // Move the .rs file to src/bin (if bin does not have, mkdir src/bin)
 // cargo run --release --bin filename (filename.rs)
 
