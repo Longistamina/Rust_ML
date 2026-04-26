@@ -1,81 +1,4 @@
 /*
-Rules of ownership:
-+ Each value in Rust has an owner.
-+ There can only be one owner at a time.
-+ When the owner goes out of scope, the value will be dropped.
-*/
-
-// -------------------------------------------------- //
-// ----------------- Variable Scope ----------------- //
-// -------------------------------------------------- //
-/*
-Remind again, A scope is the range within a program for which an item is valid
-*/
-
-fn _demo_scope() {
-    let s = "hello";
-    
-    {
-        let s = "aloha"; // variable s="aloha" is only valid in this scope
-        println!("Value of s is: {s}");
-    }
-    // Outside the scope, variable s="aloha" is not valid anymore
-    // Here, only s="hello" is valid
-
-    println!("Value of s is: {s}")
-}
-
-// ---------------------------------------------------------------- //
-// ----------------- Stack and Heap - String Type ----------------- //
-// ---------------------------------------------------------------- //
-/*
-Here, String Type will be used to illustrate Ownership, stack and heap
-(Move to the bottom part of the file to understand about Stack and Heap)
-
-Most of the types we have learned like int, float, bool, ... are of a known size
--> can be stored on the stack and popped off the stack when their scope is over
--> can be quickly and trivially copied to make a new, independent instance 
-   if another part of code needs to use the same value in a different scope (referencing)
-
-Even string literals like `let s = "Hello";` (&str) also have fixed size, immutable
-
-String Type is one of types that are stored on the heap
-(because their size is not fixed, grownable and mutable)
--> Use them to see how Rust knows when to clean up data, 
-   without garbage collector like other languages (see Memory Allocation)
-
-For example, when we want to take user string inputs, apparently their size are not known
--> cannot use string litterals, because they are fixed in size, immutable
--> MUST use String Type, because they are grownable in size, and mutable in value.
-*/
-
-#[allow(non_snake_case)] // Disable the non_snake_case warning
-fn _demo_StringType() {
-  let s0 = "To day is so cool!"; // This s0 is a string literal (&str).
-  println!("The value of s0 is: {s0}"); // s0 is stored on the stack, immutable, fixed size
-
-
-  let s1 = String::from("hello"); // create a String object "from" literal string "hello"
-  println!("The value of s1 is: {s1}");   // this s1 String will be stored on the heap
-
-  let mut s2 = String::from("Good morning"); // a mutable String
-  s2.push_str(", how are you?"); // push_str() appends a literal to a String
-  println!("The value of s2 is: {s2}")
-}
-
-// Why can String be mutated but literals cannot? 
-// The difference is in how these two types deal with memory (see Memory Allocation)
-
-////////////////////
-///    main()    ///
-////////////////////
-
-fn main() {
-    // _demo_scope();
-    _demo_StringType();
-}
-
-/*
 Think of your program's memory like a workspace with two main areas:
 the STACK and the HEAP.
 
@@ -215,3 +138,7 @@ Example:
   with the safety of a garbage collector (like Java) —
   because Ownership handles it all at compile time. ✅
 */
+
+fn main() {
+  
+}
