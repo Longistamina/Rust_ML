@@ -76,14 +76,10 @@ Then the variable goes out of the scope {}
 */
 
 
-// ------------------------------------------------------------------ //
-// ----------------------- Data Interaction ------------------------- //
-// ------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------------- //
+// ----------------------- Data Interaction between Immutables ------------------------- //
+// ------------------------------------------------------------------------------------- //
 /* In Rust, multiple variables can interact with the same data in different ways */
-
-////////////////////////////////////
-// interaction between immutables //
-////////////////////////////////////
 
 fn _demo_immutable_interact() {
     let x = 5; // bind value 5 to x
@@ -104,9 +100,11 @@ fn _demo_immutable_interact() {
     */
 }
 
-//////////////////////////////////
-// interaction between mutables //
-//////////////////////////////////
+
+// ----------------------------------------------------------------------------------- //
+// ----------------------- Data Interaction between Mutables ------------------------- //
+// ----------------------------------------------------------------------------------- //
+/* In Rust, multiple variables can interact with the same data in different ways */
 
 /*
 A String Type in Rust is made up of 3 parts:
@@ -135,24 +133,23 @@ The actual data in the heap is the thing that is mutable, growable, changeable..
                                                     +-----+-------+
 */
 
-fn _demo_mutable_moved() {
-    let s1 = String::from("hello");
-    let s2 = s1; // here s1 has been moved to s2, its memory is no longer valid
-
-    // println!("s1 = {s1}"); // this will raise error because s1 is no longer valid, it has been moved to s2
-    println!("s2 = s1_moved = {s2}")
-}
-
+//////////////////////////////////////////////////
+//    borrowing - referencing - shallow copy    //
+//////////////////////////////////////////////////
 
 fn _demo_mutable_borrow() {
     let s1 = String::from("hello");
     let s2 = &s1; // s2 borrow the value of s1, the "&" sign is for referencing, borrowing
                            // By doing this, s1 is still remains
+                           // Because we only copy the stack data (ptr, len, capacity) of s1, then bind to s2, not moving s1 to s2
+                           // the actual on the heap is not copied -> 2 pointers of s1 and s2 point to the same heap
+                           // -> s2 is a "shallow copy"
 
     println!("s1 = {s1}");
     println!("s2 = s1_borrowed = {s2}");
 
     /*
+    ========================= RUST Borrowing, Referencing LAYOUT =========================
         STACK (Variable Metadata)                       HEAP (Actual Data)
     -------------------------------                 -----------------------
     Name: s1 (The Owner)                            Index | Value
@@ -170,9 +167,115 @@ fn _demo_mutable_borrow() {
     +----------+----------+
      */
 }
+
+////////////////////////////////////
+//    clone - make a deep copy    //
+////////////////////////////////////
+
+
+fn _demo_mutable_clone() {
+    let s1 = String::from("hello");
+    let s2 = s1.clone();
+    // The clone() will make a copy of all data on the stack and the heap of s1, and bind it to s2
+    // s2 is a "deep copy"
+
+    println!("s1 = {s1}");
+    println!("s2 = s1_cloned = {s2}");
+
+    /*
+    ========================= RUST Mutable Cloning LAYOUT =========================
+        STACK (Variable Metadata)                       HEAP (Actual Data)
+    -------------------------------                 -----------------------
+    Name: s1                                        Index | Value
+    +----------+----------+                         +-----+-------+
+    | ptr      |  *-------------------------------->|  0  |   h   |
+    | len      |    5     |                         |  1  |   e   |
+    | capacity |    5     |                         |  2  |   l   |
+    +----------+----------+                         |  3  |   l   |
+                                                    |  4  |   o   |
+                                                    +-----+-------+
+
+    Name: s2                                        Index | Value
+    +----------+----------+                         +-----+-------+
+    | ptr      |  *-------------------------------->|  0  |   h   |
+    | len      |    5     |                         |  1  |   e   |
+    | capacity |    5     |                         |  2  |   l   |
+    +----------+----------+                         |  3  |   l   |
+                                                    |  4  |   o   |
+                                                    +-----+-------+
+     */
+}
+
+////////////////////////////////////////
+//    move one variable to another    //
+////////////////////////////////////////
+
+fn _demo_mutable_moved() {
+    let s1 = String::from("hello");
+    let s2 = s1; // here s1 has been moved to s2, its memory is no longer valid
+
+    // println!("s1 = {s1}"); // this will raise error because s1 is no longer valid, it has been moved to s2
+    println!("s2 = s1_moved = {s2}")
+}
+
+
+// ----------------------------------------------------------------------- //
+// ----------------------- Reassignment and Drop ------------------------- //
+// ----------------------------------------------------------------------- //
+/*
+As we learned before, we can reassign a new value to a mutable variable,
+the memory of the old value will be freed, to make space for the new value
+(done by function ```drop```).
+
+This is how reassign works under the hood
+*/
+
+#[allow(unused_assignments)]
+fn _demo_reassignment_drop() {
+    let mut s = String::from("hello"); // create a mutable String whose contents are "hello"
+    s = String::from("bonjour"); // reassign the mutable variable with new contents
+                                 // everything on the stack and heap related the old contents are all gone (make space for this new one)
+                                 // this all done by ```drop``` function
+    
+    println!("s_reassigned = {s}") // "bonjour"
+}
+
+
+// ------------------------------------------------------------ //
+// ----------------------- CONCLUSION ------------------------- //
+// ------------------------------------------------------------ //
+
+/*
+======= Stack data copied only =======
+    let x = 5;
+    let y = x;
+
+    let s1 = String::from("hello");
+    let s2 = &s1; // borrowing, referencing
+
+======= both Stack and Heap data copied =======
+    let s1 = String::from("hello");
+    let s2 = s1.clone();
+
+======= Moved one variable to another =======
+    let s1 = String::from("hello");
+    let s2 = s1;
+
+======= Reassignment - Drop old value =======
+    let mut s1 = String::from("hello");
+    s1 = String::from("aloha");
+
+*/
+
+///////////////////////
+//       main()      //
+///////////////////////
+
 fn main() {
     _demo_scope();
     _demo_immutable_interact();
-    _demo_mutable_moved();
     _demo_mutable_borrow();
+    _demo_mutable_moved();
+    _demo_mutable_clone();
+    _demo_reassignment_drop();
 }
