@@ -109,11 +109,10 @@ fn _demo_immutable_interact() {
 //////////////////////////////////
 
 /*
-
-A String Type is made up of 3 parts:
+A String Type in Rust is made up of 3 parts:
 + a pointer (on the stack): shows the way to the memory that holds the contents of the string (on the heap)
-+ a length (on the stack)
-+ a capacity (on the stack)
++ a length (on the stack): how much memory, in bytes, the contents of the String are currently using
++ a capacity (on the stack): the total amount of memory, in bytes, that the String has received from the allocator
 (We will deal with length and capacity later)
 
 So when we create a string using ```s1 = String::from("hello")```,
