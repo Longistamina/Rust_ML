@@ -1,0 +1,26 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
+{
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": {
+          "command": "clippy", // Equivalent to checkOnSave.command: "clippy"
+        },
+        "cargo": {
+          "features": "all", // Runs with --all-features
+        },
+        "procMacro": {
+          "enable": true, // Crucial for libraries like Tokio or Serde
+        },
+        "inlayHints": {
+          "bindingModeHints": { "enable": true },
+          "typeHints": { "enable": true },
+          "parameterHints": { "enable": true },
+        },
+      },
+    },
+  },
+}
