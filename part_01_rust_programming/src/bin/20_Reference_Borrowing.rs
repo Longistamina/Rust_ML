@@ -106,6 +106,27 @@ fn main() {
      let s2 = &mut s0;
      println!("Second borrow: s2 = {s2}");
 
+
+     // ------------------------------------------------------------------------------------ //
+     // ----------------- Mutable and Immutable references at the same time ---------------- //
+     // ------------------------------------------------------------------------------------ //
+     /*
+      * Rust allows mutable and immutable references to the same value at the same time
+      * as long as there is only one mutable.
+      */
+
+     let mut s0 = String::from("Hello, World!");
+
+     let s1 = &s0;
+     println!("First borrow: s1 = {s1}");
+
+     let s2 = &mut s0;
+     println!("Second borrow: s2 = {s2}");
+
+     s2.insert_str(0, "asf");
+     println!("After push_str: s2 = {s2}");
+
+
      // ------------------------------------------------------------------------------------ //
      // -------------------------------- Dangling Reference -------------------------------- //
      // ------------------------------------------------------------------------------------ //
