@@ -1,3 +1,9 @@
+use rand::prelude::*;
+
+// ------------------------------------------------------- //
+// --------------- Function no return value -------------- //
+// ------------------------------------------------------- //
+
 fn func_simple() {
     println!("Hello Wolrd!!!");
 }
@@ -11,10 +17,14 @@ fn func_multi_parameters(value: f64, unit_label: char) { // Must always specify 
     println!("The result of value*2 is: {value}{unit_label}");
 }
 
+// ------------------------------------------------------- //
+// ---------------- Function returns value --------------- //
+// ------------------------------------------------------- //
+
 fn func_return_pow(base: f64, exponent: f64) -> f64 {
     let base = base as f64; // casting to f64, ensure the right type
     let exponent = exponent as f64;
-    
+
     base.powf(exponent) // The returned value, as scalar
 }
 
@@ -23,7 +33,7 @@ fn func_multi_return(base: f64, exp: f64) -> (f64, f64, bool) {
     let is_positive = result > 0.0;
 
     // To return multiple values, just wrap the variables in parentheses
-    (result, base, is_positive) 
+    (result, base, is_positive)
 }
 
 fn get_coordinates() -> [f64; 2] {
@@ -32,6 +42,29 @@ fn get_coordinates() -> [f64; 2] {
 
     [x, y] // Return as an array
 }
+
+// ------------------------------------------------------------- //
+// --------------- Function with "return" keyword -------------- //
+// ------------------------------------------------------------- //
+
+#[allow(clippy::needless_return)]
+fn return_keyword(score: f64) -> &'static str {
+    if score >= 90.0 {
+       return "A" // returns the value "A" right away, skipping the rest of the function
+    } else if score >= 80.0 {
+        return "B";
+    } else if score >= 70.0 {
+        return "C";
+    } else if score >= 60.0 {
+        return "D";
+    } else {
+        return "F";
+    }
+}
+
+////////////
+// main() //
+////////////
 
 fn main() {
     func_simple();
@@ -46,4 +79,9 @@ fn main() {
 
     let coordinates = get_coordinates();
     println!("Function returning one array: {coordinates:?}");
+
+    let mut rng = rand::rng();
+    let score: f64 = rng.random_range(0.0..100.0);
+    let grade = return_keyword(score);
+    println!("Score: {score} ||| Grade: {grade}");
 }

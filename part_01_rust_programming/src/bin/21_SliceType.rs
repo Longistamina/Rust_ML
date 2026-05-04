@@ -22,28 +22,43 @@ fn main() {
     println!("First to {i}th-1: {}", &s[..10]); // equivalent to &s[0..10]
     println!("{i}th to end: {}", &s[i..]); // equivalent to &s[10..s.len()]
 
+    println!("s[..] = {}", &s[..]); // equivalent to &s[0..s.len()], the whole string itselfs
 
-    // -------------------------------------------------------------------------- //
-    // ------------------------- Error with reference --------------------------- //
-    // -------------------------------------------------------------------------- //
 
-    fn first_word(s: &String) -> &str {
-        let bytes = s.as_bytes();
+    // ------------------------------------------------------------------------------------ //
+    // ------------------------- &str over &String for function --------------------------- //
+    // ------------------------------------------------------------------------------------ //
+    /*
+     * Should PREFER "fn first_word(s: &str) -> &str {}" over "fn first_word(s: &String) -> &str {}"
+     * Using &str makes your function more flexible and idiomatic because it allows the function to accept both String and &str types.
+     * If you define a function with &String, you can only pass a String object to it.
+     * However, if you define it with &str, you can pass:
+     * - A String (it will automatically turn into a slice)
+     * - A string literal ("hello")
+     * - A slice of a string (&s[0..5])
+     */
 
-        for (i, &item) in bytes.iter().enumerate() {
-            if item == b' ' {
-                return &s[0..i];
-            }
-        }
+     fn first_word(s: &str) -> &str { // Accepts both String and &str types
+         for (i, &item) in s.as_bytes().iter().enumerate() {
+             if item == b' ' {
+                 return &s[..i];
+             }
+         }
+         s
 
-        &s[..]
-    }
+         // s.as_bytes() converts the &str to an array of bytes
+         // .iter() is a method that returns each element in a collection
+         // .enumerate()  wraps the result of iter and returns each element as part of a tuple (index, &item)
+         // &item is a reference to the byte value
+         // item == b' ' checks if the byte is a space character, then returns the value before the function ends
+         // If no space is found, the entire string is returned
+     }
 
-    let mut s = String::from("hello world");
+     let my_string = String::from("Hello World");
+     let my_literal = "hello world";
 
-    let word = first_word(&s);
-
-    s.clear(); // error!
-
-    println!("the first word is: {word}");
+     // Both of these work with &str:
+     println!("{}", first_word(&my_string)); // Coerced from &String to &str
+     println!("{}", first_word(my_literal)); // Already a &str
+     println!("{}", first_word(&my_string[..3])); // Only pass the first 6 elements of the string to the function
 }

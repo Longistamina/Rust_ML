@@ -108,20 +108,22 @@ fn main() {
 
 
      // ------------------------------------------------------------------------------------ //
-     // ----------------- Mutable and Immutable references at the same time ---------------- //
+     // -------------------- Mutable and Immutable references - Lifetime ------------------- //
      // ------------------------------------------------------------------------------------ //
      /*
-      * Rust allows mutable and immutable references to the same value at the same time
-      * as long as there is only one mutable.
+      * Rust does not allow mutable and immutable references to the same value at the same time,
+      * must end the life-time of the immutable reference before the mutable reference can be used.
       */
 
      let mut s0 = String::from("Hello, World!");
 
      let s1 = &s0;
+
+     // let s2 = &mut s0; // This will not work, because s0 is already borrowed as immutable
+
      println!("First borrow: s1 = {s1}");
 
-     let s2 = &mut s0;
-     println!("Second borrow: s2 = {s2}");
+     let s2 = &mut s0; // This instead will work, because s1 is already used and ended its life-time
 
      s2.insert_str(0, "asf");
      println!("After push_str: s2 = {s2}");
