@@ -4,14 +4,14 @@
 /*
 Most of the types we have learned like int, float, bool, ... are of a known size
 -> can be stored on the stack and popped off the stack when their scope is over
--> can be quickly and trivially copied to make a new, independent instance 
+-> can be quickly and trivially copied to make a new, independent instance
    if another part of code needs to use the same value in a different scope (referencing)
 
 Even string literals like `let s = "Hello";` (&str) also have fixed size, immutable
 
 String Type is one of types that are stored on the heap
 (because their size is not fixed, grownable and mutable)
--> Use them to see how Rust knows when to clean up data, 
+-> Use them to see how Rust knows when to clean up data,
    without garbage collector like other languages (see Memory Allocation)
 
 For example, when we want to take user string inputs, apparently their size are not known
@@ -33,12 +33,12 @@ fn demo_StringType() {
   println!("The value of s2 is: {s2}")
 }
 
-// Why can String be mutated but literals cannot? 
+// Why can String be mutated but literals cannot?
 // The difference is in how these two types deal with memory (see OwnerShip and Memory Allocation)
 
-////////////////////
-///    main()    ///
-////////////////////
+//////////////////
+//    main()    //
+//////////////////
 
 fn main() {
     demo_StringType();

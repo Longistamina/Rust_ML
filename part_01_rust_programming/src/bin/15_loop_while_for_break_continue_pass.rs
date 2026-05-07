@@ -20,7 +20,7 @@ fn _demo_break() {
         counter += 1;
 
         if counter == 10 {
-            break counter*2 // Breaks the loop if the condition is met, 
+            break counter*2 // Breaks the loop if the condition is met,
         }                   // then return the value = counter*2
 
     };
@@ -38,7 +38,7 @@ fn _demo_break() {
 
 fn _demo_nested_loop_with_labels() {
     let mut count = 0;
-    
+
     'counting_up: loop { // use single quote ' to name the outer loop with a label
         println!("Count = {count}");
         let mut remaining = 10;
@@ -58,7 +58,7 @@ fn _demo_nested_loop_with_labels() {
         }
 
         count += 1;
-        
+
         // Prints "=" 20 times
         let line = "=".repeat(20);
         println!("{line}")
@@ -84,7 +84,7 @@ fn _demo_nested_loop_with_labels() {
 fn _demo_while() {
     let mut number = 5;
 
-    while number != 0 { // While the condition is true, the loop runs. 
+    while number != 0 { // While the condition is true, the loop runs.
         println!("number = {number}");
         number -= 1;
     }
@@ -138,6 +138,7 @@ fn _demo_continue() {
 // ------------------ pass ------------------- //
 // ------------------------------------------- //
 
+#[allow(clippy::needless_else)]
 fn _demo_pass() {
     for number in 1..=10 {
         if (number % 2).eq(&0) {
@@ -150,9 +151,9 @@ fn _demo_pass() {
     }
 }
 
-/////////////////////////////////
-///          main()           ///
-/////////////////////////////////
+///////////////////////////////
+//          main()           //
+///////////////////////////////
 
 fn main() {
     // _demo_loop_infinite();

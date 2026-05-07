@@ -1,10 +1,10 @@
 fn main () {
     // ------------------------------ //
     // ----------- Scope ------------ //
-    // ------------------------------ // 
+    // ------------------------------ //
     // Scope defines the region of code where a variable or item is valid, accessible, and authorized to exist
     // Scope are defined by curly braces {}
-    
+
     let x = 10;
 
     {
@@ -16,7 +16,8 @@ fn main () {
 
     println!("The value of x in the main scope is: {x}"); // 12
 
-    
+    println!("===============================================================================");
+
     // ---------------------------------- //
     // ----------- Statement ------------ //
     // ---------------------------------- //
@@ -29,6 +30,7 @@ fn main () {
     // This will cause error, because (let y = 7) does not return any value
     // so we cannot assign (let y = 7) to z
 
+    println!("===============================================================================");
 
     // ----------------------------------- //
     // ----------- Expression ------------ //

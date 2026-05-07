@@ -10,5 +10,7 @@ fn main() {
         .read_line(&mut information)
         .expect("Error: cannot read the input!");
 
+    println!("===============================================================================");
+
     println!("Your information is: {information}")
 }

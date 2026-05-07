@@ -6,9 +6,17 @@ fn main() {
     let mut rng = rand::rng(); // 1. Make the variable mutable
 
     demo_if();
+    println!("===============================================================================");
+
     demo_if_else(&mut rng); // 2. Pass a mutable reference (borrowing)
+    println!("===============================================================================");
+
     demo_if_elseif_else(&mut rng); // 3. Use it again
+    println!("===============================================================================");
+
     demo_if_nested(&mut rng);
+    println!("===============================================================================");
+
     demo_let_if(&mut rng);
 }
 
@@ -17,7 +25,7 @@ fn main() {
 // ----------------------------------------- //
 
 fn demo_if() {
-    
+
     let number = 2;
 
     if number != 0 {
@@ -32,7 +40,7 @@ fn demo_if() {
 fn demo_if_else(rng: &mut ThreadRng) {
 
     let random_number = rng.random_range(1..=10);
-    
+
     if random_number > 5 {
         println!("TRUE: random_number {random_number} is greater than 5.")
     } else {
@@ -45,7 +53,7 @@ fn demo_if_else(rng: &mut ThreadRng) {
 // --------------------------------------------------- //
 
 fn demo_if_elseif_else(rng: &mut ThreadRng) {
-    
+
     let random_score = rng.random_range(0.0..=10.0); // generate floating-point numbers
 
     if (9.0 < random_score) & (random_score <= 10.0) {
@@ -91,7 +99,7 @@ fn demo_if_nested(rng: &mut ThreadRng) {
 // -------------------------------------------------------------------- //
 
 fn demo_let_if(rng: &mut ThreadRng) {
-    
+
     let random_number = rng.random_range(1..=100);
 
     let condition = (random_number % 2).eq(&0); // true or false
@@ -113,7 +121,7 @@ x <= y || x.le(&y) || less or equal
 x > y  || x.gt(&y) || greater than
 x < y  || x.lt(&y) || less than
 
-Again, here we write "&y", not "y". 
+Again, here we write "&y", not "y".
 This is because we want to use y as reference only (or "borrow" it).
 
 ######### LOGICAL OPERATORS #########

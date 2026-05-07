@@ -8,6 +8,7 @@ fn main() {
 
     // x = 6; // this will cause a compile-time error because x is immutable
 
+    println!("===============================================================================");
 
     // ------------------------------------------------- //
     // ---------------- Mutable variable ----------------//
@@ -18,7 +19,8 @@ fn main() {
 
     y = 15; // this is allowed because y is mutable
     println!("The value of y is now: {y}");
-    
+
+    println!("===============================================================================");
 
     // ------------------------------------------ //
     // ---------------- Constant ----------------//
@@ -34,7 +36,7 @@ fn main() {
     // Cannot use the `mut` keyword with constants, as they are inherently immutable.
     // Constants are conventionally written in uppercase with underscores separating words.
 
-    // When declaring a constant, you must also specify its type, as constants do not have a default type. 
+    // When declaring a constant, you must also specify its type, as constants do not have a default type.
     // This is because the value of a constant must be known at compile time, and the compiler needs to know the type to determine how much memory to allocate for it.
 
     // Operations that can be used when declaring constants: https://doc.rust-lang.org/reference/const_eval.html

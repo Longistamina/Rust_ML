@@ -16,6 +16,7 @@ fn main() {
 
     // println!("some_string again = {s}") // This will cause error since "s" has been moved to takes_ownership, no longer valid
 
+    println!("===============================================================================");
 
     // -------------------------------------------------------------------------- //
     // ------------------------------ makes_copy() ------------------------------ //
@@ -32,6 +33,7 @@ fn main() {
 
     println!("some_integer (again) = {x}"); // x is still valid here thanks to the Copy trait, no error
 
+    println!("===============================================================================");
 
     // ------------------------------------------------------------------------------- //
     // ------------------------------ gives_ownership() ------------------------------ //
@@ -40,12 +42,13 @@ fn main() {
     fn gives_ownership() -> String {
         let s = String::from("This string will be yours"); // declare a String "s"
 
-        s // "s" goes out of scope, function returns the value of "s" (give ownership), 
+        s // "s" goes out of scope, function returns the value of "s" (give ownership),
     }
 
     let s1 = gives_ownership(); // s1 receives ownership
     println!("s1 = {s1}");
 
+    println!("===============================================================================");
 
     // ------------------------------------------------------------------------------------ //
     // ------------------------------ takes_then_givesback() ------------------------------ //
@@ -58,13 +61,12 @@ fn main() {
         // some_string takes the ownership from the input,
         // then goes into scope
 
-        some_string // some_string goes out of scope, its ownership as well as value is given back 
+        some_string // some_string goes out of scope, its ownership as well as value is given back
     }
 
     let s3 = takes_then_givesback(s2);
 
     // println!("s2 = {s2}"); // Again, s2 has been moved to takes_then_givesback(), its ownership now belongs to s3
     println!("s3 = s2 = {s3}");
-
 
 }

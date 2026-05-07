@@ -68,17 +68,26 @@ fn return_keyword(score: f64) -> &'static str {
 
 fn main() {
     func_simple();
+    println!("===============================================================================");
+
     func_single_parameter(53);
+    println!("===============================================================================");
+
     func_multi_parameters(3.8, 'N');
+    println!("===============================================================================");
+
 
     let result_pow = func_return_pow(2.0, 3.2);
     println!("Function returning one value: {result_pow}"); // 2^3.2
+    println!("===============================================================================");
 
     let (val, original_base, status) = func_multi_return(2.0, 3.0);
     println!("Function returning multiple values: Reulst <-> {val}, Base <-> {original_base}, Positive <-> {status}");
+    println!("===============================================================================");
 
     let coordinates = get_coordinates();
     println!("Function returning one array: {coordinates:?}");
+    println!("===============================================================================");
 
     let mut rng = rand::rng();
     let score: f64 = rng.random_range(0.0..100.0);

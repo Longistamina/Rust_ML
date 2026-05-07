@@ -4,8 +4,10 @@ fn main() {
     // ------------------------------------------ //
 
     let mut x = 5; // mutable variable
-    x = x + 1; // reassigning x to a new value
+    x += 1; // reassigning x to a new value
     println!("The value of x is: {x}"); // this will print 6
+
+    println!("===============================================================================");
 
     // ------------------------------------------ //
     // ---------------- Shadowing ----------------//
@@ -22,6 +24,8 @@ fn main() {
     // const Z: u32 = 20; // constant variable
     // let Z = Z + 1; // shadowing Z with a new variable that has the same name
     // println!("The value of Z is: {Z}"); // this will raise error because constant cannot be shadowed
+
+    println!("===============================================================================");
 
     // -------------------------------------------- //
     // ---------- Assigning vs Shadowing ---------- //

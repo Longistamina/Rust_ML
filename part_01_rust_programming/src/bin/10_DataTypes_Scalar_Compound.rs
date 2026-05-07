@@ -13,7 +13,7 @@ fn main() {
     // Signed integer: i8, i16, ..., i128, isize (architecture-dependent)
     // stores value from -2^(n-1) to 2^(n-1)-1, it can store both positive and negative integer numbers
     // For example, i8 stores value from -2^7 to 2^7-1 -> from -128 to 127
-    
+
     let x: i8 = 3;
     // let x = 3_i8;
     println!("x-i8 = {x}");
@@ -42,6 +42,8 @@ fn main() {
     // NOTE: the default integer type is i32
     // NOTE: if you try to store the value exceed the range of the type -> Overflow
 
+    println!("===============================================================================");
+
     //////////////////////////
     //    Floating-Point    //
     //////////////////////////
@@ -58,17 +60,21 @@ fn main() {
     // let y = -1_530.26_f32;
     println!("y-f32: {y}");
 
+    println!("===============================================================================");
+
     ///////////////////
     //    Boolean    //
     ///////////////////
     // Boolean type in Rust has two possible values: true and false
     // Boolean type can be used for control flow (if condition), indexing, ....
-    
+
     let t = true;
     println!("True: {t}");
 
     let f: bool = false; // with explicit type annotation
     println!("False: {f}");
+
+    println!("===============================================================================");
 
     ////////////////
     //    Char    //
@@ -84,10 +90,12 @@ fn main() {
 
     println!("Char type examples: {c}, {z}, {heart_eyed_cat}");
 
+    println!("===============================================================================");
+
     // ------------------------------------------------- //
     // ---------------- Compound Types ----------------- //
     // ------------------------------------------------- //
-    // Compound types can group multiple values into one type. 
+    // Compound types can group multiple values into one type.
     // Rust has two primitive compound types: tuples and arrays.
 
     /////////////////
@@ -111,6 +119,8 @@ fn main() {
     let second_element_tup = tup.1;
     println!("first_element_tup = {first_element_tup}");
     println!("second_element_tup = {second_element_tup}");
+
+    println!("===============================================================================");
 
     /////////////////
     //    Array    //

@@ -2,7 +2,7 @@ use std::io;
 // io stands for Input/Output, a library to obtain user input and then print the results as output
 // std stands for Standard, is the standard library (where io library and many others come from)
 
-// By default, Rust has a set of items defined in the standard library that it brings into the scope of every program. 
+// By default, Rust has a set of items defined in the standard library that it brings into the scope of every program.
 // This set is called the "prelude"
 // If something you want is not in the "prelude" (like std::io), you have to bring it in
 
@@ -17,12 +17,12 @@ fn main() {
                                            // so, this String::new() returns an empty string which the variable "information" is bound to
 
     io::stdin() // or can use std::io::stdin() if we had not imported std::io before
-        .read_line(&mut information) 
+        .read_line(&mut information)
         .expect("Failed to read line");
 
     // .read_line(&mut information) call out read_line() from stdin() to take the user input, stored into "information"
     // that's why "information" must be mutable so that the method .read_line() can change its content to take in user input
-    
+
     // the "&" indicates this argument (the user input) is a reference, letting other parts of the code access this piece of data without copying this data into memory multiple times
     // reference is also immutable by default, that's why we write "&mut information", not "&information"
 
@@ -32,12 +32,16 @@ fn main() {
     // If the state is "Ok", then "Result" will return the user input it is holding so that you can use it
     // (If we not call .expet("message") out, Rust will display a warning during compiling)
     // NOTE: more about Ok(value) and Err(error) in file 06_loop_break_continue_pass_ErrorHandling.rs
-    
+
     // one-liner: io::stdin().read_line(&mut information).expect("Failed to read line");
+
+    println!("===============================================================================");
 
     // Print out the information
     println!("Your given information: {information}"); // The {} is a placeholder, to print out the value of the "information" variable
     println!("Your given information: {}", information);
+
+    println!("===============================================================================");
 
     // Print only the value of the variable
     println!("{information}");
