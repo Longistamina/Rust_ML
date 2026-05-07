@@ -119,7 +119,7 @@ fn main() {
      */
 
      println!("user_3 email = {}", user_3.email);
-     println!("user_3 active = {}", user_3.active)
+     println!("user_3 active = {}", user_3.active);
      /*
       * ``user_3.email`` field is still remained, because it was not used to update/create user_4
       * (in other word, this field was not moved, so it can still be borrowed or referenced)
@@ -133,4 +133,73 @@ fn main() {
       // --------------------------------------------------------------------------------------- //
       // ------------------------------------- Tuple Structs ----------------------------------- //
       // --------------------------------------------------------------------------------------- //
+      /*
+       * Rust allows creating structs that look similar to tuple, called ``tuple structs``
+       * ``tuple structs`` don't have ``key: value`` pattern, just have the types for each field
+       * Should use ``tuple structs`` when:
+       * + give a name for a tuple (resulting a different type from basic tuple)
+       * + when naming the fields become tedious
+       */
+
+       struct Color(i32, i32, i32); // create a ``tuple struct``, no field name specified
+       struct Point(i32, i32, i32);
+
+       let black = Color(0, 0, 0);
+       println!("black = {} {} {}", black.0, black.1, black.2);
+
+       let origin = Point(0, 0, 0);
+       println!("origin = {} {} {}", origin.0, origin.1, origin.2);
+
+       ////////////////////////
+
+       fn change_color (color: &Color, change: i32) -> Color { // This function only accept ``Color``, not ``Point``
+           let Color(r, g, b) = color; // NOT ``let (r, g, b) = color``
+           /*
+            * Because ``color`` is an instance of struct Color, not a tuple,
+            * we have to do ``let Color(r, g, b) = color``, this makes both sides the same type
+            * -> allows destructuring
+            */
+
+           Color(r + change, g + change, b + change) // return a new ``Color`` instance with shifted value
+       }
+
+       let color_changed = change_color(&black, 3);
+       println!("color_changed = {} {} {}", color_changed.0, color_changed.1, color_changed.2);
+
+       // let point_shifted = change_color(&origin, 4)
+       // Cannot pass the &origin to change_color() because the type is different
+
+       ////////////////////////
+
+       fn shift_point (point: &Point, shift: i32) -> Point { // This function only accepts ``Point``, not ``Color``
+           let Point(x, y, z) = point; // NOT ``let (x, y, z) = point``
+
+           Point(x + shift, y + shift, z + shift) // return a new ``Struct`` instance with shifted value
+       }
+
+       let point_shifted = shift_point(&origin, -5);
+       println!("point_shifted = {} {} {}", point_shifted.0, point_shifted.1, point_shifted.2);
+
+       // let color_changed = shift_point(&color, -5);
+       // causes compiler panic
+
+       // ------------------------------------------------------------------------------------------- //
+       // ------------------------------------- Unit-Tuple Struct ----------------------------------- //
+       // ------------------------------------------------------------------------------------------- //
+       /*
+        * Rust also allows create a struct that looks like unit tuple
+        *
+        * Unit-like structs can be useful when you need to implement a trait on some type
+        * but don’t have any data that you want to store in the type itself.
+        */
+
+        struct AlwaysEqual; // a unit-like struct with no any field
+        let _subject = AlwaysEqual; // an instance from unit-like struct
+
+        /*
+         * Because this is a unit-like struct/instance,
+         * it is always equal to every instance of any other type.
+         * (can be useful when we need to create an object as a known result for testing purposes)
+         */
+
 }

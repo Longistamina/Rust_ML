@@ -120,6 +120,10 @@ fn main() {
     println!("first_element_tup = {first_element_tup}");
     println!("second_element_tup = {second_element_tup}");
 
+    // ``unit`` tuple: an empty tuple without any value
+    let unit_tup = ();
+    println!("unit_tup {:?}", unit_tup); // {:?} is a debugg formatter
+
     println!("===============================================================================");
 
     /////////////////
