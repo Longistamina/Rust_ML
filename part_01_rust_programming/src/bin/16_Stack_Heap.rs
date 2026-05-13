@@ -22,15 +22,15 @@ fn main() {
     - Lifetime: cleaned up the moment a function ends
     */
 
-    let x: u8 = 3;
-    let y: u8 = 5;
+    let x: u8 = 3; // fixed size, on the stack
+    let y: u8 = 5; // fixed size, on the stack
 
-    fn add_numbers(num1: u8, num2: u8) -> u8 {
+    fn add_numbers(num1: u8, num2: u8) -> u8 { // fixed size, on the stack
         num1 + num2
     }
 
-    let z = add_numbers(x, y);
-    println!("z = x + y = {x} + {y} = {z}\n");
+    let z = add_numbers(x, y); // fixed size, on the stack
+    println!("z = x + y = {x} + {y} = {z}"); // fixed size, on the stack
 
     /*                          LAST IN FIRST OUT
     ┌─────────────┬─────────────┬─────────────┬─────────────┬─────────────┐
@@ -52,8 +52,9 @@ fn main() {
     │      y       ┆      y       ┆      y       ┆      y       ┆     ...      │
     │      x       ┆      x       ┆      x       ┆      x       ┆      x       │
     └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-     */
+    */
 
+     println!("===============================================================================");
 
     /*
     ───────────────────────────────────────────────────────────────────────────────────
@@ -82,22 +83,58 @@ fn main() {
     👉 Key idea: Long-lived, flexible, dynamically sized data
     */
 
-    let s1 = String::from("hello");
+    let mut s1 = String::from("Hello"); // mutable, growable, changeable -> ptr on stack, data on heap
+    s1.push_str(", I am Rust");
     println!("s1 = {s1}");
 
-    let number: i8 = -3;
-    println!("numger = {number}")
+    let number: i8 = -3; // fixed size, on stack
+    println!("number = {number}");
 
-/*
-    ──────────────────────────────────────
-    2b. RUST'S MOST COMMON HEAP TYPES
-    ──────────────────────────────────────
+    /*                                       LAST IN FIRST OUT
+    ┌──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┐
+    │    stacking_1    ┆    stacking_2    ┆    stacking_3    ┆    stacking_4    ┆    stacking_5    │
+    ╞══════════════════╪══════════════════╪══════════════════╪══════════════════╪══════════════════╡
+    │       ...        ┆       ...        ┆       ...        ┆       ...        ┆ println!(number) │
+    │       ...        ┆       ...        ┆       ...        ┆      number      ┆      number      │
+    │       ...        ┆       ...        ┆   println!(s1)   ┆   println!(s1)   ┆   println!(s1)   │
+    │       ...        ┆  s1.push_str()   ┆  s1.push_str()   ┆  s1.push_str()   ┆  s1.push_str()   │
+    │      s1_ptr      ┆      s1_ptr      ┆      s1_ptr      ┆      s1_ptr      ┆      s1_ptr      │
+    └──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┘
 
-    Type       │  What it is                          │  Stack holds
-    ───────────┼──────────────────────────────────────┼─────────────────
-    Box<T>     │  Single heap value                   │  pointer
-    Vec<T>     │  Growable array                      │  ptr + len + cap
-    String     │  Growable UTF-8 text                 │  ptr + len + cap
+    ┌──────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────────────┐
+    │   unstacking_1   ┆   unstacking_2   ┆   unstacking_3   ┆   unstacking_4   ┆   unstacking_5   │
+    ╞══════════════════╪══════════════════╪══════════════════╪══════════════════╪══════════════════╡
+    │ println!(number) ┆       ...        ┆       ...        ┆       ...        ┆       ...        │
+    │      number      ┆      number      ┆       ...        ┆       ...        ┆       ...        │
+    │   println!(s1)   ┆   println!(s1)   ┆   println!(s1)   ┆       ...        ┆       ...        │
+    │  s1.push_str()   ┆  s1.push_str()   ┆  s1.push_str()   ┆  s1.push_str()   ┆       ...        │
+    │      s1_ptr      ┆      s1_ptr      ┆      s1_ptr      ┆      s1_ptr      ┆      s1_ptr      │
+    └──────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────────────┘
+
+    STACK (Variable Metadata)                       HEAP (Actual Data)
+    -------------------------------                 -----------------------
+    Name: s1 (The Owner)                            Index | Value
+    +----------+----------+                         +-----+-------+
+    | ptr      |  *-------------------------------->|  0  |   h   |
+    | len      |    5     |                         |  1  |   e   |
+    | capacity |    5     |                         |  2  |   l   |
+    +----------+----------+                         |  3  |   l   |
+                                                    |  4  |   o   |
+                                                    +-----+-------+
+    */
+    println!("===============================================================================");
+
+
+    /*
+        ──────────────────────────────────────
+        2b. RUST'S MOST COMMON HEAP TYPES
+        ──────────────────────────────────────
+
+        Type       │  What it is                          │  Stack holds
+        ───────────┼──────────────────────────────────────┼─────────────────
+        Box<T>     │  Single heap value                   │  pointer
+        Vec<T>     │  Growable array                      │  ptr + len + cap
+        String     │  Growable UTF-8 text                 │  ptr + len + cap
 
 
 
@@ -129,25 +166,6 @@ fn main() {
   The type tells you where it lives:
     - Known, fixed size at compile time?  → STACK  (i32, bool, [i32; 3])
     - Unknown or dynamic size?            → HEAP   (Vec, String, Box)
-
-
-──────────────────────────────────────
- 5. VISUAL
-──────────────────────────────────────
-
-  STACK                         HEAP
-  (grows downward)              (spread freely)
-  ┌──────────────────┐
-  │ fn inner()       │  ← top  [ String data: "hello" ]
-  │ fn outer()       │
-  │ fn main()        │  ← base [ Vec data: 1, 2, 3    ]
-  └──────────────────┘
-   ptr │ len │ cap              [ Box data: 10         ]
-   ────┼─────┼────
-    ╰──┴─────┴──────────────────╯
-       Stack holds the metadata,
-       Heap holds the actual data
-
 
 ──────────────────────────────────────
  FINAL RULE OF THUMB  (Rust style)
