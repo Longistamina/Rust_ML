@@ -1,3 +1,9 @@
+
+const SCALE: f32 = 2.5; // local scope constant
+static FREQ: f32 = 3.; // local scope static
+
+// Or can use ``static mut FREQ`` but must use ``unsafe`` later
+
 fn main () {
     // ------------------------------ //
     // ----------- Scope ------------ //
@@ -15,6 +21,29 @@ fn main () {
     let x = x + 2;
 
     println!("The value of x in the main scope is: {x}"); // 12
+
+    println!("===============================================================================");
+
+    // ----------------------------------------------------- //
+    // ----------- Local Scope and Global Scope ------------ //
+    // ----------------------------------------------------- //
+    // Local Scope: refers to variables bound within a block, they will be dropped when scope ends
+    // Global Scope: refers to items that are available program-wide (can be via ``constant`` or ``static``)
+
+    let input_global: f32 = 33.;
+
+    {
+        let input_local: f32 = 22.;
+
+        let result = input_local * SCALE + FREQ;
+        println!("local = {result}");
+
+        let result = input_global * SCALE + FREQ;
+        println!("global (inner) = {result}")
+    }
+
+    let result = input_global * SCALE;
+    println!("global (outer) = {result}");
 
     println!("===============================================================================");
 
