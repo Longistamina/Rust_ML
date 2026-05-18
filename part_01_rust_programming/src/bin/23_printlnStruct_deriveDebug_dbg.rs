@@ -12,7 +12,7 @@
  *    (possibilities: Do you want commas or not? Do you want to print the curly brackets? Should all the fields be shown?)
  * -> structs don’t have a provided implementation of Display to use with ``println!`` and the {} placeholder.
  *
- * SOLUTIONS: use ``#[derive(Debug)]`` with ``{struct_instance:?}`` (or `{struct_instance:?}``),
+ * SOLUTIONS: use ``#[derive(Debug)]`` with ``{struct_instance:?}`` (or `{struct_instance:#?}``),
  *            or ``dbg!(&struct_instance)``
  */
 
