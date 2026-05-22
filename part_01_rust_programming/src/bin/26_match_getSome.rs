@@ -29,13 +29,13 @@ enum UsState {
 
  fn value_in_cents(coin: Coin) -> u8 {
      match coin {
-     Coin::Penny => 1, // ``Coin::Penny`` is the pattern arm, ``1`` is the code arm
-     Coin::Nickel => 5,
-     Coin::Dime => 10,
-     Coin::Quarter(state) => {
-         println!("Quarter from state {state:?}");
-         25
-        }
+        Coin::Penny => 1, // ``Coin::Penny`` is the pattern arm, ``1`` is the code arm
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter(state) => {
+            println!("Quarter from state {state:?}");
+            25
+            }
     }
  }
 
@@ -116,9 +116,9 @@ fn main() {
      let dice_roll = 9;
 
      match dice_roll {
-         3 => {println!("Roll = 3")},
-         7 => {println!("Roll = 7")},
-         other => {println!("Other = {other}")} // ``other`` variable is used to capture remaining possibilites
+         3 => println!("Roll = 3"),
+         7 => println!("Roll = 7"),
+         other => println!("Other = {other}") // ``other`` variable is used to capture remaining possibilites
      }
 
      /////////////////////////
@@ -126,9 +126,9 @@ fn main() {
      let score = 25;
 
      match score {
-         9 => {println!{"Good score!"}},
-         8 => {println!("Nice score!")},
-         remain => {println!("Unknow score: {remain}")} // ``remain`` variable is used to capture remaining possibilites
+         9 => println!{"Good score!"},
+         8 => println!("Nice score!"),
+         remain => println!("Unknow score: {remain}") // ``remain`` variable is used to capture remaining possibilites
      }
 
      /////////////////////////
@@ -136,8 +136,8 @@ fn main() {
      let choice = 0;
 
      match choice {
-         0 => {println!("No")},
-         1 => {println!("Yes")},
+         0 => println!("No"),
+         1 => println!("Yes"),
          _ => {
              println!("Invalid option.");
              repeat_something()
