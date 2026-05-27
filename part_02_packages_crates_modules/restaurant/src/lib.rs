@@ -15,11 +15,11 @@ mod tests {
 
 // ############################################################################## //
 
-mod front_of_house { // Define a module named ``front_of_house`` using ``mod`` keyword
+pub mod front_of_house { // Define a module named ``front_of_house`` using ``pub mod`` keyword (so that other crates can access it)
     // goes in side the body of the module (inside the bracket {})
 
-    mod hosting { // Place another module inside ``front_of_house`` module
-        fn add_to_wait_list() {} // Define other things like function, struct, enum, etc inside a module
+    pub mod hosting { // Place another module inside ``front_of_house`` module
+        pub fn add_to_waitlist() {} // Define other things like function, struct, enum, etc inside a module
 
         fn seat_at_table() {}
     }

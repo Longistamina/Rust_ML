@@ -3975,6 +3975,9 @@ dependencies = [
 [[package]]
 name = "part_02_packages_crates_modules"
 version = "0.1.0"
+dependencies = [
+ "restaurant",
+]
 
 [[package]]
 name = "password-hash"
@@ -4622,6 +4625,10 @@ dependencies = [
  "web-sys",
  "webpki-roots 1.0.6",
 ]
+
+[[package]]
+name = "restaurant"
+version = "0.1.0"
 
 [[package]]
 name = "rgb"
