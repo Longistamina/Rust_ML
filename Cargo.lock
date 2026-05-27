@@ -3973,6 +3973,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "part_02_packages_crates_modules"
+version = "0.1.0"
+
+[[package]]
 name = "password-hash"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
