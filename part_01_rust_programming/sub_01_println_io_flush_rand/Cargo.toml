@@ -1,0 +1,6 @@
+[package]
+name = "sub_01_warmup_println_io_rand"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

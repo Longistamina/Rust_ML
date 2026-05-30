@@ -1,0 +1,6 @@
+[package]
+name = "sub_04_ownership_SliceType"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

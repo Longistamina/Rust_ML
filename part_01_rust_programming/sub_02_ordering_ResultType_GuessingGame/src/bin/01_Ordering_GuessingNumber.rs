@@ -4,7 +4,7 @@ use std::io;
 use rand::prelude::*;
 
 fn main() {
-    println!("This is the Guessing Game!");
+    println!("\nThis is the Guessing Game!");
     println!("Please guess a random number from 1 to 100!");
 
     println!("===============================================================================");

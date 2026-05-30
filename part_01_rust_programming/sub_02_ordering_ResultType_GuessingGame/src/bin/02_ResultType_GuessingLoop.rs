@@ -3,7 +3,7 @@ use std::cmp::Ordering;
 use rand::prelude::*;
 
 fn main() {
-    println!("This the Guessing Game!");
+    println!("\nThis the Guessing Game!");
 
     println!("===============================================================================");
 
@@ -50,7 +50,7 @@ fn main() {
                 Ordering::Less => println!("Too small"),
                 Ordering::Greater => println!("Too big"),
                 Ordering::Equal => { // If the player's guess is correct, announce the victory and break the loop
-                    println!("You win!!!");
+                    println!("*** You win!!! ***");
                     break;
                 }
             }
@@ -58,7 +58,7 @@ fn main() {
 
         guess_old = guess_numeric;
 
-        print!("Please guess again ('q' to exit): ");
+        print!("\nPlease guess again ('q' to exit): ");
         io::stdout().flush().expect("Failed to flush stdout");
 
         guess_string.clear(); // Clear the old string input
@@ -75,7 +75,7 @@ fn main() {
                 guess_numeric = match guess_string.parse() {
                     Ok(num) => num,
                     Err(_) => {
-                        println!(">>>Please enter a number or 'q'!");
+                        println!(">>> Please enter a number or 'q'!");
                         continue;
                     }
                 }

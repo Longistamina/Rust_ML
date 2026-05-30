@@ -4,7 +4,7 @@ the STACK and the HEAP.
 */
 
 fn main() {
-
+    println!();
     /*
     ──────────────────────────────────────────────────────────────────────────────────────
     1. THE STACK  (simple, fast, neat)
