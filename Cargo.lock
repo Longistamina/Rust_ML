@@ -3966,20 +3966,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "part_01_rust_programming"
-version = "0.1.0"
-dependencies = [
- "rand 0.10.1",
-]
-
-[[package]]
-name = "part_02_packages_crates_modules"
-version = "0.1.0"
-dependencies = [
- "restaurant",
-]
-
-[[package]]
 name = "password-hash"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5192,6 +5178,40 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "sub_01_warmup_println_io_rand"
+version = "0.1.0"
+
+[[package]]
+name = "sub_02_guessing_game"
+version = "0.1.0"
+dependencies = [
+ "rand 0.10.1",
+]
+
+[[package]]
+name = "sub_03_basic_concepts"
+version = "0.1.0"
+
+[[package]]
+name = "sub_04_ownership_SliceType"
+version = "0.1.0"
+
+[[package]]
+name = "sub_05_struct_impl_methods"
+version = "0.1.0"
+
+[[package]]
+name = "sub_06_EnumOptionSome_PatternMatching_IfLetElse"
+version = "0.1.0"
+
+[[package]]
+name = "sub_07_packages_crates_modules"
+version = "0.1.0"
+dependencies = [
+ "restaurant",
 ]
 
 [[package]]
