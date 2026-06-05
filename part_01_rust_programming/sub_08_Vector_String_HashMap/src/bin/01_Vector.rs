@@ -36,5 +36,146 @@ fn main() {
 
     println!("\n===============================================================================\n");
 
+    // ----------------------------------------------------------------------------------------------------- //
+    // ---------------------- Access items with indexing ``[]`` and method ``.get()`` ---------------------- //
+    // ----------------------------------------------------------------------------------------------------- //
 
+    let v3 = vec![0.1, 1.2, 2.3, 3.4, 4.5];
+
+    ////////////////////////
+    //      indexing      //
+    ////////////////////////
+
+    let third_element: &f64 = &v3[2]; // 2.3
+    println!("third_element = {third_element}");
+
+    println!("fourth_element = {}", &v3[3]); // 3.4
+
+    /////////////////////
+    //      .get()     //
+    /////////////////////
+    /*
+     * NOTE: ``.get()`` will return ``Option<&T>`` -> use ``match`` to get
+     * -> Useful to handle out-of-bound index
+     */
+
+    println!();
+
+    let second_element: Option<&f64> = v3.get(1);
+    match second_element {
+        Some(value) => println!("second_element = {value}"),
+        None => println!("There is no second_element")
+    }
+
+    let out_of_bound: Option<&f64> = v3.get(100);
+    match out_of_bound {
+        Some(value) => println!("this_element = {value}"),
+        None => println!("This element does not exist")
+    }
+
+    println!("\n===============================================================================\n");
+
+    // ----------------------------------------------------------------------------------------------------- //
+    // ------------------------------ Remind mutable and immutable reference ------------------------------- //
+    // ----------------------------------------------------------------------------------------------------- //
+
+    // let mut v = vec![1, 2, 3, 4, 5];
+    // let first = &v[0];
+    // v.push(6);
+    // println!("The first element is: {first}");
+
+    /*
+     * This code will not run, because though ``v`` is a mutable vector,
+     * ``first`` in the other hand is an immutable reference.
+     * -> can’t have mutable and immutable references in the same scope.
+     *
+     * The ``v.push(6)`` adds a new element to the end of the vector
+     * -> this might require allocating new memory and copying the old elements to the new space
+     * (if there isn’t enough room to put all the elements next to each other where the vector is currently stored)
+     * -> the reference to the first element would be pointing to deallocated memory!! (Not allowed)
+     */
+
+    // ----------------------------------------------------------------------------------------------------- //
+    // -------------------------------------- Iterating over a vector -------------------------------------- //
+    // ----------------------------------------------------------------------------------------------------- //
+
+    ////////////////////
+    // for i in &v {} //
+    ////////////////////
+
+    let v4 = vec![100, 32, 57];
+
+    println!("Loop with immutable reference:");
+    for i in &v4 { // immutable reference of each element in v4
+        println!("{i}");
+    }
+
+    ////////////////////////
+    // for i in &mut v {} //
+    ////////////////////////
+
+    let mut v5 = vec![100, 32, 57];
+
+    println!("\nLoop with mutable reference:");
+    for i in &mut v5 {
+        *i += 50 // ``*`` is a dereference operator (talk about it later)
+                 // it helps us get the true value of ``i`` = [100, 32, 5] before running ``+= 50`` in each loop
+    }
+
+    println!("v5 elements = {v5:?}"); // [150, 82, 107]
+
+    println!("\n===============================================================================\n");
+
+    // ----------------------------------------------------------------------------------------------------- //
+    // ------------------------------------------ Vector and Enum ------------------------------------------ //
+    // ----------------------------------------------------------------------------------------------------- //
+    /*
+     * Vectors can only store values that are of the same type.
+     * This can be incovenient because sometimes we would need to store a list of items of different types.
+     * -> Combine Vector with Enum (because the variants of an enum are defined under the same enum type)
+     */
+
+     #[allow(dead_code)]
+     #[derive(Debug)]
+     enum Data {
+         Id(i32),
+         Name(String),
+         Score(f64)
+     }
+
+     let agent0 = vec![
+         Data::Id(0),
+         Data::Name(String::from("Cressida Bright")),
+         Data::Score(257.25)
+     ];
+
+     let agent1 = vec![
+         Data::Id(1),
+         Data::Name(String::from("James Bond")),
+         Data::Score(258.92)
+     ];
+
+     let agent2 = vec![
+         Data::Id(2),
+         Data::Name(String::from("Lennex Monroe")),
+         Data::Score(256.16)
+     ];
+
+     println!("agent0 = {agent0:?}");
+     println!("agent1 = {agent1:?}");
+     println!("agent2 = {agent2:?}");
+
+     println!("\n===============================================================================\n");
+
+     // ----------------------------------------------------------------------------------------------------- //
+     // ----------------------------- Dropping a vector also drops its elements ----------------------------- //
+     // ----------------------------------------------------------------------------------------------------- //
+
+     fn declare_vector_then_drop() {
+         let v = vec![1, 2, 3, 4];
+
+         println!("v = {v:?}")
+     } // vector ``v`` and all its elements are dropped here after this scope
+
+     declare_vector_then_drop();
 }
