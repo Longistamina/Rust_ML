@@ -61,5 +61,55 @@
 
      let mut name = "Harry Potter".to_string();
      name.insert_str(0, "My name is ");
-     println!("name = {name}")
+     println!("name = {name}");
+
+     let mut introduction = "My name is ".to_string();
+     let name = 'A';
+     introduction.insert(introduction.len(), name);
+     println!("introduction = {introduction}");
+
+     println!("\n===============================================================================\n");
+
+     // ----------------------------------------------------------------------------------- //
+     // --------------------- Concatenate with ``+`` or ``format!()`` --------------------- //
+     // ----------------------------------------------------------------------------------- //
+
+     ////////////////////////
+     // Use ``+`` operator //
+     ////////////////////////
+
+     let s1 = String::from("Hello, ");
+     let s2 = String::from("world!");
+     let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
+     // let s3 = s1.add(&s2);
+
+     /*
+      * The ``.add()`` takes literal string ``&str`` as input,
+      * So theoretically, we cannot add two Strings together.
+      * But the Rust compiler can coerce the &String argument into a &str
+      * -> The codes still run
+      */
+
+     println!("s3 = {s3}");
+
+     ///////
+
+     let s1 = String::from("tic");
+     let s2 = String::from("tac");
+     let s3 = String::from("toe");
+
+     let s = s1 + "-" + &s2 + "-" + &s3; // In this cases, use ``+`` is much more convenient than ``.add()``
+     println!("s = {s}");
+
+     ///////////////////////
+     // Use ``format!()`` //
+     ///////////////////////
+
+     let s1 = String::from("tic");
+     let s2 = String::from("tac");
+     let s3 = String::from("toe");
+
+     let s_format = format!("{s1}+{s2}+{s3}");
+     println!("s_format = {s_format}");
+
  }
