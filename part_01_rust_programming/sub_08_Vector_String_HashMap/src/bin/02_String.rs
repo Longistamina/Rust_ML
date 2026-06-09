@@ -114,9 +114,9 @@
 
      println!("\n===============================================================================\n");
 
-     // ---------------------------------------------------------------------------------------------------------------- //
-     // ---------------------- Indexing a String with ``.chars().nth()`` or ``.bytes().nth()`` ------------------------- //
-     // ---------------------------------------------------------------------------------------------------------------- //
+     // --------------------------------------------------------------------------------------------------------------- //
+     // ---------------------- Rust DOES NOT support indexing and slicing for String and &str ------------------------- //
+     // --------------------------------------------------------------------------------------------------------------- //
 
      ///////////////////////////////////////////////////////////////////////////////////////
      // Rust does not support indexing with ``string[index]`` for String and literal &str //
@@ -126,7 +126,7 @@
      // let first = s1[0];
      println!("s1_bytes = {:?}", s1.bytes()); // s1_bytes = Bytes(Copied { it: Iter([104, 111, 108, 97]) })
 
-     let s2 = String::from("Здравствуйте");
+     let s2 = "Здравствуйте"; // &str
      // let first = hello[0];
      println!("s2_bytes = {:?}", s2.bytes()); // s2_bytes = Bytes(Copied { it: Iter([208, 151, 208, 180, 209, 128, 208, 176, 208, 178, 209, 129, 209, 130, 208, 178, 209, 131, 208, 185, 209, 130, 208, 181]) })
 
@@ -141,19 +141,19 @@
       * -> each character occupies 1 byte
       * -> each byte represents 1 unicode value
       *
-      * But in the case of ``hello = String::from("Здравствуйте")``,
+      * But in the case of ``s2 = "Здравствуйте"``,
       * its length = 24
       * -> each character occupies 2 bytes
       * -> each character needs 2 unicode values
       *
       * => Therefore, an index into the string’s bytes will not always correlate to a valid Unicode scalar value.
       *
-      * For example, in the ``hello = String::from("Здравствуйте")``
+      * For example, in the ``s2 = "Здравствуйте"``
       * look at the character "3" (not three but the Cyrillic letter Ze),
       * this "3" takes two bytes, each byte stores a unicode value
       * the 1st byte is 208
       * the 2nd byt is 151
-      * -> So when we index ``hello[0]``, what we got is the unicode value of the 1st byte: 208
+      * -> So when we index ``s2[0]``, what we got is the unicode value of the 1st byte: 208
       * -> But this 208 unicode value alone is not a valid character on its own
       * -> indexing fail...
       */
@@ -171,4 +171,36 @@
        * -> still fail
        */
 
+       println!("\n===============================================================================\n");
+
+       // ------------------------------------------------------------------------------------------------------------------- //
+       // ---------------------- Iterate through a String or a &str with ``.chars()`` or ``.bytes`` ------------------------- //
+       // ------------------------------------------------------------------------------------------------------------------- //
+
+       //////////////////////
+       // Use ``.chars()`` //
+       //////////////////////
+
+       let s = String::from("Здравствуйте");
+       println!("s_chars = {:?}", s.chars()); // Chars(['З', 'д', 'р', 'а', 'в', 'с', 'т', 'в', 'у', 'й', 'т', 'е'])
+
+       for c in s.chars() {
+           println!("{c}")
+       }
+
+       println!();
+
+       //////////////////////
+       // Use ``.bytes()`` //
+       //////////////////////
+
+       let s = "Hermione";
+       println!("s_bytes = {:?}", s.bytes());
+       for unicode_value in s.bytes() {
+           println!("{unicode_value}")
+       }
+
+       // ---------------------------------------------------------------------------------------------------------------- //
+       // ---------------------- Indexing a String with ``.chars().nth()`` or ``.bytes().nth()`` ------------------------- //
+       // ---------------------------------------------------------------------------------------------------------------- //
  }
