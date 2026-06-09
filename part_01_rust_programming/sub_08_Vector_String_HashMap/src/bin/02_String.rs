@@ -112,4 +112,63 @@
      let s_format = format!("{s1}+{s2}+{s3}");
      println!("s_format = {s_format}");
 
+     println!("\n===============================================================================\n");
+
+     // ---------------------------------------------------------------------------------------------------------------- //
+     // ---------------------- Indexing a String with ``.chars().nth()`` or ``.bytes().nth()`` ------------------------- //
+     // ---------------------------------------------------------------------------------------------------------------- //
+
+     ///////////////////////////////////////////////////////////////////////////////////////
+     // Rust does not support indexing with ``string[index]`` for String and literal &str //
+     ///////////////////////////////////////////////////////////////////////////////////////
+
+     let s1 = String::from("hola");
+     // let first = s1[0];
+     println!("s1_bytes = {:?}", s1.bytes()); // s1_bytes = Bytes(Copied { it: Iter([104, 111, 108, 97]) })
+
+     let s2 = String::from("Здравствуйте");
+     // let first = hello[0];
+     println!("s2_bytes = {:?}", s2.bytes()); // s2_bytes = Bytes(Copied { it: Iter([208, 151, 208, 180, 209, 128, 208, 176, 208, 178, 209, 129, 209, 130, 208, 178, 209, 131, 208, 185, 209, 130, 208, 181]) })
+
+     /*
+      * These codes could not run
+      *     let first = s1[0];
+      *     let first = hello[0];
+      *  because of several reasons.
+      *
+      * A String is a wrapper over a Vec<u8>.
+      * The ``s1 = String::from("hola")`` has length = 4 bytes
+      * -> each character occupies 1 byte
+      * -> each byte represents 1 unicode value
+      *
+      * But in the case of ``hello = String::from("Здравствуйте")``,
+      * its length = 24
+      * -> each character occupies 2 bytes
+      * -> each character needs 2 unicode values
+      *
+      * => Therefore, an index into the string’s bytes will not always correlate to a valid Unicode scalar value.
+      *
+      * For example, in the ``hello = String::from("Здравствуйте")``
+      * look at the character "3" (not three but the Cyrillic letter Ze),
+      * this "3" takes two bytes, each byte stores a unicode value
+      * the 1st byte is 208
+      * the 2nd byt is 151
+      * -> So when we index ``hello[0]``, what we got is the unicode value of the 1st byte: 208
+      * -> But this 208 unicode value alone is not a valid character on its own
+      * -> indexing fail...
+      */
+
+      /////////////////////////////////////////////////////////////////////////////////////
+      // Rust does not support slicing with ``string[i..j]`` for String and literal &str //
+      /////////////////////////////////////////////////////////////////////////////////////
+
+      /*
+       * For the same reason above, with ``s2 = String::from("Здравствуйте");``,
+       * if we slice it like ``s2[0..2]``, we will get these unicode values: [208, 151, 208]
+       * -> Fail because the last 208 alone is not a valid character
+       *
+       * Even when we do ``s2[0..1]`` and get [208, 151] (a complete character),
+       * -> still fail
+       */
+
  }
