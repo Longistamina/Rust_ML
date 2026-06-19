@@ -5219,6 +5219,10 @@ name = "sub_08_Vector_String_HashMap"
 version = "0.1.0"
 
 [[package]]
+name = "sub_09_ErrorHandling_panic_Result"
+version = "0.1.0"
+
+[[package]]
 name = "subtle"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
