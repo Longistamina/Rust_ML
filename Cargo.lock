@@ -5194,6 +5194,9 @@ dependencies = [
 [[package]]
 name = "sub_03_basic_concepts"
 version = "0.1.0"
+dependencies = [
+ "rand 0.10.1",
+]
 
 [[package]]
 name = "sub_04_ownership_SliceType"
