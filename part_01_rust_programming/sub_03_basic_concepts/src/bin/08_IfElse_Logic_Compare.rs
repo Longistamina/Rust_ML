@@ -3,6 +3,8 @@
 use rand::prelude::*;
 
 fn main() {
+    println!();
+
     let mut rng = rand::rng(); // 1. Make the variable mutable
 
     demo_if();
