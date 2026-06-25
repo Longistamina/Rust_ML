@@ -55,7 +55,7 @@ fn main() {
     //      .get()     //
     /////////////////////
     /*
-     * NOTE: ``.get()`` will return ``Option<&T>`` -> use ``match`` to get
+     * NOTE: ``.get()`` will return ``Option<&T>`` -> use ``match`` or ``.unwrap_*()`` to get
      * -> Useful to handle out-of-bound index
      */
 
@@ -72,6 +72,9 @@ fn main() {
         Some(value) => println!("this_element = {value}"),
         None => println!("This element does not exist")
     }
+
+    let fourth_element = v3.get(3).unwrap_or(&0.); // get the value at index 3, if out-of-bound, return 0.
+    println!("fourt_element = {fourth_element}");
 
     println!("\n===============================================================================\n");
 
