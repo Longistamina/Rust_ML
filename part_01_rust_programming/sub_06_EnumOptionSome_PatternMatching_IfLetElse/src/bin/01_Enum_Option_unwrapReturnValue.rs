@@ -24,6 +24,16 @@
      V8(u8, u8, u8, u8), // version 8 address, represented by 4 u8 values
  }
 
+ fn demo_enum() {
+     let home = IpAddrDemo::V4(String::from("127.0.0.1")); // Address version 4, represented by String
+     let loopback = IpAddrDemo::V6(String::from("::1"));
+     let work = IpAddrDemo::V8(127, 0, 1, 1); // Represented by 4 u8 values
+
+     println!("home addr = {home:?}");
+     println!("loopback addr = {loopback:?}");
+     println!("work addr = {work:?}");
+ }
+
  // -------------------------------------------------------------------------------------------- //
  // ------------------------------------- Enum with method ------------------------------------- //
  // -------------------------------------------------------------------------------------------- //
@@ -41,6 +51,18 @@
      fn call(&self) {
          println!("{self:?}")
      }
+ }
+
+ fn demo_enum_with_method() {
+     let msg_quit = Message::Quit;
+     let msg_move = Message::Move{x: -32, y: 24};
+     let msg_write = Message::Write(String::from("Write something here"));
+     let msg_change_color = Message::ChangeColor(23, 55, 246);
+
+     msg_quit.call();
+     msg_move.call();
+     msg_write.call();
+     msg_change_color.call();
  }
 
  // ------------------------------------------------------------------------------------------- //
@@ -77,51 +99,41 @@
   -> Help ensure the variable is Some, not None (handle the null reference)
   */
 
+  #[allow(nonstandard_style)]
+  fn demo_Option() {
+      let some_number = Some(5); // Type is ``Option<i32>``, not ``i32``
+      let some_str = Some("Hi abc."); // Type is ``Option<&str>``, not ``&str``
+      let absent_number: Option<i32> = None;
+
+      println!("some_number = {some_number:?}");
+      println!("some_str = {some_str:?}");
+      println!("absent_number = {absent_number:?}");
+
+      let x: i8 = 3;
+      let y: Option<i8> = Some(5);
+
+      // let sum = x + y;
+      // -> COMPILER PANIC, because ``i8`` and ``Option<i8>`` are two different types!
+
+      let sum = x + y.unwrap(); // Convert from Some(T) to T, then add
+      println!("x + y = {sum}")
+  }
+
 
 // ############ //
 // ## main() ## //
 // ############ //
 
  fn main() {
-     let home = IpAddrDemo::V4(String::from("127.0.0.1")); // Address version 4, represented by String
-     let loopback = IpAddrDemo::V6(String::from("::1"));
-     let work = IpAddrDemo::V8(127, 0, 1, 1); // Represented by 4 u8 values
-
      println!();
-     println!("home addr = {home:?}");
-     println!("loopback addr = {loopback:?}");
-     println!("work addr = {work:?}");
+
+     demo_enum();
 
      println!("\n==============================================================================\n");
 
-     let msg_quit = Message::Quit;
-     let msg_move = Message::Move{x: -32, y: 24};
-     let msg_write = Message::Write(String::from("Write something here"));
-     let msg_change_color = Message::ChangeColor(23, 55, 246);
-
-     msg_quit.call();
-     msg_move.call();
-     msg_write.call();
-     msg_change_color.call();
+     demo_enum_with_method();
 
      println!("\n==============================================================================\n");
 
-     let some_number = Some(5); // Type is ``Option<i32>``, not ``i32``
-     let some_str = Some("Hi abc."); // Type is ``Option<&str>``, not ``&str``
-     let absent_number: Option<i32> = None;
-
-     println!("some_number = {some_number:?}");
-     println!("some_str = {some_str:?}");
-     println!("absent_number = {absent_number:?}");
-
-     let x: i8 = 3;
-     let y: Option<i8> = Some(5);
-
-     // let sum = x + y;
-     // -> COMPILER PANIC, because ``i8`` and ``Option<i8>`` are two different types!
-
-     let sum = x + y.unwrap(); // Convert from Some(T) to T, then add
-     println!("x + y = {sum}")
-
-
+     demo_Option();
  }
