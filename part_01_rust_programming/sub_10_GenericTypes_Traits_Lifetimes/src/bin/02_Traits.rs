@@ -17,7 +17,7 @@
  */
 
  // ------------------------------------------------------------------------------------------------------- //
- // ------------- Define a Trait and implment it on different data types ---------------------------------- //
+ // --------------------- Define a Trait and implment it on different data types -------------------------- //
  // ------------------------------------------------------------------------------------------------------- //
  /*
   * Let’s say we have multiple structs that hold various kinds and amounts of text:
@@ -42,7 +42,7 @@
 
   ////////////////////
 
-  pub struct NewsArticle {
+  pub struct NewsArticle { // define NewsArticle data type
       pub headline: String,
       pub location: String,
       pub author: String,
@@ -57,9 +57,112 @@
 
   ////////////////////
 
+  pub struct SocialPost { // define SocialPost data type
+      pub username: String,
+      pub content: String,
+      pub reply: bool,
+      pub repost: bool
+  }
+
+  impl Summary for SocialPost { // implement the Summary trait on SocialPost
+      fn summarize(&self) -> String { // define the custom behaviour of ``summarize()`` method for NewsArticle
+          format!("{}: {}", self.username, self.content)
+      }
+  }
+
+  ////////////////////
+
+  // use aggregator::{SocialPost, Summary}; // do this if you write the above codes in a separate crate named ``aggregator.rs``
+
+  fn demo_trait() {
+      let post = SocialPost {
+          username: String::from("horse_ebooks"),
+          content: String::from(
+              "of course, as you probably already know, people",
+          ),
+          reply: false,
+          repost: false,
+      };
+
+      let article = NewsArticle {
+          headline: String::from("Brand new day!"),
+          location: String::from("New York"),
+          author: String::from("Mysterious_fat_man"),
+          content: String::from("This day is the best day of my life!")
+      };
+
+      println!("post.summarize() = {}", post.summarize()); // implement custom behaviour for type SocialPost
+      println!("article.summarize() = {}", article.summarize()) // implement custom behaviour for type NewsArticle
+  }
+
+  // ------------------------------------------------------------------------------------------------------- //
+  // -------------------------- One trait with many methods - default method ------------------------------- //
+  // ------------------------------------------------------------------------------------------------------- //
+  /*
+   * Sometimes it’s useful to have default behavior for some or all of the methods in a trait
+   * instead of requiring implementations for all methods on every type.
+   */
+
+   pub trait GetInfor {
+       fn get_author(&self) -> String; // this trait is type specific, differs across types
+
+       fn get_summary(&self) -> String { // This trait is default, all types have the same behaviour like this
+           format!("(Read more from {}...)", self.get_author())
+       }
+   }
+
+   impl GetInfor for NewsArticle {
+       fn get_author(&self) -> String { // define behaviour of ``get_author()`` method for NewsArticle
+           format!("@{}", self.author)
+       }
+   }
+
+   impl GetInfor for SocialPost {
+       fn get_author(&self) -> String { // define behaviour of ``get_author()`` method for SocialPost
+           format!("@{}", self.username)
+       }
+   }
+
+   //////////////
+
+   fn demo_trait_default() {
+       let post = SocialPost {
+           username: String::from("horse_ebooks"),
+           content: String::from(
+               "of course, as you probably already know, people",
+           ),
+           reply: false,
+           repost: false,
+       };
+
+       let article = NewsArticle {
+           headline: String::from("Brand new day!"),
+           location: String::from("New York"),
+           author: String::from("Mysterious fat man"),
+           content: String::from("This day is the best day of my life!")
+       };
+
+       println!("post.get_summary() = {}", post.get_summary());
+       println!("article.get_summary() = {}", article.get_summary())
+
+       /*
+        * Though we did not define custom behaviour of ``get_summary()`` for each type,
+        * the codes still work be cause we already define a default behaviour for ``get_summary()``
+        */
+   }
+
+
  // ################# //
  //       main()      //
  // ################# //
 
  fn main() {
+     println!();
+
+     demo_trait();
+
+     println!("\n===================================================================\n");
+
+     demo_trait_default();
+
  }
