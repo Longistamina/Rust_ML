@@ -151,9 +151,9 @@
         */
    }
 
-   // ----------------------------------------------------------------------------------------------------- //
-   // -------------------------- Use Trait as parameters - ``where`` clause ------------------------------- //
-   // ----------------------------------------------------------------------------------------------------- //
+   // ------------------------------------------------------------------------------------------------------------------- //
+   // -------------------------- Use Trait as parameters in a function - ``where`` clause ------------------------------- //
+   // ------------------------------------------------------------------------------------------------------------------- //
    /*
     * Trait can be used as parameters of a function as well,
     * to better demonstrate this, let's use 3 traits:
@@ -169,9 +169,10 @@
     * Refers to crate ``smart_devices.rs``
     */
 
+    #[allow(dead_code)]
     mod smart_devices;
     use crate::smart_devices::{
-        SmartBulb, SmartThermostat, StandardToaster, Switchable
+        Dimmable, Network, SmartBulb, SmartThermostat, StandardToaster, Switchable
     };
 
     ////////////////////////////
@@ -199,7 +200,175 @@
     ////////////////////////////////////////////////////////
     // Trait bound syntaxe <T: Trait> - trait and generic //
     ////////////////////////////////////////////////////////
+    // The impl Trait syntax works for straightforward cases but is actually syntax sugar for a longer form known as a trait bound
 
+    fn deactivate_device<T: Switchable>(device: &mut T) {
+        /*
+         * <T: Switchable> means we use T as a type generic placeholder (for SmartBulb, SmartThermostat, StandardToaster)
+         * but that generic must implement trait ``Switchable``
+         */
+        println!("Deactivating...");
+        device.switch_off();
+    }
+
+    fn demo_trait_bound_generic() {
+        let mut bulb = SmartBulb {switch: true, dim: true};
+        let mut toaster = StandardToaster{switch: true};
+
+        deactivate_device(&mut bulb);
+        println!("bulb.switch = {}", bulb.switch);
+
+        deactivate_device(&mut toaster);
+        println!("toaster.switch = {}", toaster.switch)
+    }
+
+    /////////////////////////////////////////////////////////
+    // Multiple trait bounds with ``<T: Trait1 + Trait2>`` //
+    /////////////////////////////////////////////////////////
+    // What if we want to implement multiple traits at once? -> use ``<T: Trait1 + Trait2>``
+
+    fn setup<T: Switchable + Dimmable>(device: &mut T) { // or ``fn setup(device: &mut (impl Switchable + Dimmable))``
+        println!("Setting up...");
+        device.switch_on();
+        device.brighten();
+    }
+
+    fn demo_trait_bound_multiple() {
+        let mut bulb = SmartBulb{switch: false, dim: true};
+
+        setup(&mut bulb);
+
+        println!("bulb.switch = {}", bulb.switch);
+        println!("bulb.dim = {}", bulb.dim);
+
+        /*
+         * let mut thermostat = SmartThermostat{switch: false, wifi: false};
+         * setup(&mut thermostat);
+         *
+         * => This code will fail be cause ``thermostat`` does not have trait ``Dimmable`` for method ``brighten()`` to work
+         */
+    }
+
+    ////////////////////////////////////////////////
+    // Multiple trait bounds and ``where`` clause //
+    ////////////////////////////////////////////////
+    /*
+     * The above example only accepts types that implement both Switchable and Dimmable.
+     * But how about other types? How to make a more flexible ``setup()`` function that can accept more?
+     * => Use ``where`` clause
+     */
+
+     fn setup_devices<B, T>(bulb: &mut B, thermostat: &mut T)
+     where
+         B: Switchable + Dimmable, // bulb bounds to generic B which implements Switchable + Dimmable
+         T: Switchable + Network, // thermostat bounts to generic T which implements Switchable + Network
+     {
+         println!("Setting up devices...");
+
+         bulb.switch_on();
+         bulb.brighten();
+
+         thermostat.switch_on();
+         thermostat.connect();
+     }
+
+     fn demo_trait_bound_where() {
+         let mut bulb = SmartBulb {switch: false, dim: true};
+         let mut thermostat = SmartThermostat{switch: false, wifi: false};
+
+         setup_devices(&mut bulb, &mut thermostat);
+
+         println!("bulb.switch = {}", bulb.switch);
+         println!("bulb.dim = {}", bulb.dim);
+
+         println!("thermostat.switch = {}", thermostat.switch);
+         println!("thermostat.wifi = {}", thermostat.wifi);
+     }
+
+     // --------------------------------------------------------------------------------------------------------- //
+     // -------------------------- Use Trait in the return position of a function ------------------------------- //
+     // --------------------------------------------------------------------------------------------------------- //
+
+     fn returns_summarizable() -> impl Summary {
+         SocialPost {
+             username: String::from("horse_ebooks"),
+             content: String::from(
+                 "of course, as you probably already know, people",
+             ),
+             reply: false,
+             repost: false,
+         }
+     }
+
+     fn demo_trait_return_position() {
+         let summarizable = returns_summarizable();
+         println!("summarizable.summarize() = {}", summarizable.summarize())
+     }
+
+     /*
+      * However, you can only use ``impl Trait`` at return position if you’re returning a single type,
+      * for example, this code below WILL NOT WORK because it could return two different types (NewsArticle or SocialPost)
+      */
+      // fn returns_summarizable(switch: bool) -> impl Summary {
+      //     if switch {
+      //         NewsArticle {
+      //             headline: String::from(
+      //                 "Penguins win the Stanley Cup Championship!",
+      //             ),
+      //             location: String::from("Pittsburgh, PA, USA"),
+      //             author: String::from("Iceburgh"),
+      //             content: String::from(
+      //                 "The Pittsburgh Penguins once again are the best \
+      //                  hockey team in the NHL.",
+      //             ),
+      //         }
+      //     } else {
+      //         SocialPost {
+      //             username: String::from("horse_ebooks"),
+      //             content: String::from(
+      //                 "of course, as you probably already know, people",
+      //             ),
+      //             reply: false,
+      //             repost: false,
+      //         }
+      //     }
+      // }
+
+      // -------------------------------------------------------------------------------------------------- //
+      // -------------------------- Trait and conditional if-else in method ------------------------------- //
+      // -------------------------------------------------------------------------------------------------- //
+      /*
+       * By using a trait bound with an impl block that uses generic type parameters,
+       * we can implement methods conditionally for types that implement the specified traits.
+       */
+
+      use std::fmt::Display;
+
+      struct Pair<T> {
+          x: T,
+          y: T,
+      }
+
+      impl<T> Pair<T> {
+          fn new(x: T, y: T) -> Self {
+              Self { x, y }
+          }
+      }
+
+      impl<T: Display + PartialOrd> Pair<T> { // only implement this on types that have traits Display and PartialOrd
+          fn cmp_display(&self) {
+              if self.x >= self.y {
+                  println!("The largest member is x = {}", self.x);
+              } else {
+                  println!("The largest member is y = {}", self.y);
+              }
+          }
+      }
+
+      fn demo_trait_conditional() {
+          let pair = Pair::new(2.3, -1.2);
+          pair.cmp_display();
+      }
 
  // ################# //
  //       main()      //
@@ -217,5 +386,18 @@
      println!("\n===================================================================\n");
 
      demo_trait_parameter();
+     println!();
+     demo_trait_bound_generic();
+     println!();
+     demo_trait_bound_multiple();
+     println!();
+     demo_trait_bound_where();
 
+     println!("\n===================================================================\n");
+
+     demo_trait_return_position();
+
+     println!("\n===================================================================\n");
+
+     demo_trait_conditional();
  }
