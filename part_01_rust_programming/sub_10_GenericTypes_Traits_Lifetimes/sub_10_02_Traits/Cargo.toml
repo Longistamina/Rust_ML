@@ -1,0 +1,6 @@
+[package]
+name = "sub_10_02_Traits"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

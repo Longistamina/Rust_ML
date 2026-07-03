@@ -151,6 +151,55 @@
         */
    }
 
+   // ----------------------------------------------------------------------------------------------------- //
+   // -------------------------- Use Trait as parameters - ``where`` clause ------------------------------- //
+   // ----------------------------------------------------------------------------------------------------- //
+   /*
+    * Trait can be used as parameters of a function as well,
+    * to better demonstrate this, let's use 3 traits:
+    * + ``Switchable``: the device that can be turned on and off
+    * + ``Dimmable``: the device's intensity/brightness can be adjusted
+    * + ``Network``: the device can connect to wifi
+    *
+    * and 3 devices (types):
+    * + ``SmartBulb``: can be switched and dimmed
+    * + ``SmartThermostat``: can be switched and connected to Wi-Fi
+    * + ``StandardToaster``: can only be switched. It has no Wi-Fi and no dimmer
+    *
+    * Refers to crate ``smart_devices.rs``
+    */
+
+    mod smart_devices;
+    use crate::smart_devices::{
+        SmartBulb, SmartThermostat, StandardToaster, Switchable
+    };
+
+    ////////////////////////////
+    // Use trait as parameter //
+    ////////////////////////////
+
+    fn activate_device(device: &mut impl Switchable) {
+        // the ``&impl Switchable`` tells Rust to accept any ``device`` that has Switchable trait
+        // Here, we use ``&mut impl Switchable`` to make it mutable
+        println!("Activating...");
+        device.switch_on();
+    }
+
+    fn demo_trait_parameter() {
+        let mut bulb = SmartBulb {switch: false, dim: true};
+        let mut thermostat = SmartThermostat{switch: false, wifi: false};
+
+        activate_device(&mut bulb);
+        println!("bulb.switch = {}", bulb.switch);
+
+        activate_device(&mut thermostat);
+        println!("thermostat.switch = {}", thermostat.switch)
+    }
+
+    ////////////////////////////////////////////////////////
+    // Trait bound syntaxe <T: Trait> - trait and generic //
+    ////////////////////////////////////////////////////////
+
 
  // ################# //
  //       main()      //
@@ -164,5 +213,9 @@
      println!("\n===================================================================\n");
 
      demo_trait_default();
+
+     println!("\n===================================================================\n");
+
+     demo_trait_parameter();
 
  }
