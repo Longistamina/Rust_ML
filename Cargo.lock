@@ -5226,6 +5226,10 @@ name = "sub_09_ErrorHandling_panic_Result"
 version = "0.1.0"
 
 [[package]]
+name = "sub_10_00_Introduction_ReduceDuplicateCodes"
+version = "0.1.0"
+
+[[package]]
 name = "sub_10_01_Generics"
 version = "0.1.0"
 
@@ -5235,6 +5239,10 @@ version = "0.1.0"
 
 [[package]]
 name = "sub_10_03_Lifetimes"
+version = "0.1.0"
+
+[[package]]
+name = "sub_10_04_put_it_all_together"
 version = "0.1.0"
 
 [[package]]

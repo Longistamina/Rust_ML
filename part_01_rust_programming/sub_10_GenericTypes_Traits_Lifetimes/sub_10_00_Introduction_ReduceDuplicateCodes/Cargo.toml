@@ -1,5 +1,5 @@
 [package]
-name = "sub_10_GenericTypes_Traits_Lifetimes"
+name = "sub_10_00_Introduction_ReduceDuplicateCodes"
 version = "0.1.0"
 edition = "2024"
 
