@@ -44,7 +44,8 @@
  /*
   * In this function, we don't just use <T>,
   * we use <T: std::cmp::PartialOrd>.
-  * ``std::cmp::PartialOrd`` is a ``TRAIT`` that belongs to types whose values can be ordered.
+  * ``std::cmp::PartialOrd`` is a ``TRAIT`` that belongs to types whose values can be partially ordered.
+  * (``std::cmp::Ord`` is stricter than ``std::cmp::PartialOrd``)
   *
   * Why we have to do this?
   * Because, in the function body, we have ``item > largest``,

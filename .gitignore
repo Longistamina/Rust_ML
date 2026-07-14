@@ -92,7 +92,4 @@ Thumbs.db
 *.vscode
 
 *test_script
-test*.rs
-test.py
-
 demo.rs

@@ -370,6 +370,62 @@
                println!("i.part = {}", i_part)
            }
 
+           // --------------------------------------------------------------------------------------------------------------- //
+           // --------------------------------------- Lifetime and ``where`` and HRTB --------------------------------------- //
+           // --------------------------------------------------------------------------------------------------------------- //
+           /*
+            * Sometimes, you need to use lifetimes inside generic trait bounds using a ``where`` clause.
+            *
+            * For example, what if you want to accept a generic type T that can be added to an i32,
+            * but you want to pass a REFERENCE to T?
+            *
+            * In normal function arguments, Rust automatically guesses the lifetime of a reference (lifetime elision).
+            * But inside a trait bound (like ``&T: Add<i32>``), Rust refuses to guess.
+            */
+
+            ////////////////////////////////////////////
+            // The Explicit Way: Messy but Functional //
+            ////////////////////////////////////////////
+
+            // We have to explicitly declare <'a> on the function,
+            // even though the function doesn't return a reference!
+            pub fn add_two_explicit<'a, T>(input: &'a T) -> T
+            where
+                &'a T: std::ops::Add<i32, Output = T> // We must tie 'a to the trait bound
+            {
+                input + 2
+            }
+
+            /*
+            * This works, but it pollutes the function signature with a generic lifetime parameter <'a>.
+            * Because we aren't returning a reference, forcing the user to think about <'a> here is not ideal.
+            *
+            * Enter HRTB (Higher-Ranked Trait Bounds).
+            * HRTB allows you to tell the compiler: "This trait bound is valid for ANY possible lifetime you throw at it."
+            * We do this using the syntax ``for<'a>``
+            */
+
+            ///////////////////////////////////////
+            // The Idiomatic Way: HRTB (for<'a>) //
+            ///////////////////////////////////////
+
+            pub fn add_two_hrtb<T>(input: &T) -> T
+            where
+                for<'a> &'a T: std::ops::Add<i32, Output = T> // Read as: "For ANY lifetime 'a..."
+            {
+                input + 2
+            }
+
+            fn demo_where_and_hrtb() {
+                let number = 10;
+
+                // We pass a reference, and HRTB dynamically handles the lifetime bounds.
+                let result_explicit = add_two_explicit(&number);
+                let result_hrtb = add_two_hrtb(&number);
+
+                println!("Explicit result: {result_explicit}");
+                println!("HRTB result: {result_hrtb}");
+            }
            // ----------------------------------------------------------------------------------------------- //
            // --------------------------------------- Static Lifetime --------------------------------------- //
            // ----------------------------------------------------------------------------------------------- //
@@ -424,4 +480,8 @@
      println!("\n===================================================================\n");
 
      demo_static_lifetime();
+
+     println!("\n===================================================================\n");
+
+     demo_where_and_hrtb();
  }
