@@ -8,18 +8,27 @@ fn main() {
     let mut rng = rand::rng(); // 1. Make the variable mutable
 
     demo_if();
+
     println!("===============================================================================");
 
     demo_if_else(&mut rng); // 2. Pass a mutable reference (borrowing)
+
     println!("===============================================================================");
 
     demo_if_elseif_else(&mut rng); // 3. Use it again
+
     println!("===============================================================================");
 
     demo_if_nested(&mut rng);
+
     println!("===============================================================================");
 
     demo_let_if(&mut rng);
+
+    println!("===============================================================================");
+
+    demo_range_contain();
+
 }
 
 // ----------------------------------------- //
@@ -111,6 +120,29 @@ fn demo_let_if(rng: &mut ThreadRng) {
     // else, result = "ODD"
 
     println!("{random_number} is {result}!")
+}
+
+// ------------------------------------------------------------------------------------------------ //
+// --------------- (start..end).contains(&value) or (start..=end).contains(&value)  --------------- //
+// ------------------------------------------------------------------------------------------------ //
+
+fn demo_range_contain() {
+
+    let (start, end, num) = (20, 30, 22);
+    if (start..end).contains(&num) { // Inclusive [start; end). Equivalent to ``if (start <= num) && (num < end)``
+        println!("{num} is inside range [{start}; {end})")
+    } else {
+        println!("{num} is outside range [{start}; {end})")
+    }
+
+    let (start, end, num) = (1.0, 100.0, -0.32);
+    if !(start..=end).contains(&num) { // Exclusive, [start; end).
+                                       // Equivalent to ``if !(start <= num) || !(num <= end)``
+                                       // Equivalent to ``if (num < start) || (num > end)``
+        println!("{num} is outside range [{start}; {end}]")
+    } else {
+        println!("{num} is outside range [{start}; {end}]")
+    }
 }
 
 /*
