@@ -6,6 +6,8 @@ mod test_02_CheckResult_assert_boolean;
 mod test_03_TestEquality_assert_eq_ne;
 mod test_04_add_failure_message;
 mod test_05_should_panic;
+mod test_06_use_ResultTE;
+mod test_07_CargoTest_options;
 
 fn main() {
     println!("Hello, world!");
