@@ -1,0 +1,6 @@
+[package]
+name = "sub_12_02_read_filepath_argument"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

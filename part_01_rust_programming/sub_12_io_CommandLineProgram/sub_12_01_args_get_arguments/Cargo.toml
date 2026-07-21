@@ -1,0 +1,6 @@
+[package]
+name = "sub_12_01_args_get_arguments"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
