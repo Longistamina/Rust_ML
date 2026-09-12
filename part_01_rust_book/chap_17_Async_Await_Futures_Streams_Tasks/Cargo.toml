@@ -1,5 +1,5 @@
 [package]
-name = "chap_17_Parallel_Async_Await_Futures_Streams"
+name = "chap_17_Async_Await_Futures_Streams_Tasks"
 version = "0.1.0"
 edition = "2024"
 
