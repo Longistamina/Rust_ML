@@ -27,6 +27,10 @@ the post should remain an unpublished draft.
 // 1. Defining `Post`, `Draft` and `PendingReview` structs and trait `State`
 // ==============================================================================
 
+//-------------//
+// State trait //
+//-------------//
+
 trait State {
     fn content<'a>(&self, _post: &'a Post) -> &'a str {
         ""
@@ -36,6 +40,10 @@ trait State {
 
     fn approve(self: Box<Self>) -> Box<dyn State>;
 }
+
+//---------------//
+// other structs //
+//---------------//
 
 pub struct Post {
     state: Option<Box<dyn State>>,
@@ -69,13 +77,38 @@ impl Post {
     }
 
     pub fn content(&self) -> &str {
-        self.state.as_ref().unwrap().content(self)
+        self.state.as_ref().unwrap().content(self) // use `as_ref()` to get the reference without taking the ownership of the `self.state`
+        /*
+        We don't return the `self.content` here, instead we access the content from `self.state`
+
+        At `Draft` and `PendingReview` states,
+        calling `self.content()` will return the empty string ""
+        as defined by the default `fn content()` in `State` trait.
+
+        Only at `Published` state, the method `fn content()` is rewritten
+        to return the actual `self.content` string
+        */
     }
 
     pub fn request_review(&mut self) {
         if let Some(s) = self.state.take() {
             self.state = Some(s.request_review())
         }
+        /*
+        Why `self.state.take()`?
+
+        Remind, `self.state` is `Option<T>`.
+        So if we just use `if let Some(s) = self.state {}`,
+        it will move the `Box<dyn State>` inside `self.state` to the `s`,
+        then the `self.state` is consumed and dropped,
+        => making the next line `self.state = Some(s.request_review())` impossible
+
+        Therefore, we need to use `self.state.take()`,
+        it will move the `Box<dyn State>` inside `self.state` to the `s`,
+        but then put `None` at the place of `self.state`,
+        so the `self.state` is still valid and is not dropped
+        => the next line `self.state = Some(s.request_review())` is now possible
+        */
     }
 
     pub fn approve(&mut self) {
@@ -126,7 +159,7 @@ impl State for Published {
         self
     }
 
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
+    fn content<'a>(&self, post: &'a Post) -> &'a str { // redefine `content()` method here to return the actual content at `Published` state
         &post.content
     }
 }
@@ -147,3 +180,57 @@ fn main() {
     post.approve();
     assert_eq!("I ate a salad for lunch today", post.content());
 }
+
+/*
++---------------------+
+|   Post::new()       |
++---------------------+
+        |
+        v
++---------------------+
+| state: Some(Draft)  |
+| content: ""         |
+| self.content(): ""  |  <- Draft returns empty string
++---------------------+
+        |
+        v  (add_text)
++---------------------+
+| state: Some(Draft)  |
+| content: "I ate..." |
+| self.content(): ""  |  <- Still Draft, returns empty
++---------------------+
+        |
+        v  (request_review)
++----------------------------+
+| state: Some(PendingReview) |
+| content: "I ate..."        |
+| self.content(): ""         |  <- PendingReview returns empty
++----------------------------+
+        |
+        v  (approve)
++------------------------------------+
+| state: Some(Published)             |
+| content: "I ate..."                |
+| self.content(): "I ate a salad..." |  <- Published returns actual content (based on the specified `content()` method of `Published`)
++------------------------------------+
+        |
+        v  (content())
++---------------------+
+| Returns "I ate..."  |
++---------------------+
+
+--------------------------------------------------------------------
+
+Key field changes:
+1. Initial: state=Some(Draft), content=""
+2. After add_text: state=Some(Draft), content="I ate...", self.content()=""
+3. After request_review: state=Some(PendingReview), content="I ate...", self.content()=""
+4. After approve: state=Some(Published), content="I ate...", self.content()="I ate..."
+5. content() call: Returns the string from Published state
+
+The state field transitions through Box<dyn State> objects:
+• Draft → PendingReview (via request_review)
+• PendingReview → Published (via approve)
+• Published remains Published for any further state changes
+The content field remains unchanged throughout all transitions.
+*/
