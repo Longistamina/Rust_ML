@@ -177,6 +177,10 @@ name = "chap_18_OOP_programming"
 version = "0.1.0"
 
 [[package]]
+name = "chap_19_Patterns_Matching"
+version = "0.1.0"
+
+[[package]]
 name = "cpufeatures"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
