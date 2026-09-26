@@ -1,5 +1,5 @@
 [package]
-name = "chap_19_Patterns_Matching"
+name = "chap_19_Patterns_Matching_Destructuring"
 version = "0.1.0"
 edition = "2024"
 
