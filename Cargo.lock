@@ -181,6 +181,10 @@ name = "chap_19_Patterns_Matching_Destructuring"
 version = "0.1.0"
 
 [[package]]
+name = "chap_20_Adv_Unsafe_Trait_Type_FuncClosure_Macro"
+version = "0.1.0"
+
+[[package]]
 name = "cpufeatures"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1423,6 +1427,10 @@ version = "0.1.0"
 
 [[package]]
 name = "sub_01_args_get_arguments"
+version = "0.1.0"
+
+[[package]]
+name = "sub_01_unsafe_Rust"
 version = "0.1.0"
 
 [[package]]
