@@ -85,3 +85,12 @@ like `let item: &mut dyn Iterator2<u32> = /* ... */;`
 
 Using `type Item = u32` inside the trait definitiong removes this burden
 */
+
+// ====================================================================
+// When to use which?
+// ====================================================================
+/*
+Use a generic trait parameter when callers may choose among different types for the same implementing type
+
+Use an associated type when the implementation itself determines the type
+*/
