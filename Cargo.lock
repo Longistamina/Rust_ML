@@ -1477,6 +1477,10 @@ name = "sub_04_AddFunctionality_TestDrivenDevelopment"
 version = "0.1.0"
 
 [[package]]
+name = "sub_04_Function_Closure_advanced"
+version = "0.1.0"
+
+[[package]]
 name = "sub_04_iterator_or_loop"
 version = "0.1.0"
 
