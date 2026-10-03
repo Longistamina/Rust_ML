@@ -1465,6 +1465,10 @@ name = "sub_03_Refactoring_Modularity_ErrorHandling"
 version = "0.1.0"
 
 [[package]]
+name = "sub_03_Types_advanced"
+version = "0.1.0"
+
+[[package]]
 name = "sub_03_improve_ioProgram_noClone"
 version = "0.1.0"
 
