@@ -1,5 +1,5 @@
 [package]
-name = "chap_20_Adv_Unsafe_Trait_Type_FuncClosure_Macro"
+name = "chap_20_Adv_Unsafe_Trait_Type_FuncClosure"
 version = "0.1.0"
 edition = "2024"
 

@@ -181,8 +181,16 @@ name = "chap_19_Patterns_Matching_Destructuring"
 version = "0.1.0"
 
 [[package]]
-name = "chap_20_Adv_Unsafe_Trait_Type_FuncClosure_Macro"
+name = "chap_20_Adv_Unsafe_Trait_Type_FuncClosure"
 version = "0.1.0"
+
+[[package]]
+name = "chap_21_Macros"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn 2.0.117",
+]
 
 [[package]]
 name = "cpufeatures"
