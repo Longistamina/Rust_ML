@@ -193,6 +193,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "chap_22_final_project"
+version = "0.1.0"
+
+[[package]]
 name = "cpufeatures"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1439,6 +1443,10 @@ version = "0.1.0"
 
 [[package]]
 name = "sub_01_unsafe_Rust"
+version = "0.1.0"
+
+[[package]]
+name = "sub_01_web_single_thread"
 version = "0.1.0"
 
 [[package]]
