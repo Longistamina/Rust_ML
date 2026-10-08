@@ -193,7 +193,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "chap_22_final_project"
+name = "chap_22_FinalProject_ThreadPool"
 version = "0.1.0"
 
 [[package]]
@@ -1470,6 +1470,10 @@ version = "0.1.0"
 
 [[package]]
 name = "sub_02_read_filepath_argument"
+version = "0.1.0"
+
+[[package]]
+name = "sub_02_web_multi_threads"
 version = "0.1.0"
 
 [[package]]

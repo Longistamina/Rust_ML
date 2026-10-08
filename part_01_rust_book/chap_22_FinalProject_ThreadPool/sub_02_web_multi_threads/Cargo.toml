@@ -1,5 +1,5 @@
 [package]
-name = "chap_22_final_project"
+name = "sub_02_web_multi_threads"
 version = "0.1.0"
 edition = "2024"
 

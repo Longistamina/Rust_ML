@@ -1,0 +1,6 @@
+[package]
+name = "chap_22_FinalProject_ThreadPool"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
