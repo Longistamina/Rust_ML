@@ -1493,6 +1493,10 @@ name = "sub_03_improve_ioProgram_noClone"
 version = "0.1.0"
 
 [[package]]
+name = "sub_03_shutdown_cleanup"
+version = "0.1.0"
+
+[[package]]
 name = "sub_04_AddFunctionality_TestDrivenDevelopment"
 version = "0.1.0"
 

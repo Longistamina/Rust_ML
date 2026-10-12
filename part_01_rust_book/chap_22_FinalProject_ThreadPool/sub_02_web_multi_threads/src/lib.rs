@@ -79,10 +79,11 @@ struct Worker { // This `Worker` struct is not `pub`, only used internally.
     thread: thread::JoinHandle<WorkerThread>,
 }
 // Why `thread::JoinHandle<WorkerThread>`?
-// Recall the old lession when we call `thread::spawn(...)`,
-// it returns a `JoinHandle<T>` type, where T is the type the closure returns.
-// Here, our closure return a `receiver`,
-// which is a type of Job wrapped in Arc and Mutext (alias WorkerThread)
+// Recall the old lession when we call `let thread = thread::spawn(...)`,
+// it returns a `JoinHandle<T>` type, so the `thread` is a `JoinHandle<T>`,
+// where T is the type the closure returns.
+// Here, our closure return a `job`,
+// which is a type of Job wrapped in Receiver, then Arc and Mutext (alias WorkerThread)
 //
 // So when we call `thread::spawn(|| receiver)`,
 // the returned value will have type `JoinHandle<WorkerThread>`
