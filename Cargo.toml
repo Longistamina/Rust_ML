@@ -2,6 +2,8 @@
 members = [
     "part_01_rust_book/chap_*",
     "part_01_rust_book/chap_*/sub_*",
+    "part_02_useful_crates/chap_*",
+    # "part_02_useful_crates/chap_*/sub_*",
     "test_script",
 ]
 resolver = "2"
