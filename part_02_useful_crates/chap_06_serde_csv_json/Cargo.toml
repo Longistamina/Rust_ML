@@ -1,5 +1,5 @@
 [package]
-name = "chap_05_serde_csv_json"
+name = "chap_06_serde_csv_json"
 version = "0.1.0"
 edition = "2024"
 

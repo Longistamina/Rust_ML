@@ -1,5 +1,5 @@
 [package]
-name = "chap_06_thiserror"
+name = "chap_07_thiserror"
 version = "0.1.0"
 edition = "2024"
 
