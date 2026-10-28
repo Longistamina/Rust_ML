@@ -81,6 +81,11 @@ fn show<T: Debug>(result: Result<T, clap::Error>) {
 // ```
 //
 // Just like `cargo new project` or `cargo add deps`
+//
+// cargo new project
+// │     │   └── positional argument: project name
+// │     └────── subcommand
+// └──────────── executable
 fn demo_subcommands() {
     #[derive(Debug, Parser)]
     #[command(name="files")]
