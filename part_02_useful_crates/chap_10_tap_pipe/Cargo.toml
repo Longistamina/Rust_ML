@@ -1,7 +1,7 @@
 [package]
-name = "chap_07_thiserror"
+name = "chap_10_tap_pipe"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-thiserror = "2.0.21"
+tap = "1.0.1"

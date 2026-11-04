@@ -1,5 +1,5 @@
 [package]
-name = "chap_08_clap_argsparse_cli"
+name = "chap_09_clap_argsparse_cli"
 version = "0.1.0"
 edition = "2024"
 
