@@ -32,6 +32,30 @@ use std::io::{self, Read};
 use std::num::ParseIntError;
 use thiserror::Error; // derive macro
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() {
+    println!();
+
+    demo_enum();
+    println!("\n============================\n");
+    demo_struct();
+    println!("\n============================\n");
+    demo_from();
+    println!("\n============================\n");
+    demo_context();
+    println!("\n============================\n");
+    demo_transparent();
+    println!("\n============================\n");
+    demo_matching();
+    println!("\n============================\n");
+    demo_chain();
+    println!("\n============================\n");
+    demo_practical();
+}
+
 // ============================================================================
 // 1. Error enums
 // ============================================================================
@@ -47,6 +71,8 @@ enum RequestError {
 }
 
 fn demo_enum() {
+    println!("01. Error enums");
+
     let errors = [
         RequestError::Empty,
         RequestError::UnknownItem("sample-42".into()),
@@ -75,6 +101,8 @@ struct BoundsError {
 }
 
 fn demo_struct() {
+    println!("02. An error can be a struct too");
+
     let error = BoundsError { field: "workers", value: 0, min: 1, max: 256 };
     println!("{error}"); // value 0 is outside 1..=256 for "workers"
     // Formatting supports Debug with {:?} as well as Display.
@@ -101,6 +129,8 @@ fn read_number(mut reader: impl Read) -> Result<u16, ReadNumberError> {
 }
 
 fn demo_from() {
+    println!("03. #[from] and ?");
+
     println!("{:?}", read_number(&b"42\n"[..])); // Ok(42)
     println!("{:?}", read_number(&b"wrong"[..])); // Err(Parse(...))
 
@@ -134,6 +164,8 @@ fn parse_field(field: &'static str, text: &str) -> Result<u16, FieldError> {
 }
 
 fn demo_context() {
+    println!("04. Preserve context and source with map_err");
+
     match parse_field("workers", "many") {
         Ok(value) => println!("{value}"),
         Err(error) => {
@@ -157,6 +189,8 @@ fn demo_context() {
 struct PublicFieldError(#[from] FieldError);
 
 fn demo_transparent() {
+    println!("05. Transparent forwarding");
+
     if let Err(error) = parse_field("port", "bad") {
         let public: PublicFieldError = error.into();
         println!("{public}"); // same Display as the wrapped FieldError
@@ -172,6 +206,8 @@ fn demo_transparent() {
 // ============================================================================
 
 fn demo_matching() {
+    println!("06. Handle errors by variant");
+
     let result: Result<(), ReadNumberError> = Err(io::Error::new(
         io::ErrorKind::NotFound, "demo input missing",
     ).into());
@@ -202,6 +238,8 @@ fn print_chain(error: &dyn StdError) {
 }
 
 fn demo_chain() {
+    println!("07. Inspect an error chain");
+
     if let Err(error) = parse_field("workers", "oops") {
         print_chain(&error);
     }
@@ -246,6 +284,8 @@ fn load_workers(mut reader: impl Read) -> Result<u16, ConfigError> {
 }
 
 fn demo_practical() {
+    println!("08. Practical example: read, parse, validate");
+
     for input in ["4\n", "", "many", "0", "300", "70000"] {
         println!("input: {input:?}");
         match load_workers(input.as_bytes()) {
@@ -260,26 +300,3 @@ fn demo_practical() {
     // I/O and parsing keep their original causes; domain validation has no cause.
 }
 
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() {
-    println!();
-
-    demo_enum();
-    println!("\n============================\n");
-    demo_struct();
-    println!("\n============================\n");
-    demo_from();
-    println!("\n============================\n");
-    demo_context();
-    println!("\n============================\n");
-    demo_transparent();
-    println!("\n============================\n");
-    demo_matching();
-    println!("\n============================\n");
-    demo_chain();
-    println!("\n============================\n");
-    demo_practical();
-}

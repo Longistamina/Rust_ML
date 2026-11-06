@@ -42,6 +42,54 @@ use std::io::{self, Cursor, Read};
 use std::thread;
 use std::time::Duration;
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() -> Result<(), Box<dyn Error>> {
+    println!();
+
+    demo_basic();
+    println!("\n============================\n");
+
+    demo_manual();
+    println!("\n============================\n");
+
+    demo_iterators();
+    println!("\n============================\n");
+
+    demo_spinner();
+    println!("\n============================\n");
+
+    demo_styles();
+    println!("\n============================\n");
+
+    demo_messages();
+    println!("\n============================\n");
+
+    demo_timing();
+    println!("\n============================\n");
+
+    demo_completion();
+    println!("\n============================\n");
+
+    demo_logging();
+    println!("\n============================\n");
+
+    demo_multiple();
+    println!("\n============================\n");
+
+    demo_threads();
+    println!("\n============================\n");
+
+    demo_bytes_batches()?;
+    println!("\n============================\n");
+
+    demo_rendering();
+
+    Ok(())
+}
+
 // Shared helpers keep individual demos short.
 
 fn pause() {
@@ -68,6 +116,8 @@ fn make_bar(total: u64, label: &str) -> ProgressBar {
 // ============================================================================
 
 fn demo_basic() {
+    println!("01. Basic progress bar");
+
     let bar = make_bar(20, "Basic");
 
     for _ in 0..20 {
@@ -88,6 +138,8 @@ fn demo_basic() {
 // ============================================================================
 
 fn demo_manual() {
+    println!("02. Manual position, initial progress, and changing totals");
+
     let bar = make_bar(100, "Manual");
     bar.set_position(40); // resume at 40/100
 
@@ -122,6 +174,8 @@ fn demo_manual() {
 // ============================================================================
 
 fn demo_iterators() {
+    println!("03. Iterator adapters: like tqdm(items)");
+
     for _ in (0..12).progress() {
         pause();
     }
@@ -157,6 +211,8 @@ fn demo_iterators() {
 // ============================================================================
 
 fn demo_spinner() {
+    println!("04. Unknown totals and spinners");
+
     let spinner = ProgressBar::new_spinner();
     spinner.set_style(
         ProgressStyle::with_template(
@@ -186,6 +242,8 @@ fn demo_spinner() {
 // ============================================================================
 
 fn demo_styles() {
+    println!("05. Custom styles and spinner frames");
+
     let bar = ProgressBar::new(15);
     bar.set_style(
         ProgressStyle::with_template(
@@ -217,6 +275,8 @@ fn demo_styles() {
 // ============================================================================
 
 fn demo_messages() {
+    println!("06. Dynamic messages: task name, loss, accuracy, etc.");
+
     let bar = make_bar(10, "Training");
 
     for step in 1..=10 {
@@ -245,6 +305,8 @@ fn demo_messages() {
 // ============================================================================
 
 fn demo_timing() {
+    println!("07. Timing, rate, and ETA");
+
     let bar = ProgressBar::new(20);
     bar.set_style(
         ProgressStyle::with_template(
@@ -273,6 +335,8 @@ fn demo_timing() {
 // ============================================================================
 
 fn demo_completion() {
+    println!("08. Finish, clear, or abandon");
+
     let completed = make_bar(3, "Complete");
     for _ in 0..3 {
         pause();
@@ -303,6 +367,8 @@ fn demo_completion() {
 // ============================================================================
 
 fn demo_logging() {
+    println!("09. Print messages while a bar is active");
+
     let bar = make_bar(12, "Logging");
 
     for step in 1..=12 {
@@ -332,6 +398,8 @@ fn demo_logging() {
 // ============================================================================
 
 fn demo_multiple() {
+    println!("10. Multiple / nested progress bars");
+
     let multi = MultiProgress::new();
 
     // Add bars before doing anything that might draw them.
@@ -366,6 +434,8 @@ fn demo_multiple() {
 // ============================================================================
 
 fn demo_threads() {
+    println!("11. Share one progress bar across threads");
+
     let bar = make_bar(40, "Threads");
 
     thread::scope(|scope| {
@@ -395,6 +465,8 @@ fn demo_threads() {
 // ============================================================================
 
 fn demo_bytes_batches() -> io::Result<()> {
+    println!("12. Byte streams and batch processing");
+
     // A memory-backed stream keeps this guide independent of external files.
     let data = vec![0u8; 64 * 1024];
     let bar = ProgressBar::new(data.len() as u64);
@@ -461,6 +533,8 @@ fn demo_bytes_batches() -> io::Result<()> {
 // ============================================================================
 
 fn demo_rendering() {
+    println!("13. Visibility and refresh frequency");
+
     let enabled = false;
     let bar = if enabled {
         make_bar(5, "Visible")
@@ -490,50 +564,3 @@ fn demo_rendering() {
     // Output may therefore be absent in redirected logs or some IDE consoles.
 }
 
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() -> Result<(), Box<dyn Error>> {
-    println!();
-
-    demo_basic();
-    println!("\n============================\n");
-
-    demo_manual();
-    println!("\n============================\n");
-
-    demo_iterators();
-    println!("\n============================\n");
-
-    demo_spinner();
-    println!("\n============================\n");
-
-    demo_styles();
-    println!("\n============================\n");
-
-    demo_messages();
-    println!("\n============================\n");
-
-    demo_timing();
-    println!("\n============================\n");
-
-    demo_completion();
-    println!("\n============================\n");
-
-    demo_logging();
-    println!("\n============================\n");
-
-    demo_multiple();
-    println!("\n============================\n");
-
-    demo_threads();
-    println!("\n============================\n");
-
-    demo_bytes_batches()?;
-    println!("\n============================\n");
-
-    demo_rendering();
-
-    Ok(())
-}

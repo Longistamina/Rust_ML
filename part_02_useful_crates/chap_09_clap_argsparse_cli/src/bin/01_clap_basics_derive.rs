@@ -37,6 +37,38 @@ use clap::{ArgAction, CommandFactory, Parser, ValueEnum};
 use std::fmt::Debug;
 use std::path::PathBuf;
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() {
+    println!();
+
+    demo_parser();
+    println!("\n============================\n");
+    demo_positionals();
+    println!("\n============================\n");
+    demo_required_options();
+    println!("\n============================\n");
+    demo_defaults();
+    println!("\n============================\n");
+    demo_flags();
+    println!("\n============================\n");
+    demo_multiple_values();
+    println!("\n============================\n");
+    demo_paths();
+    println!("\n============================\n");
+    demo_choices();
+    println!("\n============================\n");
+    demo_numeric_validation();
+    println!("\n============================\n");
+    demo_custom_validation();
+    println!("\n============================\n");
+    demo_hyphens();
+    println!("\n============================\n");
+    demo_help_errors();
+}
+
 // Keep expected errors local: an invalid example must not stop later demos.
 fn show<T: Debug>(result: Result<T, clap::Error>) {
     match result {
@@ -53,6 +85,8 @@ fn show<T: Debug>(result: Result<T, clap::Error>) {
 // ============================================================================
 
 fn demo_parser() {
+    println!("01. Parser derive and argument lists");
+
     #[derive(Debug, Parser)]
     #[command(name="greet", about="Greet a person")]
     struct Args {
@@ -77,6 +111,8 @@ fn demo_parser() {
 // ============================================================================
 
 fn demo_positionals() {
+    println!("02. Positional arguments");
+
     #[derive(Debug, Parser)]
     #[command(name="copy-demo")]
     struct Args {
@@ -102,6 +138,8 @@ fn demo_positionals() {
 // ============================================================================
 
 fn demo_required_options() {
+    println!("03. Required short / long options");
+
     #[derive(Debug, Parser)]
     #[command(name="rectangle")]
     struct Args {
@@ -129,6 +167,8 @@ fn demo_required_options() {
 // ============================================================================
 
 fn demo_defaults() {
+    println!("04. Optional values and defaults");
+
     #[derive(Debug, Parser)]
     #[command(name="settings")]
     struct Args {
@@ -156,6 +196,8 @@ fn demo_defaults() {
 // ============================================================================
 
 fn demo_flags() {
+    println!("05. Boolean flags and counted verbosity");
+
     #[derive(Debug, Parser)]
     #[command(name="flags")]
     struct Args {
@@ -180,6 +222,8 @@ fn demo_flags() {
 // ============================================================================
 
 fn demo_multiple_values() {
+    println!("06. Repeated options vs multiple values per occurrence");
+
     #[derive(Debug, Parser)]
     #[command(name="lists")]
     struct Args {
@@ -213,6 +257,8 @@ fn demo_multiple_values() {
 // ============================================================================
 
 fn demo_paths() {
+    println!("07. Paths and spaces");
+
     #[derive(Debug, Parser)]
     #[command(name="paths")]
     struct Args {
@@ -234,6 +280,8 @@ fn demo_paths() {
 // ============================================================================
 
 fn demo_choices() {
+    println!("08. Enumerated choices");
+
     #[derive(Debug, Clone, Copy, ValueEnum)]
     enum OutputFormat { Text, Json, PrettyJson }
 
@@ -258,6 +306,8 @@ fn demo_choices() {
 // ============================================================================
 
 fn demo_numeric_validation() {
+    println!("09. Built-in numeric validation");
+
     #[derive(Debug, Parser)]
     #[command(name="workers")]
     struct Args {
@@ -285,6 +335,8 @@ fn positive_finite(text: &str) -> Result<f64, String> {
 }
 
 fn demo_custom_validation() {
+    println!("10. Custom validation: positive finite floats");
+
     #[derive(Debug, Parser)]
     #[command(name="dimension")]
     struct Args {
@@ -305,6 +357,8 @@ fn demo_custom_validation() {
 // ============================================================================
 
 fn demo_hyphens() {
+    println!("11. Negative numbers and the -- separator");
+
     #[derive(Debug, Parser)]
     #[command(name="hyphens")]
     struct Args {
@@ -325,6 +379,8 @@ fn demo_hyphens() {
 // ============================================================================
 
 fn demo_help_errors() {
+    println!("12. Help, version, and expected errors");
+
     #[derive(Debug, Parser)]
     #[command(name="help-demo", version="1.0.0", about="Demonstrate CLI help",
         after_help="Examples:\n  help-demo --name Alice")]
@@ -348,34 +404,3 @@ fn demo_help_errors() {
     // Prefer generated usage and clear value_name labels over backspace tricks.
 }
 
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() {
-    println!();
-
-    demo_parser();
-    println!("\n============================\n");
-    demo_positionals();
-    println!("\n============================\n");
-    demo_required_options();
-    println!("\n============================\n");
-    demo_defaults();
-    println!("\n============================\n");
-    demo_flags();
-    println!("\n============================\n");
-    demo_multiple_values();
-    println!("\n============================\n");
-    demo_paths();
-    println!("\n============================\n");
-    demo_choices();
-    println!("\n============================\n");
-    demo_numeric_validation();
-    println!("\n============================\n");
-    demo_custom_validation();
-    println!("\n============================\n");
-    demo_hyphens();
-    println!("\n============================\n");
-    demo_help_errors();
-}

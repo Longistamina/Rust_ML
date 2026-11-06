@@ -72,6 +72,8 @@ fn main() {
     // 1. Consecutive numbers: Python count(start=10, step=2) [std]
     // ============================================================================
     {
+        println!("01. Consecutive numbers: Python count(start=10, step=2) [std]");
+
         let numbers: Vec<_> = (10u64..).step_by(2).take(5).collect();
         println!("{numbers:?}"); // [10, 12, 14, 16, 18]
         // Bound examples with take() or break; don't collect an unbounded source.
@@ -89,6 +91,8 @@ fn main() {
     // 2. Cycle [std]
     // ============================================================================
     {
+        println!("02. Cycle [std]");
+
         let colors = ["red", "green", "blue"];
         for (i, color) in colors.iter().cycle().take(6).enumerate() {
             println!("{i} - {color}"); // red, green, blue, red, green, blue
@@ -103,6 +107,8 @@ fn main() {
     // 3. Repeat [std]
     // ============================================================================
     {
+        println!("03. Repeat [std]");
+
         println!("{:?}", iter::repeat("Hello").take(3).collect::<Vec<_>>());
         // ["Hello", "Hello", "Hello"]
         // repeat(value) clones the value; repeat_with(closure) constructs each item.
@@ -116,6 +122,8 @@ fn main() {
     // 4. Accumulation: scan [std]
     // ============================================================================
     {
+        println!("04. Accumulation: scan [std]");
+
         let sums: Vec<_> = (1..=5).scan(0, |state, x| { // `0` -> `state` (initial value)
             *state += x;
             Some(*state)
@@ -138,6 +146,8 @@ fn main() {
     // 5. Chain [std]
     // ============================================================================
     {
+        println!("05. Chain [std]");
+
         println!("{:?}", [1, 2].into_iter().chain([3, 4]).chain([5]).collect::<Vec<_>>());
         // [1, 2, 3, 4, 5]
 
@@ -153,6 +163,8 @@ fn main() {
     // 6. Compress with a selector mask [std]
     // ============================================================================
     {
+        println!("06. Compress with a selector mask [std]");
+
         let data = ['A', 'B', 'C', 'D', 'E'];
         let mask = [true, false, true, false, true];
 
@@ -172,6 +184,8 @@ fn main() {
     // 7. Dropwhile: skip_while [std]
     // ============================================================================
     {
+        println!("07. Dropwhile: skip_while [std]");
+
         let data = [1, 2, 3, 4, 5, 1, 2];
         println!("{:?}", data.into_iter().skip_while(|&x| x < 4).collect::<Vec<_>>());
         // [4, 5, 1, 2]: once the predicate is false, keep ALL remaining items.
@@ -183,6 +197,8 @@ fn main() {
     // 8. Filterfalse: negate the predicate [std]
     // ============================================================================
     {
+        println!("08. Filterfalse: negate the predicate [std]");
+
         let values: Vec<_> = (0..30).filter(|x| !(x % 10 != 0)).collect();
         println!("{values:?}"); // [0, 10, 20]
         // Negation shown to match filterfalse(lambda x: x % 10, ...).
@@ -195,6 +211,8 @@ fn main() {
     // 9. Consecutive grouping vs global grouping [itertools]
     // ============================================================================
     {
+        println!("09. Consecutive grouping vs global grouping [itertools]");
+
         let data = [('A', 1), ('A', 2), ('B', 3), ('A', 4)];
         let groups = data.into_iter().chunk_by(|&(key, _)| key);
         for (key, group) in &groups {
@@ -219,6 +237,8 @@ fn main() {
     // 10. Islice: skip / take / step_by [std]
     // ============================================================================
     {
+        println!("10. Islice: skip / take / step_by [std]");
+
         println!("{:?}", (0..10).skip(2).take(6).step_by(2).collect::<Vec<_>>());
         // [2, 4, 6]: Python islice(data, 2, 8, 2)
         // take(stop - start) BEFORE step_by(step); order changes the result.
@@ -233,6 +253,8 @@ fn main() {
     // 11. Pairwise: array_windows [itertools]
     // ============================================================================
     {
+        println!("11. Pairwise: array_windows [itertools]");
+
         println!("{:?}", "abcd".chars().array_windows::<2>().collect_vec());
         // [['a', 'b'], ['b', 'c'], ['c', 'd']]
 
@@ -252,6 +274,8 @@ fn main() {
     // 12. Starmap: destructure tuple arguments [std]
     // ============================================================================
     {
+        println!("12. Starmap: destructure tuple arguments [std]");
+
         let dimensions = [(1.5, 2.0), (2.0, 3.0), (3.0, 4.0)];
         let areas: Vec<_> = dimensions.into_iter().map(|(h, w)| h * w).collect();
         println!("{areas:?}"); // [3.0, 6.0, 12.0]
@@ -264,6 +288,8 @@ fn main() {
     // 13. Takewhile: take_while [std]
     // ============================================================================
     {
+        println!("13. Takewhile: take_while [std]");
+
         println!("{:?}", [1, 2, 3, 4, 1].into_iter().take_while(|&x| x < 4).collect::<Vec<_>>());
         // [1, 2, 3]: stops at the first false predicate, even if later items qualify.
         // The first failing item is consumed from the underlying iterator.
@@ -275,6 +301,8 @@ fn main() {
     // 14. Tee and cloning an iterator [itertools / std]
     // ============================================================================
     {
+        println!("14. Tee and cloning an iterator [itertools / std]");
+
         let (mut first, second) = (1..=4).tee();
         println!("{:?}", first.next()); // Some(1)
         println!("{:?}", second.collect_vec()); // [1, 2, 3, 4]
@@ -294,6 +322,8 @@ fn main() {
     // 15. Zip longest [itertools]
     // ============================================================================
     {
+        println!("15. Zip longest [itertools]");
+
         use EitherOrBoth::{Both, Left, Right};
         let pairs = [1, 2, 3].into_iter().zip_longest(['a', 'b']);
         for pair in pairs {
@@ -320,6 +350,8 @@ fn main() {
     // 16. Cartesian products [itertools]
     // ============================================================================
     {
+        println!("16. Cartesian products [itertools]");
+
         println!("{:?}", [1, 2].into_iter().cartesian_product(['a', 'b']).collect_vec());
         // [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]
 
@@ -343,6 +375,8 @@ fn main() {
     // 17. Permutations [itertools]
     // ============================================================================
     {
+        println!("17. Permutations [itertools]");
+
         let letters = ['A', 'B', 'C'];
         println!("{:?}", letters.into_iter().permutations(2).collect_vec());
         // [['A','B'], ['A','C'], ['B','A'], ['B','C'], ['C','A'], ['C','B']]
@@ -358,6 +392,8 @@ fn main() {
     // 18. Combinations [itertools]
     // ============================================================================
     {
+        println!("18. Combinations [itertools]");
+
         println!("{:?}", ['A', 'B', 'C'].into_iter().combinations(2).collect_vec());
         // [['A', 'B'], ['A', 'C'], ['B', 'C']]
 
@@ -373,6 +409,8 @@ fn main() {
     // 19. Combinations with replacement [itertools]
     // ============================================================================
     {
+        println!("19. Combinations with replacement [itertools]");
+
         println!("{:?}", [0, 1, 2].into_iter().combinations_with_replacement(2).collect_vec());
         // [[0, 0], [0, 1], [0, 2], [1, 1], [1, 2], [2, 2]]
 
@@ -389,6 +427,8 @@ fn main() {
     // 20. Frequency counting: counts / counts_by [itertools]
     // ============================================================================
     {
+        println!("20. Frequency counting: counts / counts_by [itertools]");
+
         let counts = "mississippi".chars().counts();
         println!("{:?}", counts.into_iter().sorted_by_key(|&(c, _)| c).collect_vec());
         // [('i', 4), ('m', 1), ('p', 2), ('s', 4)]
@@ -418,6 +458,8 @@ fn main() {
     // 21. Collection and display
     // ============================================================================
     {
+        println!("21. Collection and display");
+
         println!("{:?}", (1..=3).collect_vec()); // [1, 2, 3]
         println!("{}", (1..=3).join(" - ")); // 1 - 2 - 3
         println!("[{}]", (1..=3).format(", ")); // [1, 2, 3]
@@ -431,6 +473,8 @@ fn main() {
     // 22. Sorting and selecting the smallest k
     // ============================================================================
     {
+        println!("22. Sorting and selecting the smallest k");
+
         println!("{:?}", [4, 1, 3, 2].into_iter().sorted().collect_vec()); // [1, 2, 3, 4]
 
         let words = ["pear", "fig", "banana"];
@@ -449,6 +493,8 @@ fn main() {
     // 23. Global uniqueness vs consecutive deduplication
     // ============================================================================
     {
+        println!("23. Global uniqueness vs consecutive deduplication");
+
         let data = [1, 1, 2, 1, 3, 3];
         println!("{:?}", data.into_iter().unique().collect_vec()); // [1, 2, 3]
         println!("{:?}", data.into_iter().dedup().collect_vec()); // [1, 2, 1, 3]
@@ -469,6 +515,8 @@ fn main() {
     // 24. Global grouping by a derived key
     // ============================================================================
     {
+        println!("24. Global grouping by a derived key");
+
         let by_length = ["cat", "bird", "dog"].into_iter().into_group_map_by(|s| s.len());
         println!("{:?}", by_length.into_iter().sorted_by_key(|&(n, _)| n).collect_vec());
         // [(3, ["cat", "dog"]), (4, ["bird"])]
@@ -482,6 +530,8 @@ fn main() {
     // 25. Aggregate values directly per group
     // ============================================================================
     {
+        println!("25. Aggregate values directly per group");
+
         let totals = [("A", 10), ("B", 5), ("A", 7)].into_iter()
             .into_grouping_map().sum();
         println!("{:?}", totals.into_iter().sorted_by_key(|&(key, _)| key).collect_vec());
@@ -496,6 +546,8 @@ fn main() {
     // 26. Fixed-size batches: chunks
     // ============================================================================
     {
+        println!("26. Fixed-size batches: chunks");
+
         let batches = (1..=7).chunks(3);
         for batch in &batches {
             println!("{:?}", batch.collect_vec());
@@ -511,6 +563,8 @@ fn main() {
     // 27. Fixed-size collection
     // ============================================================================
     {
+        println!("27. Fixed-size collection");
+
         let mut source = 1..=5;
         println!("{:?}", source.next_array::<3>()); // Some([1, 2, 3])
         println!("{:?}", source.collect_vec()); // [4, 5]
@@ -527,6 +581,8 @@ fn main() {
     // 28. All subsets: powerset
     // ============================================================================
     {
+        println!("28. All subsets: powerset");
+
         println!("{:?}", ['A', 'B'].into_iter().powerset().collect_vec());
         // [[], ['A'], ['B'], ['A', 'B']]
         // Includes the empty and full subsets. n items produce 2^n subsets.
@@ -538,6 +594,8 @@ fn main() {
     // 29. Interleave and intersperse
     // ============================================================================
     {
+        println!("29. Interleave and intersperse");
+
         println!("{:?}", [1, 2, 3].into_iter().interleave([10, 20]).collect_vec());
         // [1, 10, 2, 20, 3]: keep leftovers after one side ends
         // Explicit trait call avoids conflicts if std offers the same method name.
@@ -552,6 +610,8 @@ fn main() {
     // 30. Merge sorted streams and compare keys
     // ============================================================================
     {
+        println!("30. Merge sorted streams and compare keys");
+
         println!("{:?}", [1, 3, 5].into_iter().merge([2, 4, 6]).collect_vec());
         // [1, 2, 3, 4, 5, 6]; each input must already be sorted.
 
@@ -571,6 +631,8 @@ fn main() {
     // 31. Partition and transform in one pass
     // ============================================================================
     {
+        println!("31. Partition and transform in one pass");
+
         let (even, odd): (Vec<i32>, Vec<String>) = (1..=5).partition_map(|n| {
             if n % 2 == 0 { Either::Left(n) } else { Either::Right(format!("odd:{n}")) }
         });
@@ -584,6 +646,8 @@ fn main() {
     // 32. Multiple iterators and columns
     // ============================================================================
     {
+        println!("32. Multiple iterators and columns");
+
         let rows = izip!([1, 2], ['a', 'b'], [true, false]).collect_vec();
         println!("{rows:?}"); // [(1, 'a', true), (2, 'b', false)]
         // izip! returns flat tuples and stops at the shortest input.
@@ -598,6 +662,8 @@ fn main() {
     // 33. Min/max and cardinality validation
     // ============================================================================
     {
+        println!("33. Min/max and cardinality validation");
+
         println!("{:?}", [4, 1, 9, 2].into_iter().minmax()); // MinMax(1, 9)
         // MinMaxResult also has NoElements and OneElement(value) variants.
 
@@ -615,6 +681,8 @@ fn main() {
     // 34. Result-aware operations
     // ============================================================================
     {
+        println!("34. Result-aware operations");
+
         let values: [Result<i32, &str>; 3] = [Ok(1), Err("bad"), Ok(3)];
         println!("{:?}", values.into_iter().map_ok(|n| n * 10).collect_vec());
         // [Ok(10), Err("bad"), Ok(30)]: errors are preserved
@@ -634,6 +702,8 @@ fn main() {
     // 35. Merge adjacent items: coalesce
     // ============================================================================
     {
+        println!("35. Merge adjacent items: coalesce");
+
         let runs = [('a', 1), ('a', 2), ('b', 1), ('b', 3)].into_iter()
             .coalesce(|(a, n), (b, m)| {
                 if a == b { Ok((a, n + m)) } else { Err(((a, n), (b, m))) }
@@ -649,6 +719,8 @@ fn main() {
     // 36. Positions, padding, and inclusive stopping
     // ============================================================================
     {
+        println!("36. Positions, padding, and inclusive stopping");
+
         println!("{:?}", [2, 5, 4, 7].into_iter().positions(|n| n % 2 == 0).collect_vec());
         // [0, 2]: ALL matching indices; std position() finds only the first.
         println!("{:?}", [10, 20].into_iter().pad_using(5, |index| index as i32).collect_vec());

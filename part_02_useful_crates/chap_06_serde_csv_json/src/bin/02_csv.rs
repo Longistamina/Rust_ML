@@ -42,11 +42,59 @@ type DemoResult = Result<(), Box<dyn std::error::Error>>;
 
 const PEOPLE: &str = "Name,Age,City,Score\nAlice,28,\"New York, NY\",85\nBob,35,Chicago,\nClaire,31,Seoul,90\n";
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() -> DemoResult {
+    println!();
+
+    let stamp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_nanos();
+    let root = std::env::temp_dir().join(format!("rust_csv_{}_{stamp}", std::process::id()));
+    fs::create_dir(&root)?;
+    println!("Demo directory: {}\n", root.display());
+
+    let result: DemoResult = (|| {
+        demo_read()?;
+        println!("\n============================\n");
+        demo_headerless()?;
+        println!("\n============================\n");
+        demo_collect_maps()?;
+        println!("\n============================\n");
+        demo_delimiters(&root)?;
+        println!("\n============================\n");
+        demo_write(&root)?;
+        println!("\n============================\n");
+        demo_serde(&root)?;
+        println!("\n============================\n");
+        demo_options()?;
+        println!("\n============================\n");
+        demo_quoting()?;
+        println!("\n============================\n");
+        demo_batches()?;
+        println!("\n============================\n");
+        demo_buffers_bytes()?;
+        println!("\n============================\n");
+        demo_errors()?;
+        println!("\n============================\n");
+        demo_append(&root)?;
+        Ok(())
+    })();
+
+    let cleanup: io::Result<()> = fs::remove_dir_all(&root); // attempt even after demo errors
+    result?;
+    cleanup?;
+    println!("\nDemo directory removed.");
+    Ok(())
+}
+
 // ============================================================================
 // 1. Read records and headers
 // ============================================================================
 
 fn demo_read() -> DemoResult {
+    println!("01. Read records and headers");
+
     let mut reader = Reader::from_reader(PEOPLE.as_bytes());
     println!("headers: {:?}", reader.headers()?); // Name, Age, City, Score
 
@@ -68,6 +116,8 @@ fn demo_read() -> DemoResult {
 // ============================================================================
 
 fn demo_headerless() -> DemoResult {
+    println!("02. Headerless input / alternate field names");
+
     let data = "Alice,28\nBob,35\n";
     let mut reader = ReaderBuilder::new().has_headers(false).from_reader(data.as_bytes());
     let names = ["person", "years"];
@@ -87,6 +137,8 @@ fn demo_headerless() -> DemoResult {
 // ============================================================================
 
 fn demo_collect_maps() -> DemoResult {
+    println!("03. Collect records / dictionary-like rows");
+
     let mut reader = Reader::from_reader(PEOPLE.as_bytes());
     let headers = reader.headers()?.clone(); // owned copy avoids borrowing reader
     let rows: Vec<StringRecord> = reader.records().collect::<Result<_, _>>()?;
@@ -113,6 +165,8 @@ fn demo_collect_maps() -> DemoResult {
 // ============================================================================
 
 fn demo_delimiters(root: &Path) -> DemoResult {
+    println!("04. TSV / semicolon / pipe-separated data");
+
     let mut writer = WriterBuilder::new().delimiter(b'\t').from_path(root.join("scores.tsv"))?;
     writer.write_record(["Name", "Score"])?;
     writer.write_record(["Alice", "85"])?;
@@ -138,6 +192,8 @@ fn demo_delimiters(root: &Path) -> DemoResult {
 // ============================================================================
 
 fn demo_write(root: &Path) -> DemoResult {
+    println!("05. Write records and round-trip special fields");
+
     let path = root.join("notes.csv");
     let mut writer = Writer::from_path(&path)?;
     writer.write_record(["Name", "Note"])?;
@@ -186,6 +242,8 @@ struct Person {
 }
 
 fn demo_serde(root: &Path) -> DemoResult {
+    println!("06. Typed rows with Serde");
+
     let mut reader = Reader::from_reader(PEOPLE.as_bytes());
     let mut writer = Writer::from_path(root.join("typed_people.csv"))?;
 
@@ -210,6 +268,8 @@ fn demo_serde(root: &Path) -> DemoResult {
 // ============================================================================
 
 fn demo_options() -> DemoResult {
+    println!("07. Trimming, comments, and variable field counts");
+
     let data = "# generated data\n Name ; Age \n Alice ; 28 \n";
     let mut reader = ReaderBuilder::new().delimiter(b';').trim(Trim::All)
         .comment(Some(b'#')).from_reader(data.as_bytes());
@@ -234,6 +294,8 @@ fn demo_options() -> DemoResult {
 // ============================================================================
 
 fn demo_quoting() -> DemoResult {
+    println!("08. Quoting styles and escaped quotes");
+
     for (label, style) in [
         ("necessary", QuoteStyle::Necessary),
         ("always", QuoteStyle::Always),
@@ -262,6 +324,8 @@ fn demo_quoting() -> DemoResult {
 // ============================================================================
 
 fn demo_batches() -> DemoResult {
+    println!("09. Bounded row batches");
+
     let mut reader = Reader::from_reader(PEOPLE.as_bytes());
     let batch_size = 2;
     let mut batch = Vec::with_capacity(batch_size);
@@ -287,6 +351,8 @@ fn demo_batches() -> DemoResult {
 // ============================================================================
 
 fn demo_buffers_bytes() -> DemoResult {
+    println!("10. Reusable records / raw bytes");
+
     let mut reader = Reader::from_reader(PEOPLE.as_bytes());
     let mut record = StringRecord::new();
     while reader.read_record(&mut record)? {
@@ -310,6 +376,8 @@ fn demo_buffers_bytes() -> DemoResult {
 // ============================================================================
 
 fn demo_errors() -> DemoResult {
+    println!("11. Handle structural and conversion errors");
+
     let data = "Name,Age,City,Score\nAlice,28,Seoul,85\nBob,wrong,Chicago,90\n";
     let mut reader = Reader::from_reader(data.as_bytes());
     for result in reader.deserialize::<Person>() {
@@ -344,6 +412,8 @@ fn demo_errors() -> DemoResult {
 // ============================================================================
 
 fn demo_append(root: &Path) -> DemoResult {
+    println!("12. Append without another header");
+
     let path = root.join("append.csv");
     {
         let mut writer = Writer::from_path(&path)?;
@@ -365,48 +435,3 @@ fn demo_append(root: &Path) -> DemoResult {
     Ok(())
 }
 
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() -> DemoResult {
-    println!();
-
-    let stamp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_nanos();
-    let root = std::env::temp_dir().join(format!("rust_csv_{}_{stamp}", std::process::id()));
-    fs::create_dir(&root)?;
-    println!("Demo directory: {}\n", root.display());
-
-    let result: DemoResult = (|| {
-        demo_read()?;
-        println!("\n============================\n");
-        demo_headerless()?;
-        println!("\n============================\n");
-        demo_collect_maps()?;
-        println!("\n============================\n");
-        demo_delimiters(&root)?;
-        println!("\n============================\n");
-        demo_write(&root)?;
-        println!("\n============================\n");
-        demo_serde(&root)?;
-        println!("\n============================\n");
-        demo_options()?;
-        println!("\n============================\n");
-        demo_quoting()?;
-        println!("\n============================\n");
-        demo_batches()?;
-        println!("\n============================\n");
-        demo_buffers_bytes()?;
-        println!("\n============================\n");
-        demo_errors()?;
-        println!("\n============================\n");
-        demo_append(&root)?;
-        Ok(())
-    })();
-
-    let cleanup: io::Result<()> = fs::remove_dir_all(&root); // attempt even after demo errors
-    result?;
-    cleanup?;
-    println!("\nDemo directory removed.");
-    Ok(())
-}

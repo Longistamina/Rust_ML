@@ -27,11 +27,63 @@ use std::io::{self, Write};
 use std::path::{self, Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!();
+
+    demo_create_join();
+
+    println!("\n====================================================\n");
+
+    demo_directories()?;
+
+    println!("\n====================================================\n");
+
+    demo_components();
+
+    println!("\n====================================================\n");
+
+    demo_modify_compare()?;
+
+    println!("\n====================================================\n");
+
+    demo_strings();
+
+    println!("\n====================================================\n");
+
+    // Reserve a new directory before any filesystem demos run.
+    let stamp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_nanos();
+    let root = env::temp_dir().join(format!("rust_path_guide_{}_{stamp}", std::process::id()));
+    fs::create_dir(&root)?;
+    println!("Demo directory: {}\n", root.display());
+
+    let result: io::Result<()> = (|| {
+        demo_checks_resolution(&root)?;
+        demo_file_operations(&root)?;
+        demo_metadata_permissions(&root)?;
+        demo_symlinks(&root)?;
+        demo_read_dir_filter(&root)?;
+        Ok(())
+    })();
+
+    let cleanup = fs::remove_dir_all(&root); // attempt cleanup even if a demo failed
+    result?;
+    cleanup?;
+
+    println!("\nDemo directory removed.");
+    Ok(())
+}
+
 // ====================================================
 // 1. Path / PathBuf: create, borrow, join, push, pop
 // ====================================================
 
 fn demo_create_join() {
+    println!("01. Path / PathBuf: create, borrow, join, push, pop");
+
     let borrowed: &Path = Path::new("parent/child/example.txt");
     let owned: PathBuf = borrowed.to_path_buf();
     let borrowed_again: &Path = owned.as_path();
@@ -59,6 +111,8 @@ fn demo_create_join() {
 // ====================================================
 
 fn demo_directories() -> io::Result<()> {
+    println!("02. Current / home / temporary directory");
+
     println!("cwd: {}", env::current_dir()?.display()); // Python Path.cwd()
 
     if let Some(home) = env::home_dir() {
@@ -77,6 +131,8 @@ fn demo_directories() -> io::Result<()> {
 // ====================================================
 
 fn demo_components() {
+    println!("03. Extract components");
+
     let p = Path::new("parent/child/archive.tar.gz");
 
     println!("name: {:?}", p.file_name()); // Some("archive.tar.gz")
@@ -119,6 +175,8 @@ fn demo_components() {
 // ====================================================
 
 fn demo_modify_compare() -> Result<(), std::path::StripPrefixError> {
+    println!("04. Change names / extensions and compare paths");
+
     let p = Path::new("parent/child/example.txt");
     println!("{:?}", p.with_file_name("notes.md")); // parent/child/notes.md
     println!("{:?}", p.with_extension("csv")); // parent/child/example.csv
@@ -146,6 +204,8 @@ fn demo_modify_compare() -> Result<(), std::path::StripPrefixError> {
 // ====================================================
 
 fn demo_strings() {
+    println!("05. Display / strings / accepting paths in functions");
+
     let p = Path::new("data/example.txt");
     println!("{}", p.display()); // human-readable display
     println!("{p:?}"); // debugging, quotes / escaped characters
@@ -172,6 +232,8 @@ fn show_path(p: impl AsRef<Path>) {
 // ====================================================
 
 fn demo_checks_resolution(root: &Path) -> io::Result<()> {
+    println!("06. Filesystem checks; absolute vs canonicalize");
+
     println!("exists: {}", root.exists()); // true
     println!("is_dir: {}", root.is_dir()); // true
     println!("is_file: {}", root.is_file()); // false
@@ -198,6 +260,8 @@ fn demo_checks_resolution(root: &Path) -> io::Result<()> {
 // ====================================================
 
 fn demo_file_operations(root: &Path) -> io::Result<()> {
+    println!("07. Directory and file operations");
+
     let empty_dir = root.join("empty");
     fs::create_dir(&empty_dir)?; // mkdir(); fails if it already exists
     fs::remove_dir(&empty_dir)?; // rmdir(); requires an empty directory
@@ -246,6 +310,8 @@ fn demo_file_operations(root: &Path) -> io::Result<()> {
 // ====================================================
 
 fn demo_metadata_permissions(root: &Path) -> io::Result<()> {
+    println!("08. Metadata and permissions");
+
     let p = root.join("data/example.txt");
     let metadata = p.metadata()?; // Python stat(); follows symlinks
     println!("size: {} bytes", metadata.len()); // 12
@@ -280,6 +346,8 @@ fn demo_metadata_permissions(root: &Path) -> io::Result<()> {
 // ====================================================
 
 fn demo_symlinks(root: &Path) -> io::Result<()> {
+    println!("09. Symlinks");
+
     #[cfg(unix)]
     {
         use std::os::unix::fs::symlink;
@@ -307,6 +375,8 @@ fn demo_symlinks(root: &Path) -> io::Result<()> {
 // ====================================================
 
 fn demo_read_dir_filter(root: &Path) -> io::Result<()> {
+    println!("10. Directory entries and simple filename filtering");
+
     let data = root.join("data");
     fs::write(data.join("notes.md"), "notes\n")?;
     let mut txt_files = Vec::new();
@@ -334,55 +404,5 @@ fn demo_read_dir_filter(root: &Path) -> io::Result<()> {
     // std::path / std::fs have no glob() or rglob().
     // Use the glob crate for wildcard patterns; regex for regular expressions.
     // Recursive directory walking is saved for the later walkdir guide.
-    Ok(())
-}
-
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!();
-
-    demo_create_join();
-
-    println!("\n====================================================\n");
-
-    demo_directories()?;
-
-    println!("\n====================================================\n");
-
-    demo_components();
-
-    println!("\n====================================================\n");
-
-    demo_modify_compare()?;
-
-    println!("\n====================================================\n");
-
-    demo_strings();
-
-    println!("\n====================================================\n");
-
-    // Reserve a new directory before any filesystem demos run.
-    let stamp = SystemTime::now().duration_since(UNIX_EPOCH)?.as_nanos();
-    let root = env::temp_dir().join(format!("rust_path_guide_{}_{stamp}", std::process::id()));
-    fs::create_dir(&root)?;
-    println!("Demo directory: {}\n", root.display());
-
-    let result: io::Result<()> = (|| {
-        demo_checks_resolution(&root)?;
-        demo_file_operations(&root)?;
-        demo_metadata_permissions(&root)?;
-        demo_symlinks(&root)?;
-        demo_read_dir_filter(&root)?;
-        Ok(())
-    })();
-
-    let cleanup = fs::remove_dir_all(&root); // attempt cleanup even if a demo failed
-    result?;
-    cleanup?;
-
-    println!("\nDemo directory removed.");
     Ok(())
 }

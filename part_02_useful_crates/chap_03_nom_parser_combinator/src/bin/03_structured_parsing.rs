@@ -45,6 +45,28 @@ use nom::multi::separated_list0;
 use nom::sequence::{delimited, terminated};
 use nom::{IResult, Parser};
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() {
+    println!();
+
+    demo_tokens();
+    println!("\n============================\n");
+    demo_values();
+    println!("\n============================\n");
+    demo_setting();
+    println!("\n============================\n");
+    demo_document();
+    println!("\n============================\n");
+    demo_owned_config();
+    println!("\n============================\n");
+    demo_validation();
+    println!("\n============================\n");
+    demo_error_position();
+}
+
 // ============================================================================
 // 1. Grammar and reusable token parsers
 // ============================================================================
@@ -66,6 +88,8 @@ fn parse_text(input: &str) -> IResult<&str, &str> {
 }
 
 fn demo_tokens() {
+    println!("01. Grammar and reusable token parsers");
+
     println!("{:?}", parse_identifier("worker_count=4")); // Ok(("=4", "worker_count"))
     println!("{:?}", parse_identifier("123name")); // Err(...)
     println!("{:?}", parse_text(r#""worker";"#)); // Ok((";", "worker"))
@@ -115,6 +139,8 @@ fn parse_value(input: &str) -> IResult<&str, Value<'_>> {
 }
 
 fn demo_values() {
+    println!("02. Alternative value types -> enum");
+
     for text in [r#""worker""#, "-42", "true", "[8000, 8001]", "[ ]", "[1,]"] {
         println!("{text:?} -> {:?}", parse_value(text));
     }
@@ -142,6 +168,8 @@ fn parse_setting(input: &str) -> IResult<&str, Setting<'_>> {
 }
 
 fn demo_setting() {
+    println!("03. One setting -> struct");
+
     println!("{:?}", parse_setting("workers = 4;"));
     // Ok((";", Setting { key: "workers", value: Integer(4) }))
     println!("{:?}", parse_setting("workers = nope")); // Err(Failure(...))
@@ -166,6 +194,8 @@ fn parse_document(input: &str) -> IResult<&str, Vec<Setting<'_>>> {
 }
 
 fn demo_document() {
+    println!("04. Complete document -> Vec<Setting>");
+
     let text = "name = \"worker\";\nworkers = 4; enabled = true; ports = [8000, 8001];\n";
     match parse_document(text) {
         Ok((rest, settings)) => {
@@ -241,6 +271,8 @@ fn build_config(settings: Vec<Setting<'_>>) -> Result<Config, String> {
 }
 
 fn demo_owned_config() {
+    println!("05. Parsed settings -> owned application config");
+
     let result = {
         let source = String::from("name=\"worker\"; workers=4; enabled=true; ports=[8000,8001]");
         match parse_document(&source) {
@@ -259,6 +291,8 @@ fn demo_owned_config() {
 // ============================================================================
 
 fn demo_validation() {
+    println!("06. Syntax errors vs semantic errors");
+
     for text in [
         "name=\"worker\"; workers=4; enabled=true; ports=[8000]", // valid
         "name=\"worker\"; workers=4; enabled=true; ports=[1,]", // syntax
@@ -282,6 +316,8 @@ fn demo_validation() {
 // ============================================================================
 
 fn demo_error_position() {
+    println!("07. Report error positions");
+
     let source = "name=\"worker\";\nworkers = nope;";
     match parse_document(source) {
         Ok((_, settings)) => println!("{settings:?}"),
@@ -303,24 +339,3 @@ fn demo_error_position() {
     // Rich context / expected-token messages need a richer error type.
 }
 
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() {
-    println!();
-
-    demo_tokens();
-    println!("\n============================\n");
-    demo_values();
-    println!("\n============================\n");
-    demo_setting();
-    println!("\n============================\n");
-    demo_document();
-    println!("\n============================\n");
-    demo_owned_config();
-    println!("\n============================\n");
-    demo_validation();
-    println!("\n============================\n");
-    demo_error_position();
-}

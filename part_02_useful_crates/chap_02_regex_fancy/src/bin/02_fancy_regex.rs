@@ -33,6 +33,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. API differences: searching can fail at runtime
     // ============================================================================
     {
+        println!("01. API differences: searching can fail at runtime");
+
         let re = Regex::new(r"\b([a-z]+)\s+\1\b")?;
         let text = "cat cat, dog bird";
         println!("{}", re.is_match(text)?); // true
@@ -56,6 +58,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 2. Positive / negative lookahead
     // ============================================================================
     {
+        println!("02. Positive / negative lookahead");
+
         // X(?=Y): match X only if followed by Y; Y is not consumed.
         let re = Regex::new(r"[0-9]+(?= dollars)")?;
         let text = "59 dollars, 20 euros";
@@ -80,6 +84,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 3. Positive / negative lookbehind
     // ============================================================================
     {
+        println!("03. Positive / negative lookbehind");
+
         // (?<=Y)X: match X only if preceded by Y; Y is not consumed.
         let re = Regex::new(r"(?<=&_)\w+\W")?;
         let text = "Apple &_apple_& Banana &_banana_& Cherry &_cherry_&";
@@ -102,6 +108,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 4. Combine lookbehind and lookahead
     // ============================================================================
     {
+        println!("04. Combine lookbehind and lookahead");
+
         let re = Regex::new(r"(?<=&_)\w+?(?=_&)")?;
         let text = "Apple &_apple_& Banana &_banana_& Cherry &_cherry_&";
         for result in re.find_iter(text) {
@@ -120,6 +128,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 5. Numbered / named backreferences
     // ============================================================================
     {
+        println!("05. Numbered / named backreferences");
+
         // \1 matches the EXACT text captured by group 1, not the group's pattern.
         let re = Regex::new(r"\A([a-z]+)\s+\1\z")?;
         println!("{}", re.is_match("cat cat")?); // true
@@ -145,6 +155,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 6. Variable-length lookbehind
     // ============================================================================
     {
+        println!("06. Variable-length lookbehind");
+
         // Current 0.19.2 supports this through variable-lookbehinds (default on).
         // Older versions / builds without that feature may reject such patterns.
         // Variable lookbehind has restrictions: do not assume every Python regex
@@ -168,6 +180,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 7. Replace only inside parentheses
     // ============================================================================
     {
+        println!("07. Replace only inside parentheses");
+
         let text = "x = func(a = 5, b = 10)\ny = other(c = 15, d = 20)";
         let re = Regex::new(r"(?<=\([^()]*)\s+=\s+(?=[^()]*\))")?;
         println!("{}", re.try_replacen(text, 0, "=")?);
@@ -187,6 +201,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 8. Captures / splitting / replacement expansion
     // ============================================================================
     {
+        println!("08. Captures / splitting / replacement expansion");
+
         let re = Regex::new(r"(?<=\$)(?P<amount>[0-9]+)")?;
         if let Some(caps) = re.captures("price=$20")? {
             println!("{}", caps.name("amount").unwrap().as_str()); // 20
@@ -211,6 +227,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 9. Atomic groups and conditionals
     // ============================================================================
     {
+        println!("09. Atomic groups and conditionals");
+
         // (?>...) commits to its choice; later failure can't backtrack inside it.
         let ordinary = Regex::new(r"\Aa(?:bc|b)c\z")?;
         let atomic = Regex::new(r"\Aa(?>bc|b)c\z")?;
@@ -232,6 +250,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 10. Compile errors / runtime errors / limits
     // ============================================================================
     {
+        println!("10. Compile errors / runtime errors / limits");
+
         match Regex::new("[") {
             Ok(_) => println!("valid pattern"),
             Err(error) => eprintln!("compile error: {error}"),

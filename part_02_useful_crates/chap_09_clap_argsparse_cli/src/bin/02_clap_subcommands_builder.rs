@@ -1,4 +1,4 @@
-// 02_clap_commands_builder.rs
+// 02_clap_subcommands_builder.rs
 // ===========================
 // Setup (inside chap_08_clap_argsparse):
 //     cargo add clap@4 --features derive
@@ -87,6 +87,8 @@ fn show<T: Debug>(result: Result<T, clap::Error>) {
 // │     └────── subcommand
 // └──────────── executable
 fn demo_subcommands() {
+    println!("01. Subcommands: one executable, several operations");
+
     #[derive(Debug, Parser)]
     #[command(name="files")]
     struct Cli {
@@ -132,6 +134,8 @@ fn demo_subcommands() {
 // 02. Optional subcommands and generated subcommand help
 // -----------------------------------------------------
 fn demo_optional_subcommand() {
+    println!("02. Optional subcommands and generated subcommand help");
+
     #[derive(Debug, Parser)]
     #[command(name="app")]
     struct Cli {
@@ -154,6 +158,8 @@ fn demo_optional_subcommand() {
 // 03. Reusable argument structs with flatten; global options
 // ---------------------------------------------------------
 fn demo_flatten_and_global() {
+    println!("03. Reusable argument structs with flatten; global options");
+
     #[derive(Debug, Args)]
     struct Logging {
         #[arg(short, long, action=ArgAction::Count, global=true)]
@@ -184,6 +190,8 @@ fn demo_flatten_and_global() {
 // 04. Relationships: conflicts_with and requires
 // ----------------------------------------------
 fn demo_conflicts_and_requires() {
+    println!("04. Relationships: conflicts_with and requires");
+
     #[derive(Debug, Parser)]
     #[command(name="export")]
     struct Cli {
@@ -214,6 +222,8 @@ fn demo_conflicts_and_requires() {
 // 05. ArgGroup: exactly one input source
 // --------------------------------------
 fn demo_argument_group() {
+    println!("05. ArgGroup: exactly one input source");
+
     #[derive(Debug, Parser)]
     #[command(name="read")]
     #[command(group(
@@ -246,6 +256,8 @@ fn demo_argument_group() {
 // 06. Builder API: definitions and typed extraction
 // ------------------------------------------------
 fn demo_builder_arguments() {
+    println!("06. Builder API: definitions and typed extraction");
+
     let command = Command::new("build")
         .about("Builder API example")
         .arg(Arg::new("input").required(true).value_parser(clap::value_parser!(PathBuf)))
@@ -280,6 +292,8 @@ fn demo_builder_arguments() {
 // 07. Builder subcommands and dispatch
 // ------------------------------------
 fn demo_builder_subcommands() {
+    println!("07. Builder subcommands and dispatch");
+
     let command = Command::new("cache")
         .subcommand_required(true)
         .subcommand(Command::new("list").about("List cached entries"))
@@ -306,6 +320,8 @@ fn demo_builder_subcommands() {
 // 08. Combining derive with builder customization
 // -----------------------------------------------
 fn demo_derive_with_builder() {
+    println!("08. Combining derive with builder customization");
+
     use clap::{CommandFactory, FromArgMatches};
 
     #[derive(Debug, Parser)]
@@ -375,6 +391,8 @@ fn run_rectangle(args: RectangleCli) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn demo_rectangle() {
+    println!("09. Practical rectangle calculator (adapted from Python argparse)");
+
     let args = RectangleCli::try_parse_from(["rectangle", "-l", "5", "-w", "3"])
         .expect("valid demo arguments");
     run_rectangle(args).expect("no file output requested");

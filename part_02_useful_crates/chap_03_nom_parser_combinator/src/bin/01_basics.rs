@@ -34,6 +34,28 @@ use nom::character::complete::{
 use nom::number::complete::double;
 use nom::{IResult, Parser};
 
+// ============ //
+//    main()    //
+// ============ //
+
+fn main() {
+    println!();
+
+    demo_result();
+    println!("\n============================\n");
+    demo_exact();
+    println!("\n============================\n");
+    demo_runs_whitespace();
+    println!("\n============================\n");
+    demo_take();
+    println!("\n============================\n");
+    demo_numbers();
+    println!("\n============================\n");
+    demo_remainder();
+    println!("\n============================\n");
+    demo_errors_streaming();
+}
+
 // ============================================================================
 // 1. Parser signature and IResult
 // ============================================================================
@@ -43,6 +65,8 @@ fn parse_hello(input: &str) -> IResult<&str, &str> {
 }
 
 fn demo_result() {
+    println!("01. Parser signature and IResult");
+
     println!("{:?}", parse_hello("HELLO world")); // Ok((" world", "HELLO"))
     println!("{:?}", parse_hello("HELLO")); // Ok(("", "HELLO"))
     println!("{:?}", parse_hello("world HELLO")); // Err(...)
@@ -70,6 +94,8 @@ fn parse_open_paren(input: &str) -> IResult<&str, char> {
 }
 
 fn demo_exact() {
+    println!("02. Exact prefixes and characters");
+
     println!("{:?}", parse_http("http/1.1")); // Ok(("/1.1", "http"))
     println!("{:?}", parse_open_paren("(abc)")); // Ok(("abc)", '('))
     println!("{:?}", parse_open_paren("abc")); // Err(...)
@@ -91,6 +117,8 @@ fn parse_digits(input: &str) -> IResult<&str, &str> {
 }
 
 fn demo_runs_whitespace() {
+    println!("03. Character runs and whitespace");
+
     println!("{:?}", parse_letters("abc123")); // Ok(("123", "abc"))
     println!("{:?}", parse_digits("123abc")); // Ok(("abc", "123"))
     println!("{:?}", parse_digits("abc")); // Err(...)
@@ -130,6 +158,8 @@ fn parse_identifier(input: &str) -> IResult<&str, &str> {
 }
 
 fn demo_take() {
+    println!("04. Take input by count, delimiter, or predicate");
+
     println!("{:?}", parse_three_chars("abcdef")); // Ok(("def", "abc"))
     println!("{:?}", parse_three_chars("안녕!rest")); // Ok(("rest", "안녕!"))
     println!("{:?}", parse_three_bytes(b"abcdef")); // slices: b"def", b"abc"
@@ -157,6 +187,8 @@ fn parse_float(input: &str) -> IResult<&str, f64> {
 }
 
 fn demo_numbers() {
+    println!("05. Numeric output instead of digit text");
+
     println!("{:?}", parse_digits("42!")); // Ok(("!", "42")): output &str
     println!("{:?}", parse_integer("-42!")); // Ok(("!", -42)): output i32
     println!("{:?}", parse_integer("+7 rest")); // Ok((" rest", 7))
@@ -181,6 +213,8 @@ fn parse_assignment(input: &str) -> IResult<&str, (&str, i32)> {
 }
 
 fn demo_remainder() {
+    println!("06. Feed the remainder into the next parser");
+
     println!("{:?}", parse_assignment("count = 42;")); // Ok((";", ("count", 42)))
     println!("{:?}", parse_assignment("count=-7")); // Ok(("", ("count", -7)))
     println!("{:?}", parse_assignment("count:42")); // Err(...): expected '='
@@ -195,6 +229,8 @@ fn demo_remainder() {
 // ============================================================================
 
 fn demo_errors_streaming() {
+    println!("07. Complete vs streaming; inspect errors");
+
     let complete: IResult<&str, &str> = tag("HELLO").parse("HEL");
     let streaming: IResult<&str, &str> = nom::bytes::streaming::tag("HELLO").parse("HEL");
     println!("complete: {complete:?}"); // Err(Error(...))
@@ -218,24 +254,3 @@ fn demo_errors_streaming() {
     // Incomplete: more input is needed under streaming semantics.
 }
 
-// ============ //
-//    main()    //
-// ============ //
-
-fn main() {
-    println!();
-
-    demo_result();
-    println!("\n============================\n");
-    demo_exact();
-    println!("\n============================\n");
-    demo_runs_whitespace();
-    println!("\n============================\n");
-    demo_take();
-    println!("\n============================\n");
-    demo_numbers();
-    println!("\n============================\n");
-    demo_remainder();
-    println!("\n============================\n");
-    demo_errors_streaming();
-}

@@ -52,6 +52,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. Derives and a round trip
     // ============================================================================
     {
+        println!("01. Derives and a round trip");
+
         #[derive(Debug, Serialize, Deserialize, PartialEq)]
         struct Person {
             name: String,
@@ -79,6 +81,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 2. Nested types, collections, and maps
     // ============================================================================
     {
+        println!("02. Nested types, collections, and maps");
+
         #[derive(Debug, Serialize, Deserialize)]
         struct Address { city: String }
 
@@ -109,6 +113,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 3. Option: absent, null, and present
     // ============================================================================
     {
+        println!("03. Option: absent, null, and present");
+
         #[derive(Debug, Serialize, Deserialize)]
         struct Contact { email: Option<String> }
 
@@ -129,6 +135,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 4. Rename fields and accept legacy names
     // ============================================================================
     {
+        println!("04. Rename fields and accept legacy names");
+
         #[derive(Debug, Serialize, Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct User {
@@ -149,6 +157,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 5. Defaults for missing fields
     // ============================================================================
     {
+        println!("05. Defaults for missing fields");
+
         fn default_workers() -> u16 { 4 }
 
         #[derive(Debug, Serialize, Deserialize)]
@@ -173,6 +183,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 6. Skip fields / omit None
     // ============================================================================
     {
+        println!("06. Skip fields / omit None");
+
         #[derive(Debug, Serialize, Deserialize)]
         struct Record {
             id: u32,
@@ -199,6 +211,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 7. Unknown fields and type errors
     // ============================================================================
     {
+        println!("07. Unknown fields and type errors");
+
         #[derive(Debug, Serialize, Deserialize)]
         #[serde(deny_unknown_fields)]
         struct Strict { count: u16 }
@@ -220,6 +234,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 8. Flatten shared fields and capture extras
     // ============================================================================
     {
+        println!("08. Flatten shared fields and capture extras");
+
         #[derive(Debug, Serialize, Deserialize)]
         struct Identity { id: u32 }
 
@@ -245,6 +261,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 9. Enums: default external tagging
     // ============================================================================
     {
+        println!("09. Enums: default external tagging");
+
         #[derive(Debug, Serialize, Deserialize)]
         enum Event {
             Ready,
@@ -267,6 +285,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 10. Internal and adjacent enum tags
     // ============================================================================
     {
+        println!("10. Internal and adjacent enum tags");
+
         #[derive(Debug, Serialize, Deserialize)]
         #[serde(tag = "type", rename_all = "snake_case")]
         enum Action { Move { x: i32, y: i32 }, Stop }
@@ -290,6 +310,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 11. Untagged alternatives
     // ============================================================================
     {
+        println!("11. Untagged alternatives");
+
         #[derive(Debug, Serialize, Deserialize)]
         #[serde(untagged)]
         enum NumberOrText { Number(i64), Text(String) }
@@ -309,6 +331,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 12. Transparent wrappers
     // ============================================================================
     {
+        println!("12. Transparent wrappers");
+
         #[derive(Debug, Serialize, Deserialize)]
         #[serde(transparent)]
         struct UserId { value: u64 }
@@ -327,6 +351,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 13. Generic structures
     // ============================================================================
     {
+        println!("13. Generic structures");
+
         #[derive(Debug, Serialize, Deserialize)]
         struct Page<T> { items: Vec<T>, total: usize }
 
@@ -342,6 +368,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 14. Borrowed vs owned data
     // ============================================================================
     {
+        println!("14. Borrowed vs owned data");
+
         #[derive(Debug, Serialize, Deserialize)]
         struct Borrowed<'a> { name: &'a str }
 
@@ -362,6 +390,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 15. Explicit conversion with deserialize_with
     // ============================================================================
     {
+        println!("15. Explicit conversion with deserialize_with");
+
         fn from_decimal_string<'de, D>(deserializer: D) -> Result<u16, D::Error>
         where D: serde::Deserializer<'de> {
             let text = String::deserialize(deserializer)?;

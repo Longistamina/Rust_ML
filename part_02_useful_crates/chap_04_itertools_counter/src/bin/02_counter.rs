@@ -47,6 +47,8 @@ fn main() {
     // 1. Construct a Counter
     // ============================================================================
     {
+        println!("01. Construct a Counter");
+
         let chars: Counter<char> = "mississippi".chars().collect();
         println!("{:?}", chars.most_common_ordered());
         // [('i', 4), ('s', 4), ('p', 2), ('m', 1)]
@@ -70,6 +72,8 @@ fn main() {
     // 2. Missing keys and mutable indexing
     // ============================================================================
     {
+        println!("02. Missing keys and mutable indexing");
+
         let mut counts: Counter<char> = "aaa".chars().collect();
         println!("{}", counts[&'a']); // 3
         println!("{}", counts[&'z']); // 0, NOT a panic
@@ -89,6 +93,8 @@ fn main() {
     // 3. Most common and top k
     // ============================================================================
     {
+        println!("03. Most common and top k");
+
         let counts: Counter<_> = [1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 5].into_iter().collect();
         println!("{:?}", counts.most_common()); // descending frequency; tied order unspecified
         println!("{:?}", counts.most_common_ordered());
@@ -107,6 +113,8 @@ fn main() {
     // 4. Custom tie-breaking
     // ============================================================================
     {
+        println!("04. Custom tie-breaking");
+
         let counts: Counter<_> = "eaddbbccc".chars().collect();
         println!("{:?}", counts.most_common_ordered());
         // [('c', 3), ('b', 2), ('d', 2), ('a', 1), ('e', 1)]
@@ -124,6 +132,8 @@ fn main() {
     // 5. Arithmetic and multiset operations
     // ============================================================================
     {
+        println!("05. Arithmetic and multiset operations");
+
         let a: Counter<char> = ['a', 'b', 'c', 'a', 'b', 'b'].into_iter().collect();
         let b: Counter<char> = ['a', 'b', 'd', 'd'].into_iter().collect();
 
@@ -159,6 +169,8 @@ fn main() {
     // 6. update() and subtract()
     // ============================================================================
     {
+        println!("06. update() and subtract()");
+
         let mut counts: Counter<char> = "abc".chars().collect();
         counts.update("abd".chars());
         println!("{:?}", counts.most_common_ordered()); // [('a', 2), ('b', 2), ('c', 1), ('d', 1)]
@@ -183,6 +195,8 @@ fn main() {
     // 7. Signed counts: preserve raw subtraction results
     // ============================================================================
     {
+        println!("07. Signed counts: preserve raw subtraction results");
+
         let mut balance: Counter<char, i64> = "abb".chars().collect();
         for ch in "abbbz".chars() {
             balance[&ch] -= 1;
@@ -202,6 +216,8 @@ fn main() {
     // 8. Expand counts: Python elements() equivalent
     // ============================================================================
     {
+        println!("08. Expand counts: Python elements() equivalent");
+
         let counts: Counter<char> = [('a', 3usize), ('b', 2), ('c', 1)].into_iter().collect();
         let mut elements: Vec<char> = counts.iter()
             .flat_map(|(&ch, &n)| iter::repeat(ch).take(n)).collect();
@@ -225,6 +241,8 @@ fn main() {
     // 9. Weighted counts and extending another Counter
     // ============================================================================
     {
+        println!("09. Weighted counts and extending another Counter");
+
         let mut counts: Counter<char, i64> = [('a', 3), ('b', 2), ('a', 4)].into_iter().collect();
         println!("{:?}", counts.most_common_ordered()); // [('a', 7), ('b', 2)]
         // With a Counter<char,...> target, collect reads these as (item,count) pairs.
@@ -246,6 +264,8 @@ fn main() {
     // 10. Stored keys, total counts, and explicit zeros
     // ============================================================================
     {
+        println!("10. Stored keys, total counts, and explicit zeros");
+
         let mut counts: Counter<char> = "abb".chars().collect();
         println!("keys: {}; total: {}", counts.len(), counts.total::<usize>()); // 2; 3
         counts.insert('z', 0);
@@ -267,6 +287,8 @@ fn main() {
     // 11. Subset / superset checks use multiplicities
     // ============================================================================
     {
+        println!("11. Subset / superset checks use multiplicities");
+
         let needed: Counter<char> = "aab".chars().collect();
         let available: Counter<char> = "aaabbc".chars().collect();
         println!("{}", needed.is_subset(&available)); // true
@@ -283,6 +305,8 @@ fn main() {
     // 12. HashMap interoperability
     // ============================================================================
     {
+        println!("12. HashMap interoperability");
+
         let mut counts: Counter<char> = "aa-bb-c".chars().collect();
         counts.remove(&'-');
         *counts.entry('d').or_insert(0) += 4;
@@ -303,6 +327,8 @@ fn main() {
     // 13. Rust-specific types and capacity
     // ============================================================================
     {
+        println!("13. Rust-specific types and capacity");
+
         let wide: Counter<char, u128> = "aaab".chars().collect();
         println!("{}", wide.total::<u128>()); // 4
         // Choose usize, u128, i64, etc. to fit the application. Counts are still
@@ -329,6 +355,8 @@ fn main() {
     // 14. Practical examples from the Python guide
     // ============================================================================
     {
+        println!("14. Practical examples from the Python guide");
+
         let words: Counter<&str> = "the quick brown fox jumps over the lazy dog the fox"
             .split_whitespace().collect();
         println!("words: {:?}", words.k_most_common_ordered(2)); // [("the", 3), ("fox", 2)]
@@ -357,6 +385,8 @@ fn main() {
     // 15. Count categories rather than exact values
     // ============================================================================
     {
+        println!("15. Count categories rather than exact values");
+
         let mut categories: Counter<&str> = Counter::new();
         for ch in "P@ssw0rd123!".chars() {
             let category = if ch.is_ascii_alphabetic() {

@@ -35,6 +35,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. Compile and search
     // ============================================================================
     {
+        println!("01. Compile and search");
+
         let text = "The rain in Spain";
         let re = Regex::new(r"The.*Spain")?;
         println!("{}", re.is_match(text)); // true
@@ -58,6 +60,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 2. Pattern syntax
     // ============================================================================
     {
+        println!("02. Pattern syntax");
+
         let re = Regex::new(r"[a-m]")?;
         let matches: Vec<_> = re.find_iter("The rain in Spain").map(|m| m.as_str()).collect();
         println!("{matches:?}"); // ["h", "e", "a", "i", "i", "a", "i"]
@@ -87,6 +91,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 3. Quantifiers
     // ============================================================================
     {
+        println!("03. Quantifiers");
+
         // * zero or more;
         // + one or more;
         // ? zero or one.
@@ -120,6 +126,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 4. Alternation / non-capturing groups
     // ============================================================================
     {
+        println!("04. Alternation / non-capturing groups");
+
         let re = Regex::new(r"falls|stays|mainly")?;
         println!("{:?}", re.find_iter("rain falls mainly in the plain").map(|m| m.as_str()).collect::<Vec<_>>());
         // ["falls", "mainly"]
@@ -138,6 +146,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 5. Numbered / named / optional captures
     // ============================================================================
     {
+        println!("05. Numbered / named / optional captures");
+
         let re = Regex::new(r"\A(?P<position>[0-9]+\.*[0-9]*)(?P<label>[a-zA-Z]+)\z")?;
         for text in ["312.1C", "42.6gap", "100A"] {
             if let Some(caps) = re.captures(text) {
@@ -161,6 +171,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 6. All matches vs capture groups
     // ============================================================================
     {
+        println!("06. All matches vs capture groups");
+
         let text = "cat123 dog456 bird789";
         let re = Regex::new(r"([a-z]+)([0-9]+)")?;
         let whole: Vec<_> = re.find_iter(text).map(|m| m.as_str()).collect();
@@ -183,6 +195,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 7. Match positions / Unicode
     // ============================================================================
     {
+        println!("07. Match positions / Unicode");
+
         let text = "안녕 Spain";
         if let Some(m) = Regex::new(r"\bSpain\b")?.find(text) {
             println!("{}: {}..{}", m.as_str(), m.start(), m.end()); // Spain: 7..12
@@ -204,6 +218,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 8. Split / splitn
     // ============================================================================
     {
+        println!("08. Split / splitn");
+
         let text = "The rain in Spain";
         let re = Regex::new(r"\s+")?;
         println!("{:?}", re.split(text).collect::<Vec<_>>()); // ["The", "rain", "in", "Spain"]
@@ -221,6 +237,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 9. Replace / group expansion
     // ============================================================================
     {
+        println!("09. Replace / group expansion");
+
         let text = "The rain in Spain";
         let re = Regex::new(r"\s")?;
         println!("{}", re.replace(text, "_")); // The_rain in Spain (FIRST match)
@@ -245,6 +263,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 10. Replacement closures
     // ============================================================================
     {
+        println!("10. Replacement closures");
+
         let re = Regex::new(r"[a-z]+")?;
         let result = re.replace_all("cat123 dog456", |caps: &Captures<'_>| caps[0].to_uppercase());
         println!("{result}"); // CAT123 DOG456
@@ -258,6 +278,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 11. Flags / RegexBuilder
     // ============================================================================
     {
+        println!("11. Flags / RegexBuilder");
+
         // (?i) case-insensitive; (?m) multiline anchors; (?s) dot includes newline.
         // (?x) verbose: ignore pattern whitespace / # comments.
         // (?i:...) scopes a flag to one group; (?-i:...) disables it locally.
@@ -278,6 +300,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 12. Literal escaping / errors / reuse
     // ============================================================================
     {
+        println!("12. Literal escaping / errors / reuse");
+
         let literal = "file[1].txt";
         let pattern = format!(r"\A{}\z", regex::escape(literal));
         assert!(Regex::new(&pattern)?.is_match(literal));
