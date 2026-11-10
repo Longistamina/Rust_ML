@@ -1,5 +1,5 @@
 [package]
-name = "chap_01_path_walkdir_glob"
+name = "chap_04_path_walkdir_glob"
 version = "0.1.0"
 edition = "2024"
 

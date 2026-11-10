@@ -1,5 +1,5 @@
 [package]
-name = "chap_05_indicatif_progressbar"
+name = "chap_06_indicatif_progressbar"
 version = "0.1.0"
 edition = "2024"
 

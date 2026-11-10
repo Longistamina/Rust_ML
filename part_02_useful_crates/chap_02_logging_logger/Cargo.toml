@@ -1,0 +1,8 @@
+[package]
+name = "chap_02_logging_logger"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+flexi_logger = "0.31.10"
+log = "0.4.35"
