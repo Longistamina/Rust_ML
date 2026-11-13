@@ -1,0 +1,7 @@
+[package]
+name = "chap_13_bon_builder"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bon = "3.10.3"
