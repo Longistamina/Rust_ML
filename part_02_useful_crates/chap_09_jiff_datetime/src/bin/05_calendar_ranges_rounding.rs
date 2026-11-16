@@ -1,7 +1,7 @@
 // 05_calendar_ranges_rounding.rs
 // ==============================
 // Setup (inside chap_07_jiff_datetime):
-//     cargo add jiff@0.2
+//     cargo add jiff@1
 // Run:
 //     cargo run --bin 05_calendar_ranges_rounding
 //
@@ -16,14 +16,14 @@
 // Round values with round(...); limiting printed precision only changes text.
 //
 // Docs:
-// https://docs.rs/jiff/latest/jiff/civil/struct.Date.html
-// https://docs.rs/jiff/latest/jiff/civil/struct.ISOWeekDate.html
-// https://docs.rs/jiff/latest/jiff/civil/struct.DateTimeRound.html
-// https://docs.rs/jiff/latest/jiff/struct.Zoned.html
+// https://docs.rs/jiff/1.0.0/jiff/civil/struct.Date.html
+// https://docs.rs/jiff/1.0.0/jiff/civil/struct.ISOWeekDate.html
+// https://docs.rs/jiff/1.0.0/jiff/civil/struct.DateTimeRound.html
+// https://docs.rs/jiff/1.0.0/jiff/struct.ZonedDateTime.html
 
 use jiff::{
     civil::{Date, DateTime, DateTimeRound, ISOWeekDate, Weekday},
-    RoundMode, ToSpan, Unit, Zoned,
+    RoundMode, ToSpan, Unit, ZonedDateTime,
 };
 
 fn main() -> Result<(), jiff::Error> {
@@ -221,13 +221,13 @@ fn demo_start_of_day() -> Result<(), jiff::Error> {
     let civil: DateTime = "2024-06-18T14:30:45".parse()?;
     println!("Civil start: {}", civil.start_of_day()); // midnight
 
-    let zoned: Zoned = "2024-03-10T12:00:00-04:00[America/New_York]".parse()?;
+    let zoned: ZonedDateTime = "2024-03-10T12:00:00-04:00[America/New_York]".parse()?;
     let start = zoned.start_of_day()?;
     let next_date = zoned.date().tomorrow()?;
     let next_start = next_date.at(0, 0, 0, 0)
-        .to_zoned(zoned.time_zone().clone())?
+        .to_zoned_datetime(zoned.time_zone().clone())?
         .start_of_day()?;
-    println!("Zoned start: {start}"); // midnight -05:00, before DST transition
+    println!("ZonedDateTime start: {start}"); // midnight -05:00, before DST transition
     println!("Next start:  {next_start}"); // midnight -04:00
     println!("Hours in this local day: {}", next_start.duration_since(&start).as_hours()); // 23
     // A zoned day's first valid time can differ from 00:00 in some regions/dates.

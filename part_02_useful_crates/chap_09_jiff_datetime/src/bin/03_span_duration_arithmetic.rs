@@ -1,9 +1,9 @@
 // 03_span_duration_arithmetic.rs
 // ====================================
 // Setup (inside chap_07_jiff_datetime):
-//     cargo add jiff@0.2
+//     cargo add jiff@1
 // Run:
-//     cargo run --bin 03_spans_arithmetic
+//     cargo run --bin 03_span_duration_arithmetic
 //
 // Three duration concepts:
 //     Span: calendar/clock units (years, months, days, hours, ...).
@@ -16,14 +16,14 @@
 // ToSpan adds methods such as 2.hours() to signed integer types.
 //
 // Official docs:
-// https://docs.rs/jiff/latest/jiff/struct.Span.html
-// https://docs.rs/jiff/latest/jiff/struct.SignedDuration.html
-// https://docs.rs/jiff/latest/jiff/struct.SpanRound.html
-// https://docs.rs/jiff/latest/jiff/trait.ToSpan.html
+// https://docs.rs/jiff/1.0.0/jiff/struct.Span.html
+// https://docs.rs/jiff/1.0.0/jiff/struct.SignedDuration.html
+// https://docs.rs/jiff/1.0.0/jiff/struct.SpanRound.html
+// https://docs.rs/jiff/1.0.0/jiff/trait.ToSpan.html
 
 use jiff::{
     civil::{Date, DateTime},
-    RoundMode, SignedDuration, Span, SpanRound, Timestamp, ToSpan, Unit, Zoned,
+    RoundMode, SignedDuration, Span, SpanRound, Timestamp, ToSpan, Unit, ZonedDateTime,
 };
 use std::time::Duration;
 
@@ -314,6 +314,10 @@ fn demo_signed_duration() -> Result<(), jiff::Error> {
     let elapsed = end.duration_since(start);
     println!("End: {end}");
     println!("Elapsed: {elapsed}");
+    let by_subtraction: SignedDuration = end - start;
+    println!("Timestamp subtraction agrees: {}", by_subtraction == elapsed);
+    // Jiff 1.0: Timestamp - Timestamp returns SignedDuration (not Span).
+    // Use since/until when you want a configurable Span instead.
     println!("Within two minutes: {}", elapsed <= SignedDuration::from_secs(120));
     // duration_since returns SignedDuration directly; since/until return a
     // configurable Span in Result. Reversing the instants produces a negative duration.
@@ -327,7 +331,7 @@ fn demo_signed_duration() -> Result<(), jiff::Error> {
 fn demo_calendar_day_vs_hours() -> Result<(), jiff::Error> {
     println!("11. One calendar day can be 23 elapsed hours");
 
-    let start: Zoned = "2024-03-09T12:00:00-05:00[America/New_York]".parse()?;
+    let start: ZonedDateTime = "2024-03-09T12:00:00-05:00[America/New_York]".parse()?;
     let next_day = start.checked_add(1.day())?;
     let after_24h = start.checked_add(SignedDuration::from_hours(24))?;
     println!("Start:            {start}");

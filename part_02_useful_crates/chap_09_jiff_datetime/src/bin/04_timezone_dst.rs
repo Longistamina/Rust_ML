@@ -1,7 +1,7 @@
 // 04_timezone_dst.rs
 // ==================
 // Setup (inside chap_07_jiff_datetime):
-//     cargo add jiff@0.2
+//     cargo add jiff@1
 // Run:
 //     cargo run --bin 04_timezone_dst
 //
@@ -20,20 +20,20 @@
 //
 // Named-zone examples need an available IANA timezone database.
 // Default Jiff features use platform timezone data. On systems without it,
-// embedding is an option: cargo add jiff@0.2 --features tzdb-bundle-always
+// embedding is an option: cargo add jiff@1 --features tzdb-bundle-always
 // Available names and future rules depend on the database version.
 //
 // Docs:
-// https://docs.rs/jiff/latest/jiff/tz/index.html
-// https://docs.rs/jiff/latest/jiff/tz/struct.TimeZone.html
-// https://docs.rs/jiff/latest/jiff/tz/struct.AmbiguousZoned.html
-// https://docs.rs/jiff/latest/jiff/tz/enum.OffsetConflict.html
+// https://docs.rs/jiff/1.0.0/jiff/tz/index.html
+// https://docs.rs/jiff/1.0.0/jiff/tz/struct.TimeZone.html
+// https://docs.rs/jiff/1.0.0/jiff/tz/struct.AmbiguousZonedDateTime.html
+// https://docs.rs/jiff/1.0.0/jiff/tz/enum.OffsetConflict.html
 
 use jiff::{
     civil::DateTime,
     fmt::temporal::DateTimeParser,
     tz::{self, Disambiguation, OffsetConflict, TimeZone},
-    SignedDuration, Timestamp, ToSpan, Zoned,
+    SignedDuration, Timestamp, ToSpan, ZonedDateTime,
 };
 
 fn main() -> Result<(), jiff::Error> {
@@ -119,11 +119,12 @@ fn demo_system_timezone() {
     match TimeZone::try_system() {
         Ok(zone) => {
             println!("System IANA name, if known: {:?}", zone.iana_name());
-            println!("Current local time: {}", Timestamp::now().to_zoned(zone));
+            println!("Current local time: {}", Timestamp::now().to_zoned_datetime(zone));
         }
         Err(error) => println!("System timezone discovery failed: {error}"),
     }
-    // try_system reports discovery errors. system() falls back to UTC on error.
+    // try_system reports discovery errors. system() falls back to Etc/Unknown
+    // on error, with UTC-like rules rather than a known geographic zone.
     // A valid system zone need not have an IANA name: iana_name() returns Option.
     // Prefer explicit zones for reproducible examples and business rules.
     // There is no need to modify process-global TZ or call Python-style tzset().
@@ -164,9 +165,9 @@ fn demo_fixed_offsets() -> Result<(), jiff::Error> {
     let fixed_eastern = TimeZone::fixed(tz::offset(-5));
     let fixed_seoul = TimeZone::fixed(tz::offset(9));
     let instant: Timestamp = "2024-07-01T12:00:00Z".parse()?;
-    println!("Fixed -05:00: {}", instant.to_zoned(fixed_eastern)); // 07:00
+    println!("Fixed -05:00: {}", instant.to_zoned_datetime(fixed_eastern)); // 07:00
     println!("New York:     {}", instant.in_tz("America/New_York")?); // 08:00 -04:00
-    println!("Fixed +09:00: {}", instant.to_zoned(fixed_seoul.clone()));
+    println!("Fixed +09:00: {}", instant.to_zoned_datetime(fixed_seoul.clone()));
     println!("Fixed zone IANA name: {:?}", fixed_seoul.iana_name()); // None
     // tz::offset takes whole signed hours; it is not an IANA database lookup.
     // A fixed +09:00 zone and Asia/Seoul agree here, but only Asia/Seoul carries
@@ -183,7 +184,7 @@ fn demo_seasonal_offsets() -> Result<(), jiff::Error> {
     let zone = TimeZone::get("America/New_York")?;
     for input in ["2024-01-15T12:00:00Z", "2024-07-15T12:00:00Z"] {
         let instant: Timestamp = input.parse()?;
-        let local = instant.to_zoned(zone.clone());
+        let local = instant.to_zoned_datetime(zone.clone());
         println!("{local}; offset={}, abbreviation={}", local.offset(), local.strftime("%Z"));
     }
     // Winter: -05:00 / EST. Summer: -04:00 / EDT for these dates in New York.
@@ -201,8 +202,8 @@ fn demo_spring_gap() -> Result<(), jiff::Error> {
 
     let zone = TimeZone::get("America/New_York")?;
     let fields: DateTime = "2024-03-10T02:30:00".parse()?;
-    let ambiguous = zone.to_ambiguous_zoned(fields);
-    // This produces AmbiguousZoned directly, not Result<Zoned>.
+    let ambiguous = zone.to_ambiguous_zoned_datetime(fields);
+    // This produces AmbiguousZonedDateTime directly, not Result<ZonedDateTime>.
     // It records the local fields, zone, and possible offset ambiguity.
     println!("Requested fields: {fields}");
     println!("Ambiguous: {}", ambiguous.is_ambiguous());
@@ -232,7 +233,7 @@ fn demo_autumn_fold() -> Result<(), jiff::Error> {
 
     let zone = TimeZone::get("America/New_York")?;
     let fields: DateTime = "2024-11-03T01:30:00".parse()?;
-    let ambiguous = zone.to_ambiguous_zoned(fields);
+    let ambiguous = zone.to_ambiguous_zoned_datetime(fields);
     let first = ambiguous.clone().earlier()?;
     let second = ambiguous.clone().later()?;
     println!("Offset situation: {:?}", ambiguous.offset()); // Fold
@@ -264,15 +265,15 @@ fn demo_parser_policies() -> Result<(), jiff::Error> {
     let input = "2024-11-03T01:30:00[America/New_York]";
     for policy in [Disambiguation::Earlier, Disambiguation::Later, Disambiguation::Compatible] {
         let parser = DateTimeParser::new().disambiguation(policy);
-        println!("{policy:?}: {}", parser.parse_zoned(input)?);
+        println!("{policy:?}: {}", parser.parse_zoned_datetime(input)?);
     }
-    // The same enum can be used on an AmbiguousZoned value with
+    // The same enum can be used on an AmbiguousZonedDateTime value with
     // ambiguous.disambiguate(policy), useful for runtime application settings.
 
     println!();
 
     let strict = DateTimeParser::new().disambiguation(Disambiguation::Reject);
-    match strict.parse_zoned(input) {
+    match strict.parse_zoned_datetime(input) {
         Ok(value) => println!("Parsed: {value}"),
         Err(error) => println!("Strict parser rejected ambiguity: {error}"),
     }
@@ -288,13 +289,13 @@ fn demo_parser_policies() -> Result<(), jiff::Error> {
 fn demo_offset_conflicts() -> Result<(), jiff::Error> {
     println!("09. Numeric offset versus named timezone");
 
-    let valid: Zoned = "2024-07-01T12:00:00-04:00[America/New_York]".parse()?;
+    let valid: ZonedDateTime = "2024-07-01T12:00:00-04:00[America/New_York]".parse()?;
     println!("Consistent input: {valid}");
 
     println!();
 
     let input = "2024-07-01T12:00:00-05:00[America/New_York]";
-    match input.parse::<Zoned>() {
+    match input.parse::<ZonedDateTime>() {
         Ok(value) => println!("Parsed: {value}"),
         Err(error) => println!("Default rejects inconsistent offset: {error}"),
     }
@@ -304,8 +305,8 @@ fn demo_offset_conflicts() -> Result<(), jiff::Error> {
 
     let trust_offset = DateTimeParser::new().offset_conflict(OffsetConflict::AlwaysOffset);
     let trust_zone = DateTimeParser::new().offset_conflict(OffsetConflict::AlwaysTimeZone);
-    println!("Trust supplied offset: {}", trust_offset.parse_zoned(input)?); // 13:00 -04:00
-    println!("Trust local fields + zone: {}", trust_zone.parse_zoned(input)?); // 12:00 -04:00
+    println!("Trust supplied offset: {}", trust_offset.parse_zoned_datetime(input)?); // 13:00 -04:00
+    println!("Trust local fields + zone: {}", trust_zone.parse_zoned_datetime(input)?); // 12:00 -04:00
     // AlwaysOffset preserves the instant implied by 12:00-05:00, displaying it
     // correctly in New York. AlwaysTimeZone discards the supplied offset.
     // These choices differ by one hour. Keep Reject unless your data policy
@@ -315,12 +316,12 @@ fn demo_offset_conflicts() -> Result<(), jiff::Error> {
     Ok(())
 }
 
-// 10. Zoned arithmetic automatically follows timezone rules
+// 10. ZonedDateTime arithmetic automatically follows timezone rules
 // ----------------------------------------------------------
 fn demo_arithmetic_across_dst() -> Result<(), jiff::Error> {
     println!("10. Arithmetic across transitions");
 
-    let before: Zoned = "2024-03-10T01:30:00-05:00[America/New_York]".parse()?;
+    let before: ZonedDateTime = "2024-03-10T01:30:00-05:00[America/New_York]".parse()?;
     let after = before.checked_add(3.hours())?;
     println!("Before spring transition: {before}");
     println!("Three elapsed hours later: {after}"); // 05:30 -04:00
@@ -328,7 +329,7 @@ fn demo_arithmetic_across_dst() -> Result<(), jiff::Error> {
 
     println!();
 
-    let autumn: Zoned = "2024-11-02T12:00:00-04:00[America/New_York]".parse()?;
+    let autumn: ZonedDateTime = "2024-11-02T12:00:00-04:00[America/New_York]".parse()?;
     let tomorrow = autumn.checked_add(1.day())?;
     let after_24h = autumn.checked_add(SignedDuration::from_hours(24))?;
     println!("Start: {autumn}");
@@ -349,14 +350,14 @@ fn demo_transitions() -> Result<(), jiff::Error> {
     let zone = TimeZone::get("America/New_York")?;
     let reference: Timestamp = "2024-01-01T00:00:00Z".parse()?;
     for transition in zone.following(reference).take(2) {
-        let local = transition.timestamp().to_zoned(zone.clone());
+        let local = transition.timestamp().to_zoned_datetime(zone.clone());
         println!("At {local}; new offset={}, abbreviation={}",
             transition.offset(), transition.abbreviation());
     }
     // Following yields transitions strictly after the reference, in time order.
     // preceding(reference) goes backward. Always bound iteration in a demo.
     // Fixed-offset zones have no transitions; these iterators can be empty.
-    // Most applications should use Zoned operations rather than inspect tables.
+    // Most applications should use ZonedDateTime operations rather than inspect tables.
 
     Ok(())
 }
@@ -368,7 +369,7 @@ fn demo_meeting_schedule() -> Result<(), jiff::Error> {
 
     let requested: DateTime = "2024-06-18T09:00:00".parse()?;
     let organizer_zone = TimeZone::get("America/New_York")?;
-    let meeting = organizer_zone.to_ambiguous_zoned(requested).unambiguous()?;
+    let meeting = organizer_zone.to_ambiguous_zoned_datetime(requested).unambiguous()?;
     println!("Organizer: {meeting}");
     println!("Instant for storage: {}", meeting.timestamp()); // 13:00Z
 

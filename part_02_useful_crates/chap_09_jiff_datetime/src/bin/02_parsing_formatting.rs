@@ -1,14 +1,14 @@
 // 02_parsing_formatting.rs
 // ========================
 // Setup (inside chap_07_jiff_datetime):
-//     cargo add jiff@0.2
+//     cargo add jiff@1
 // Run:
 //     cargo run --bin 02_parsing_formatting
 //
 // Choose the target TYPE before choosing the parser:
 //     Date/Time/DateTime: calendar and clock fields without a timezone.
 //     Timestamp: an instant; the input must establish its UTC offset.
-//     Zoned: an instant with a timezone representation.
+//     ZonedDateTime: an instant with a timezone representation.
 //
 // Standard text: text.parse::<T>() -> Result<T, jiff::Error>
 // Custom text:   T::strptime(FORMAT, TEXT) -> Result<T, jiff::Error>
@@ -21,14 +21,14 @@
 // Jiff's standard parsing is not pandas-style natural-language inference.
 //
 // Official docs:
-// https://docs.rs/jiff/latest/jiff/fmt/temporal/index.html
-// https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html
-// https://docs.rs/jiff/latest/jiff/fmt/rfc2822/index.html
+// https://docs.rs/jiff/1.0.0/jiff/fmt/temporal/index.html
+// https://docs.rs/jiff/1.0.0/jiff/fmt/strtime/index.html
+// https://docs.rs/jiff/1.0.0/jiff/fmt/rfc2822/index.html
 
 use jiff::{
     civil::{Date, DateTime, Time},
     fmt::{rfc2822, strtime, temporal::DateTimePrinter},
-    Timestamp, Zoned,
+    Timestamp, ZonedDateTime,
 };
 
 fn main() -> Result<(), jiff::Error> {
@@ -94,18 +94,18 @@ fn demo_standard_civil() -> Result<(), jiff::Error> {
 // 02. Parse an instant with an offset; parse a zoned datetime
 // ---------------------------------------------------------
 fn demo_standard_instants() -> Result<(), jiff::Error> {
-    println!("02. Standard Timestamp and Zoned parsing");
+    println!("02. Standard Timestamp and ZonedDateTime parsing");
 
     let utc: Timestamp = "2024-06-18T03:00:00Z".parse()?;
     let offset: Timestamp = "2024-06-18T12:00:00+09:00".parse()?;
-    let seoul: Zoned = "2024-06-18T12:00:00+09:00[Asia/Seoul]".parse()?;
+    let seoul: ZonedDateTime = "2024-06-18T12:00:00+09:00[Asia/Seoul]".parse()?;
     println!("UTC input:    {utc}");
     println!("Offset input: {offset}"); // normalized UTC display: 03:00:00Z
-    println!("Zoned input:  {seoul}");
+    println!("ZonedDateTime input:  {seoul}");
     println!("All identify the same instant: {}", utc == offset && utc == seoul.timestamp());
     // Z means UTC. +09:00 is an offset; [Asia/Seoul] preserves an IANA zone name.
     // Timestamp retains the instant, not the input's original offset spelling.
-    // Zoned retains a timezone; its Display includes the zone annotation.
+    // ZonedDateTime retains a timezone; its Display includes the zone annotation.
     // A numeric offset alone does not encode a region's future DST rules.
 
     Ok(())
@@ -194,7 +194,7 @@ fn demo_offsets_and_zones() -> Result<(), jiff::Error> {
     println!("06. Offsets and named zones in custom formats");
 
     let instant = Timestamp::strptime("%Y-%m-%d %H:%M:%S %:z", "2024-06-18 12:00:00 +09:00")?;
-    let zoned = Zoned::strptime("%Y-%m-%d %H:%M:%S %Q", "2024-06-18 12:00:00 Asia/Seoul")?;
+    let zoned = ZonedDateTime::strptime("%Y-%m-%d %H:%M:%S %Q", "2024-06-18 12:00:00 Asia/Seoul")?;
     println!("Offset-based instant: {instant}");
     println!("Named-zone datetime:  {zoned}");
     println!("Compact offset (%z): {}", zoned.strftime("%z"));
@@ -232,13 +232,13 @@ fn demo_configurable_printer() -> Result<(), jiff::Error> {
 fn demo_round_trips() -> Result<(), jiff::Error> {
     println!("08. Round trips");
 
-    let original: Zoned = "2024-06-18T12:00:00.123456789+09:00[Asia/Seoul]".parse()?;
+    let original: ZonedDateTime = "2024-06-18T12:00:00.123456789+09:00[Asia/Seoul]".parse()?;
     let encoded = original.to_string();
-    let decoded: Zoned = encoded.parse()?;
+    let decoded: ZonedDateTime = encoded.parse()?;
     println!("Full zoned string: {encoded}");
     println!("Same instant: {}", original.timestamp() == decoded.timestamp());
     println!("Same canonical output: {}", original.to_string() == decoded.to_string());
-    // Zoned equality alone compares instants, so it cannot prove zone retention.
+    // ZonedDateTime equality alone compares instants, so it cannot prove zone retention.
 
     let utc_text = original.timestamp().to_string();
     let restored: Timestamp = utc_text.parse()?;
@@ -308,8 +308,8 @@ fn demo_errors() -> Result<(), jiff::Error> {
         Err(error) => println!("A Time has no year to format: {error}"),
     }
     // Prefer fallible strtime::format for user-supplied format strings.
-    // clock.strftime("%Y").to_string() can panic when the adapter is formatted.
-    // A displayed format error is handled here as Result instead.
+    // strftime is lenient: unavailable/invalid directives pass through as text.
+    // strtime::format reports the error explicitly instead of hiding it.
 
     Ok(())
 }

@@ -1,29 +1,29 @@
 // 01_date_time_dt_tstamp_zone.rs
 // ===============================
 // Setup (inside chap_07_jiff_datetime):
-//     cargo add jiff@0.2
+//     cargo add jiff@1
 // Run:
-//     cargo run --bin 01_basic
+//     cargo run --bin 01_date_time_dt_tstamp_zone
 //
 // Main types:
 //     civil::Date     calendar date:                  2024-06-18
 //     civil::Time     clock time:                     14:30:45
 //     civil::DateTime date + clock time, no zone:     2024-06-18T14:30:45
 //     Timestamp       precise instant, displayed UTC: 2024-06-18T05:30:45Z
-//     Zoned           instant + zone + local fields:  ...+09:00[Asia/Seoul]
+//     ZonedDateTime           instant + zone + local fields:  ...+09:00[Asia/Seoul]
 //
 // A civil DateTime alone does not identify a unique instant on the timeline.
 // Timestamp is NOT a direct equivalent of pandas.Timestamp: pandas' type can
 // represent naive calendar fields too, whereas Jiff separates these concepts.
-// Span and SignedDuration are introduced in 03_spans_arithmetic.rs.
+// Span and SignedDuration are introduced in 03_span_duration_arithmetic.rs.
 //
-// Docs (Jiff 0.2):
-// https://docs.rs/jiff/latest/jiff/
-// https://docs.rs/jiff/latest/jiff/civil/index.html
-// https://docs.rs/jiff/latest/jiff/struct.Timestamp.html
-// https://docs.rs/jiff/latest/jiff/struct.Zoned.html
+// Docs (Jiff 1.0):
+// https://docs.rs/jiff/1.0.0/jiff/
+// https://docs.rs/jiff/1.0.0/jiff/civil/index.html
+// https://docs.rs/jiff/1.0.0/jiff/struct.Timestamp.html
+// https://docs.rs/jiff/1.0.0/jiff/struct.ZonedDateTime.html
 
-use jiff::{civil::{date, Date, DateTime, Time}, tz::TimeZone, Timestamp, Zoned};
+use jiff::{civil::{date, Date, DateTime, Time}, tz::TimeZone, Timestamp, ZonedDateTime};
 
 fn main() -> Result<(), jiff::Error> {
     println!();
@@ -120,7 +120,7 @@ fn demo_split_and_combine() -> Result<(), jiff::Error> {
     println!("Recombined: {rebuilt}");
     println!("Matches original: {}", rebuilt == dt);
     // Splitting needs no timezone conversion: these are just calendar fields.
-    // Date, Time, DateTime, and Timestamp are Copy; Zoned is Clone, not Copy.
+    // Date, Time, DateTime, and Timestamp are Copy; ZonedDateTime is Clone, not Copy.
 
     Ok(())
 }
@@ -131,7 +131,7 @@ fn demo_current_time() -> Result<(), jiff::Error> {
     println!("04. Current time");
 
     let now = Timestamp::now();
-    let utc = now.to_zoned(TimeZone::UTC);
+    let utc = now.to_zoned_datetime(TimeZone::UTC);
     let seoul = now.in_tz("Asia/Seoul")?;
     println!("Current instant (UTC): {now}");
     println!("Same instant in UTC:   {utc}");
@@ -140,10 +140,11 @@ fn demo_current_time() -> Result<(), jiff::Error> {
 
     println!();
 
-    let local = Zoned::now();
+    let local = ZonedDateTime::now();
     println!("System-local datetime: {local}");
     println!("System-local date:     {}", local.date());
-    // Zoned::now() uses the system's detected timezone (with UTC fallback).
+    // ZonedDateTime::now() uses the detected system zone; discovery failure falls
+    // back to Etc/Unknown (UTC-like rules, explicitly marked as unknown).
     // Do not assume the machine running this file is configured for Seoul.
     // "Today" depends on the timezone, especially around midnight.
     // This second clock read may differ slightly from the first Timestamp::now().
@@ -183,15 +184,15 @@ fn demo_unix_timestamps() -> Result<(), jiff::Error> {
     Ok(())
 }
 
-// 06. Civil DateTime -> Zoned -> Timestamp (and back)
+// 06. Civil DateTime -> ZonedDateTime -> Timestamp (and back)
 // --------------------------------------------------
 fn demo_civil_zoned_timestamp() -> Result<(), jiff::Error> {
     println!("06. Calendar fields versus an instant");
 
     let civil = DateTime::new(2024, 6, 18, 12, 0, 0, 0)?;
-    let seoul: Zoned = civil.in_tz("Asia/Seoul")?;
+    let seoul: ZonedDateTime = civil.in_tz("Asia/Seoul")?;
     let instant: Timestamp = seoul.timestamp();
-    let utc = instant.to_zoned(TimeZone::UTC);
+    let utc = instant.to_zoned_datetime(TimeZone::UTC);
     println!("Unzoned fields: {civil}");
     println!("Interpreted in Seoul: {seoul}");
     println!("Precise instant: {instant}"); // 2024-06-18T03:00:00Z
@@ -221,13 +222,13 @@ fn demo_comparisons() -> Result<(), jiff::Error> {
     // A civil comparison alone cannot establish real-world order across zones.
 
     let seoul = DateTime::new(2024, 6, 18, 12, 0, 0, 0)?.in_tz("Asia/Seoul")?;
-    let utc = seoul.timestamp().to_zoned(TimeZone::UTC);
+    let utc = seoul.timestamp().to_zoned_datetime(TimeZone::UTC);
     println!("Seoul: {seoul}");
     println!("UTC:   {utc}");
     println!("Same timestamp: {}", seoul.timestamp() == utc.timestamp());
-    println!("Zoned equality: {}", seoul == utc); // true: compares instants
+    println!("ZonedDateTime equality: {}", seoul == utc); // true: compares instants
     println!("Same civil fields: {}", seoul.datetime() == utc.datetime()); // false
-    // Zoned ordering/equality follow the instant, not the printed local fields
+    // ZonedDateTime ordering/equality follow the instant, not the printed local fields
     // or the zone name. Subtraction/durations come in file 03.
 
     Ok(())
