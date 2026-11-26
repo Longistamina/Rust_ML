@@ -391,6 +391,10 @@ name = "chap_16_Concurency_Thread_MPSC_MutexArc_SendSync"
 version = "0.1.0"
 
 [[package]]
+name = "chap_16_process_command"
+version = "0.1.0"
+
+[[package]]
 name = "chap_17_Async_Await_Futures_Streams_Tasks"
 version = "0.1.0"
 dependencies = [
